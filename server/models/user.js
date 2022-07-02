@@ -6,31 +6,31 @@ const UserSchema = mongoose.Schema({
     //Per ogni attributo diamo il tipo e se è richiesto (oltre ad altre qualsiasi proprietà vogliamo)
     id: {
         type: String,
-        required: true
+        required: false
     },
     email: {
         type: String,
-        required: true
+        required: false
     },
     password: {
         type: String,
-        required: true
+        required: false
     },
     username: {
         type: String,
-        required: true
+        required: false
     },
     max_winstreak: {
         type: Number,
-        required: true
+        required: false
     },
     current_winstreak: {
         type: Number,
-        required: true
+        required: false
     },
     accuracy: {
         type: Number,
-        required: true
+        required: false
     },
     pfp: {
         type: String,

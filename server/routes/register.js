@@ -8,11 +8,20 @@ router.get('/', (req, res) => {
 });
 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     /* Così facendo però otterremmo una stampa di "undefined": ci serve il package  body-parser, che ci permette di trasformare 
     l'input della POST in un json leggibile dalla nostra app: allora lanciamo "npm install body-parser" e allora questa 
     funzione riuscirà a stampare l'effettivo contenuto della POST */
-    console.log(req.body)
+    const user = new User({
+        email: req.body.email
+    })
+
+    try {
+        const newUser = await user.save()
+        res.status(201).json(newUser)
+      } catch (err) {
+        res.status(400).json({ message: err.message })
+      }
 });
 
 module.exports = router;

@@ -10,7 +10,12 @@ const bodyParser = require('body-parser'); // Serve per il parsing in json del b
 
 app.use(bodyParser.json()); // Ogni volta che arriva una request ne trasformiamo il body in json
 
-mongoose.connect(process.env.DB_CONNECTION, () => console.log('Connesso al db'));//Utilizziamo DB_CONNECTION da .env (dotenv)
+mongoose.connect(
+  process.env.DB_CONNECTION, () => console.log('Connesso al db'),
+  (err) => {
+    if(err) console.log(err) 
+    else console.log("mongdb is connected");
+   });//Utilizziamo DB_CONNECTION da .env (dotenv)
 
 //Dichiariamo tutte le route esistenti, per ora abbiamo fatto solo due esempi di login e register
 const indexRoute = require('./routes/index');
