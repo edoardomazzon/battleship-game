@@ -16,10 +16,16 @@ export class User {
   email!: string;
   password!: string;
   username!: string;
+  firstname!: string;
+  lastname!: string;
   max_winstreak!: number;
   current_winstreak!: number;
   accuracy!: number;
+  games_played!: number;
+  games_won!: number;
+  games_lost!: number;
   pfp!: string;
+
 }
 
 

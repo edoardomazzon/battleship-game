@@ -19,7 +19,18 @@ router.post('/', async (req, res) => {
     l'input della POST in un json leggibile dalla nostra app: allora lanciamo "npm install body-parser" e allora questa 
     funzione riuscirà a stampare l'effettivo contenuto della POST */
     const user = new User({
-        email: req.body.email
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        max_winstreak: 0,
+        current_winstreak: 0,
+        accuracy: 0,
+        games_played: 0,
+        games_won: 0,
+        games_lost: 0,
+        pfp: 'profile picture URL'
     })
 
     try {

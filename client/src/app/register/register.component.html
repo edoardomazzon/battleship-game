@@ -7,7 +7,23 @@
       <!-- Qui mettiamo [(ngModel)] per il two-way-binding di angular grazie all'import del modulo FormsModule da @angular/forms -->
       <input type="text" id="email" [(ngModel)]="newuser.email" name="email"/>
       <!-- Chiamiamo la registerUser() nella register.component.ts che a sua volta chiamerà la addUser() di register.service.ts -->
-      <button (click)="registerUser()">Conferma</button>
     </div>
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" [(ngModel)]="newuser.username" name="username"/>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" [(ngModel)]="newuser.password" name="password"/>
+    </div>
+    <div>
+      <label for="firstname">First Name</label>
+      <input type="text" id="firstname" [(ngModel)]="newuser.firstname" name="firstname"/>
+    </div>
+    <div>
+      <label for="lastname">Last Name</label>
+      <input type="text" id="lastname" [(ngModel)]="newuser.lastname" name="lastname"/>
+    </div>
+    <button (click)="registerUser()">Conferma</button>
   </form>
 </div>
