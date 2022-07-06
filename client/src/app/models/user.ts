@@ -8,7 +8,7 @@
   }
 
   i cui campi sono riempiti dal form della componente html.
-  Poi questi JSON verranno inviati in POST al server tramite il registerService (vedere ./services/register.service.ts) che con HttpClient invierà le request.
+  Poi questi JSON verranno inviati con POST al server tramite il registerService (vedere ./services/register.service.ts) che con HttpClient invierà le request.
 */
 
 export class User {

@@ -5,7 +5,7 @@
   prende questo Json, lo parsa e lo passa al costruttore di documenti MongoDB che stavolta usa il SUO model "User" (il fatto che i model User di angular e mongodb si chiamino
   in modo uguale è solo una coincidenza).
 
-  Vedere ./models/user.ts per altre informazioni
+  Vedere ./models/user.ts per altre informazioni a riguardo
 */
 
 import { HttpClient } from '@angular/common/http';
