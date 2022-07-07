@@ -18,10 +18,14 @@ router.post('/', async (req, res) => {
     /* Così facendo però otterremmo una stampa di "undefined": ci serve il package  body-parser, che ci permette di trasformare 
     l'input della POST in un json leggibile dalla nostra app: allora lanciamo "npm install body-parser" e allora questa 
     funzione riuscirà a stampare l'effettivo contenuto della POST */
+
+    var crypto = require('crypto');
+
+
     const user = new User({
         email: req.body.email,
         username: req.body.username,
-        password: req.body.password,
+        password: crypto.createHash('sha256').update(crypto.createHash('sha256').update(req.body.password).digest('hex')).digest('hex'),
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         max_winstreak: 0,
