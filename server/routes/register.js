@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');// Importiamo il model (o lo Schema) User creato in user.js nella cartella models
 const router = express.Router();// Creiamo un router grazie a express
+var crypto = require('crypto');
 
 // Mostrare tutti gli utenti
 router.get('/', async (req, res) => {
@@ -19,7 +20,7 @@ router.post('/', async (req, res) => {
     l'input della POST in un json leggibile dalla nostra app: allora lanciamo "npm install body-parser" e allora questa 
     funzione riuscirà a stampare l'effettivo contenuto della POST */
 
-    var crypto = require('crypto');
+    
 
 
     const user = new User({
