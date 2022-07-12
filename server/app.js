@@ -12,11 +12,11 @@ app.all('/*', (req, res, next) => {
   //Abilitiamo le policy CORS che altrimenti ci bloccherebbero il traffico in uscita
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Method', 'GET, PUT, POST, DELETE, OPTIONS, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, cache-control');
   next();
 })
-app.use(bodyParser.json()); // Ogni volta che arriva una request ne trasformiamo il body in json
 
+app.use(bodyParser.json()); // Ogni volta che arriva una request ne trasformiamo il body in json
 
 
 mongoose.connect(

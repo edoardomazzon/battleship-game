@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   loginUser(): void {
     this._loginService.login(this.authuser).subscribe(authuser =>{
       if (authuser){
-        this._router.navigateByUrl('/login')
+        this._router.navigateByUrl('/')
       }
     });
   }

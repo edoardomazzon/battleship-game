@@ -1,6 +1,5 @@
 //Funziona come register.services.ts quindi vedere i commenti per quello
-
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserLogin } from '../models/user-login';
 
@@ -14,7 +13,14 @@ export class LoginService {
   constructor(private _httpClient: HttpClient) { }
 
   login(userLogin: UserLogin) {
-    return this._httpClient.post(this.baseURL, userLogin);
-  }
+    const options = {
+      headers: new HttpHeaders({
+          Authorization: 'Basic ' + btoa(userLogin.username + ':' + userLogin.password),
+          'cache-control': 'no-cache',
+          'Content-Type': 'application/x-www-form-urlencoded'
+      })
+    };
 
+    return this._httpClient.post(this.baseURL, options);
+  }
 }

@@ -40,7 +40,7 @@ passport.use(
         // Delegate function we provide to passport middleware
         // to verify user credentials
 
-        console.log("Nuova richiesta di login da ".green + username);
+        console.log("Nuova richiesta di login da " + username);
         User.getModel().findOne({
             username: username
         }, (err, user) => {
@@ -87,8 +87,7 @@ router.post("/", passport.authenticate("basic", {
     // and return it as response
 
     var tokendata = {
-        username: req.user.username,
-
+        username: req.user.username
     };
 
     console.log("Login avvenuto con successo. Sto generando il token");

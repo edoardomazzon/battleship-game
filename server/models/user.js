@@ -91,17 +91,11 @@ UserSchema.methods.validatePassword = function (pwd) {
     // To validate the password, we compute the digest with the
     // same HMAC to check if it matches with the digest we stored
     // in the database.
-    //
 
-
-    var hmac = crypto.createHmac("sha256", "provasalt");
+    var hmac = crypto.createHmac("sha256", this.salt);
     hmac.update(pwd);
     var digest = hmac.digest('hex');
-    console.log("pppppp" + pwd)
-
-    console.log(this.password)
-    console.log(digest) 
-    return ("01af4030ee4b53a7e2751efa9657715c9d542acf2203e540ad645351dd26c81b" === digest);
+    return (this.digest === digest);
 };
 
 
