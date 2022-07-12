@@ -2,6 +2,7 @@
 require('dotenv/config');
 
 const express = require('express')
+const passport = require('passport'); // authentication middleware for express
 const mongoose = require('mongoose')
 const app = express()
 const port = 3000
@@ -15,6 +16,8 @@ app.all('/*', (req, res, next) => {
   next();
 })
 app.use(bodyParser.json()); // Ogni volta che arriva una request ne trasformiamo il body in json
+
+
 
 mongoose.connect(
   process.env.DB_CONNECTION, () => console.log('Connesso al db'),
