@@ -76,7 +76,7 @@ passport.use(
 );
 
 
-router.post("/", passport.authenticate("basic", {
+router.get("/", passport.authenticate("basic", {
     session: false
 }),
 (req, res, next) => {
