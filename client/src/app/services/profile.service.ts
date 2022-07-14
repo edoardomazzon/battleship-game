@@ -9,19 +9,23 @@ import { tap } from 'rxjs';
 export class ProfileService {
 
   private usertoken: any;
-  private baseURL: string = 'http://localhost:3000/myprofile'
+  private baseURL: string = 'http://localhost:3000/myprofile';
+
   constructor(private _httpClient: HttpClient) { }
 
   private create_options() {
     return {
         headers: new HttpHeaders({
-            authorization: 'Bearer ' + this.usertoken
-        })
-    };
+            authorization: 'Bearer ' + this.usertoken,
+            'cache-control': 'no-cache',
+            'Content-Type': 'application/json',
+    })
+  };
+
 
 }
   profile() {
     this.usertoken = localStorage.getItem('auth_token');
-    return this._httpClient.get(this.baseURL, this.create_options()).subscribe();
+    return this._httpClient.get(this.baseURL, this.create_options())
   }
 }
