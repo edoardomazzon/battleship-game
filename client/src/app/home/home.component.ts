@@ -22,4 +22,9 @@ export class HomeComponent implements OnInit {
   gotoprofile(): void {
     this._profileService.profile()
   }
+
+  logoutUser(): void{
+    localStorage.removeItem('current_user');
+    localStorage.removeItem('auth_token');
+  }
 }

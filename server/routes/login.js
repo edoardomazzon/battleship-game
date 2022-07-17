@@ -39,13 +39,10 @@ passport.use(
         // Delegate function we provide to passport middleware
         // to verify user credentials
 
-        console.log("Nuova richiesta di login da " + username);
         User.getModel().findOne({
             username: username
         }, (err, user) => {
 
-            console.log("Verifica login " + username + " type of" + typeof username   + password + " type of" + typeof password) 
-            
             if (err) {
                 return done({
                     statusCode: 500,
@@ -60,9 +57,8 @@ passport.use(
                     errormessage: "Invalid user"
                 });
             }
-            console.log("user" + user)
+            
             if (user.validatePassword(password)) {
-                console.log("entra")
                 return done(null, user);
             }
             return done({
@@ -83,13 +79,12 @@ async (req, res, next) => {
     // has been injected into req.user
 
     // We now generate a JWT with the useful user data
-    // and return it as response
-
+    // and return it as response    
     var tokendata = {
-        username: req.user.username
+        username: req.user.username,
+        role: req.user.role
     };
-
-    console.log("Login avvenuto con successo. Sto generando il token");
+    //Login avvenuto con successo, genera il token
     var token_signed = jsonwebtoken.sign(
         tokendata,
         process.env.JWT_SECRET, {

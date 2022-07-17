@@ -6,6 +6,10 @@ var crypto = require("crypto");
 //Costruiamo uno schema per l'utente con il costruttore Schema() di mongoose
 const UserSchema = mongoose.Schema({
     //Per ogni attributo diamo il tipo e se è richiesto (oltre ad altre qualsiasi proprietà vogliamo)
+    role:{
+        type: String,
+        required: false
+    },
     email: {
         type: String,
         required: false

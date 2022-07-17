@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IsAuthenticatedService } from './services/is-authenticated.service';
 import { IsNotAuthenticatedService } from './services/is-not-authenticated.service';
+import { IsAdminService } from './services/is-admin.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -11,12 +12,14 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MyProfileComponent } from './my-profile/my-profile.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 
 const routes: Routes = [
   {path: 'register', component: RegisterComponent, canActivate : [IsNotAuthenticatedService]},
   {path: 'login', component: LoginComponent, canActivate : [IsNotAuthenticatedService]},
   {path: 'myprofile', component: MyProfileComponent, canActivate: [IsAuthenticatedService]},
+  {path: 'admindashboard', component: AdminDashboardComponent, canActivate: [IsAdminService]},
   {path: '', component: HomeComponent},
   {path: '**', redirectTo: '/'}
 ]
@@ -27,7 +30,8 @@ const routes: Routes = [
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
