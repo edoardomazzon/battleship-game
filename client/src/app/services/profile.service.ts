@@ -26,6 +26,9 @@ export class ProfileService {
 }
   profile() {
     this.usertoken = localStorage.getItem('auth_token');
-    return this._httpClient.get(this.baseURL, this.create_options())
+    //console.log(this.usertoken)
+    return this._httpClient.get(this.baseURL, this.create_options()).pipe(
+    );
+
   }
 }

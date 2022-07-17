@@ -14,9 +14,15 @@ export class MyProfileComponent implements OnInit {
   constructor(private _httpClient: HttpClient,
               private _profileService: ProfileService) { }
   ngOnInit(): void {
+    /*console.log("entra in  root")
+    let mytoken = this._profileService.profile();
+    console.log(mytoken);
+    this.gotoprofile()*/
   }
 
   gotoprofile() {
-    this._profileService.profile();
+    /*console.log("chiamata goto profile");
+    let ris=this._profileService.profile();
+    console.log(ris)*/
   }
 }
