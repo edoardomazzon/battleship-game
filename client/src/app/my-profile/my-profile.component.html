@@ -1,1 +1,10 @@
 <p>my-profile works!</p>
+<p> Stampo i dettagli dell'utente: </p>
+<div>
+  <ul>
+    <li> Nome Utente:     {{ this.current_user.username }}</li>
+    <li> E-mail:          {{ this.current_user.email }}</li>
+    <li> Partite giocate: {{ this.current_user.games_played }}</li>
+  </ul>
+</div>
+

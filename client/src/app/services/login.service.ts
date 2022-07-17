@@ -11,7 +11,9 @@ import { Observable } from 'rxjs';
 export class LoginService {
 
   private baseURL: string = 'http://localhost:3000/login'
+  public response: any;
   public token: any;
+  public user: any;
   constructor(private _httpClient: HttpClient) { }
 
   login(userLogin: UserLogin) : Observable < any >  {
@@ -25,10 +27,16 @@ export class LoginService {
 
     return this._httpClient.get(this.baseURL, options).pipe(
       tap( (data) => {
-        console.log(JSON.stringify(data));
-        this.token = data;
-        this.token = this.token.token;
+        //Otteniamo la response dal server (vedere route login.js in server per capire com'è fatta la response)
+        this.response = data;
+
+        //Salviamo in localstorage il token
+        this.token = this.response.token;
         localStorage.setItem('auth_token', this.token);
+
+        //Salviamo in localstorage l'utente per averne i dati comodamente estraibili in seugito
+        this.user = this.response.user;
+        localStorage.setItem('current_user', JSON.stringify(this.user));
       }));
   }
 }

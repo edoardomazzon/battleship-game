@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { IsAuthenticatedService } from './services/is-authenticated.service';
+import { IsNotAuthenticatedService } from './services/is-not-authenticated.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -11,10 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 
+
 const routes: Routes = [
-  {path: 'register', component: RegisterComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'myprofile', component: MyProfileComponent},
+  {path: 'register', component: RegisterComponent, canActivate : [IsNotAuthenticatedService]},
+  {path: 'login', component: LoginComponent, canActivate : [IsNotAuthenticatedService]},
+  {path: 'myprofile', component: MyProfileComponent, canActivate: [IsAuthenticatedService]},
   {path: '', component: HomeComponent},
   {path: '**', redirectTo: '/'}
 ]

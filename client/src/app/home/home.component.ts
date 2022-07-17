@@ -17,8 +17,7 @@ export class HomeComponent implements OnInit {
               private _profileService: ProfileService,
               private _router: Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   gotoprofile(): void {
     this._profileService.profile()

@@ -12,7 +12,6 @@
 */
 
 export class User {
-  id!: string;
   email!: string;
   password!: string;
   username!: string;
@@ -23,9 +22,7 @@ export class User {
   accuracy!: number;
   games_played!: number;
   games_won!: number;
-  games_lost!: number;
   pfp!: string;
-
 }
 
 

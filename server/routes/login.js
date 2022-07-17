@@ -1,9 +1,8 @@
 const express = require('express');
 const passport = require('passport'); // authentication middleware for express
 const passportHTTP = require('passport-http'); // implements Basic and Digest authentication for HTTP (used for /login endpoint)
-
+const jwt_decode = require('jwt-decode'); // Decoding of jwt tokens   
 const jsonwebtoken = require('jsonwebtoken'); // JWT generation
-//var jwt = require('express-jwt');
 const { expressjwt: jwt } = require("express-jwt");
 
 
@@ -14,9 +13,8 @@ var crypto = require('crypto'); //Anche qui hashiamo la password per confrontarl
 const { use } = require('passport');
 
 
-const result = require("dotenv").config(); // The dotenv module will load a file named ".env"
-// file and load all the key-value pairs into
-// process.env (environment variable)
+
+const result = require("dotenv").config(); 
 if (result.error) {
     console.log(
         'Unable to load ".env" file. Please provide one to store the JWT secret key'
@@ -30,6 +28,7 @@ if (!process.env.JWT_SECRET) {
     process.exit(-1);
 }
 
+//Diciamo di usare l'algoritmo RS256 per il JWT_SECRET
 var auth = jwt({
     secret: process.env.JWT_SECRET,
     algorithms: ['RS256']
@@ -79,7 +78,7 @@ passport.use(
 router.get("/", passport.authenticate("basic", {
     session: false
 }),
-(req, res, next) => {
+async (req, res, next) => {
     // If we reach this point, the user is successfully authenticated and
     // has been injected into req.user
 
@@ -98,41 +97,23 @@ router.get("/", passport.authenticate("basic", {
         }
     );
 
-    // Note: You can manually check the JWT content at https://jwt.io
+    //Costruiamo un JSON con i dati non sensibili dell'utente da ritornare al client
+    //così che il client possa salvarselo in localstorage e recuperarne i dati in modo semplice
+    const logged_username = jwt_decode(token_signed);
+    var logged_user = await User.findOne({username: logged_username.username});
+    logged_user.password = undefined;
+    logged_user.salt = undefined;
+    logged_user.digest = undefined;
 
     return res
         .status(200)
         .json({
             error: false,
             errormessage: "",
-            token: token_signed
+            token: token_signed, //Rispondiamo con il token
+            user: logged_user    //e con il JSON contenente i dati dell'utente
         });
-}
-);
-
-/*router.post('/', async (req, res) => {
-    //Creiamo un documento User di mongodb ma solo con username e passowrd
-    const authuser = new User({
-        username: req.body.username,
-        password: crypto.createHash('sha256').update(crypto.createHash('sha256').update(req.body.password).digest('hex')).digest('hex')
-    })
-    try {
-        //Facciamo SELECT in base all'username messo
-        const found_user = await User.findOne({username: authuser.username}).exec();
-        if (found_user){ //Se troviamo effettivamente un utente con quel username
-            const found_password = found_user.password;
-            if (found_password == authuser.password) { //Controlliamo la password
-                res.json({ message: 'Loggato correttamente'}); //Rispondiamo di conseguenza
-            }else {
-                res.json({ message: 'Username o password errati'});
-            }
-        }else {
-            res.json({ message: 'Username o password errati'});
-        }
-    }catch (err) {
-        res.json({ message: err })
     }
-});
-*/
+);
 
 module.exports = router;
