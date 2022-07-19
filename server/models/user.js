@@ -54,6 +54,18 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    pending_friend_requests: {
+        type: Array,
+        required: false
+    },
+    friends_list: {
+        type:  Array,
+        required: false
+    },
+    blacklisted_users: {
+        type:  Array,
+        required: false
+    },
     salt: {
         type: String,
         required: false

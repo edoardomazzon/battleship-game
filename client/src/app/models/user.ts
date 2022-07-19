@@ -24,6 +24,9 @@ export class User {
   games_played!: number;
   games_won!: number;
   pfp!: string;
+  pending_friend_requests!: Array<String>;
+  friends_list!: Array<String>;
+  blacklisted_users!: Array<String>;
 }
 
 

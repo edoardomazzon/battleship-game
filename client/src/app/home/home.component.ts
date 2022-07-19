@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { ProfileService } from '../services/profile.service';
 import { Router } from '@angular/router';
-
+import { User } from '../models/user';
+import { FriendRequestService } from '../services/friend-request.service';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +13,12 @@ import { Router } from '@angular/router';
 })
 
 export class HomeComponent implements OnInit {
-  private myprofileURL: string = 'http://localhost:3000/myprofile'
+
+  public newfriend: User = new User()
   constructor(private _httpClient: HttpClient,
               private _profileService: ProfileService,
-              private _router: Router) { }
+              private _router: Router,
+              private _friendRequestService: FriendRequestService) { }
 
   ngOnInit(): void {}
 
@@ -26,5 +29,10 @@ export class HomeComponent implements OnInit {
   logoutUser(): void{
     localStorage.removeItem('current_user');
     localStorage.removeItem('auth_token');
+  }
+
+  newFriendRequest(): void{
+    console.log('DA HOME COMPONENT TS: PROVO AD AGGIUNGERE L\'UTENTE: ', this.newfriend.username, '\n')
+    this._friendRequestService.sendFriendRequest(this.newfriend)
   }
 }

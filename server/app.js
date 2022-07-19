@@ -31,12 +31,14 @@ const indexRoute = require('./routes/index');
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
+const friendRequestRoute = require('./routes/friendrequest');
 
 //Qui diciamo di utilizzare le route dichiarate prima in base a dove ci troviamo, se in /login o in /register in questo caso
 app.use('/', indexRoute);
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
+app.use('/friendrequest', friendRequestRoute);
 
 
 //Facciamo partire il server in ascolto sulla porta 3000

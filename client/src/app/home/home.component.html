@@ -3,4 +3,15 @@
 <a href="/register">Registrati qui</a>
 <p>or <a href="/login">login</a> login if you are already registered</p>
 <button (click)="logoutUser()">Effettua il LogOut</button>
+
+
+<div>
+  <form>
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" [(ngModel)]="newfriend.username" name="username"/>
+    </div>
+    <button (click)="newFriendRequest()">Richiedi amicizia</button>
+  </form>
+</div>
 <!-- form con username e sassord e bottone login -->

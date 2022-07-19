@@ -27,8 +27,23 @@ router.post('/', async (req, res) => {
     u.games_won = 0;
     u.accuracy = 0;
     u.pfp = 'profilePictureURL';
+    u.friends_list = ['aa', 'bb', 'cc'];
+    u.blacklisted_users = ['aa'];
+    u.pending_friend_requests = ['aa'];
     u.setPassword(req.body.password);
 
+    /*  ----------PER CONTAINS E DELETE DA UN ARRAY-----------
+
+
+    if (u.friends_list.find(element => element = 'aa')){
+      console.log('CONTAINS WORKS')
+    }
+    delete u.friends_list[0]
+    if (u.friends_list.find(element => element = 'aa')){
+      console.log('CONTAINS WORKS')
+    }
+    
+    */
     try {
         const newUser = await u.save()
         res.json(newUser)
