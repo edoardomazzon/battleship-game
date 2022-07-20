@@ -2,7 +2,6 @@
 require('dotenv/config');
 
 const express = require('express')
-const passport = require('passport'); // authentication middleware for express
 const mongoose = require('mongoose')
 const app = express()
 const port = 3000
@@ -32,6 +31,7 @@ const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
 const friendRequestRoute = require('./routes/friendrequest');
+const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 
 //Qui diciamo di utilizzare le route dichiarate prima in base a dove ci troviamo, se in /login o in /register in questo caso
 app.use('/', indexRoute);
@@ -39,6 +39,7 @@ app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/friendrequest', friendRequestRoute);
+app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 
 
 //Facciamo partire il server in ascolto sulla porta 3000

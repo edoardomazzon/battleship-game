@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { tap } from 'rxjs';
-import { User } from '../models/user';
+import { HttpClient } from '@angular/common/http';
+import { FriendRequest } from '../models/friend-request';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class FriendRequestService {
-  private baseURL = 'http://localhost:3000/friendrequest'
-  constructor(private _httpClient: HttpClient,
-              private _router: Router) { }
+  private sendRequestURL = 'http://localhost:3000/friendrequest'
+  private acceptRequestURL = 'http://localhost:3000/acceptfriendrequest'
+  constructor(private _httpClient: HttpClient) { }
 
-  sendFriendRequest(newfriend: User) {
-    console.log('DA FRIENDREQUEST SERVICE: PROVO AD AGGIUNGERE: ', newfriend.username)
-    return this._httpClient.post('http://localhost:3000/friendrequest', newfriend).subscribe()
+  //Effettua una chiamata HTTP alla route "friendrequest" passando la friendrequest che come sender ha l'username di chi ha chiesto l'amicizia
+  // e come receiver ha l'username di chi la riceve
+  sendFriendRequest(friendrequest: FriendRequest) {
+    return this._httpClient.post(this.sendRequestURL, friendrequest).subscribe()
+  }
+
+  acceptFriendRequest(accepted_request: FriendRequest){
+    return this._httpClient.post(this.acceptRequestURL, accepted_request).subscribe()
   }
 }

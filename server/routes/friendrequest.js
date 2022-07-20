@@ -1,22 +1,32 @@
 const express = require('express');
-
 const User = require('../models/User');
 const router = express.Router();
+const { expressjwt: jwt } = require("express-jwt");
+var auth = jwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ['sha1', 'RS256', 'HS256']
+});
 
 
+/*
+Attivata quando un utente A invia la richiesta di amicizia ad un altro utente B. Il parametro principale nel body è lo username di B
+che essendo UNIQUE identificherà univocamente l'utente a cui si invia la richiesta.
+*/
 router.post("/", async (req, res) => {
-    console.log('ENTRO NELLA POST')
-    const new_friend = req.body.username
-    console.log('STAMPO REQUEST USERNAME: ', req.body.username)
+    //Prendiamo il nome utente del sender e del receiver
+    console.log('REQ BODY: ', req.body)
+    const receiver = req.body.receiver
+    const sender = req.body.sender
+    //Creiamo un array in cui verrà copiata la pending_friend_requests di B
     var list_to_change = new Array();
-    var list_to_change = (await User.findOne({username: new_friend})).pending_friend_requests;
-    console.log('RISULTATO QUERY: ', list_to_change)
-    list_to_change.push(new_friend)
-    console.log('NEW LIST: ', list_to_change)
+    var list_to_change = (await User.findOne({username: receiver})).pending_friend_requests;
+    //Aggiungiamo il nome utente di A nella pending_friend_requests di B
+    list_to_change.push(sender)
 
-
+    //Ora effettuiamo la UPDATE sull'utente B sostituendone la vecchia pending_fiend_requests con quella nuova, che ora ha anche lo
+    //username di A
     try {
-        const update = await User.updateOne({username: new_friend}, {pending_friend_requests: list_to_change}, function(err, docs){
+        const update = await User.updateOne({username: receiver}, {pending_friend_requests: list_to_change}, function(err, docs){
             if (err){
                 console.log(err)
             }
@@ -24,7 +34,7 @@ router.post("/", async (req, res) => {
                 console.log("Updated Docs : ", docs);
             }
         })
-        res.json('ciao')
+        res.json('Friend Requests List updated')
         } catch (err) {
         res.json({ message: err })
         }

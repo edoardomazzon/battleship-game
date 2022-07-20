@@ -29,7 +29,7 @@ export class LoginService {
       tap( (data) => {
         //Otteniamo la response dal server (vedere route login.js in server per capire com'è fatta la response)
         this.response = data;
-
+        localStorage.clear()
         //Salviamo in localstorage il token
         this.token = this.response.token;
         localStorage.setItem('auth_token', this.token);

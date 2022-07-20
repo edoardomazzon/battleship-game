@@ -7,4 +7,14 @@
     <li> Partite giocate: {{ this.current_user.games_played }}</li>
   </ul>
 </div>
+<br>
+<br>
+<div>
+  <ul> PENDING FRIEND REQUESTS
+    <li *ngFor="let friendrequest of this.friend_requests_list">
+      {{ friendrequest }}
+      <button (click)="acceptFriendRequest(friendrequest)">Accetta richiesta</button>
+    </li>
+  </ul>
+</div>
 

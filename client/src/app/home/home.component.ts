@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { tap } from 'rxjs';
 import { ProfileService } from '../services/profile.service';
-import { Router } from '@angular/router';
-import { User } from '../models/user';
 import { FriendRequestService } from '../services/friend-request.service';
+import { FriendRequest } from '../models/friend-request';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +11,8 @@ import { FriendRequestService } from '../services/friend-request.service';
 
 export class HomeComponent implements OnInit {
 
-  public newfriend: User = new User()
-  constructor(private _httpClient: HttpClient,
-              private _profileService: ProfileService,
-              private _router: Router,
+  public friendrequest: FriendRequest = new FriendRequest()
+  constructor(private _profileService: ProfileService,
               private _friendRequestService: FriendRequestService) { }
 
   ngOnInit(): void {}
@@ -31,8 +26,10 @@ export class HomeComponent implements OnInit {
     localStorage.removeItem('auth_token');
   }
 
+  //Funzione chiamata quando un utente A preme su "Send friend request" di fianco a un utente B
   newFriendRequest(): void{
-    console.log('DA HOME COMPONENT TS: PROVO AD AGGIUNGERE L\'UTENTE: ', this.newfriend.username, '\n')
-    this._friendRequestService.sendFriendRequest(this.newfriend)
+    this.friendrequest.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
+    console.log(this.friendrequest)
+    this._friendRequestService.sendFriendRequest(this.friendrequest) //Funzione in FriendRequestService
   }
 }

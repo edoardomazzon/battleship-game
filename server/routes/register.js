@@ -27,9 +27,9 @@ router.post('/', async (req, res) => {
     u.games_won = 0;
     u.accuracy = 0;
     u.pfp = 'profilePictureURL';
-    u.friends_list = ['aa', 'bb', 'cc'];
-    u.blacklisted_users = ['aa'];
-    u.pending_friend_requests = ['aa'];
+    u.friends_list = [];
+    u.blacklisted_users = [];
+    u.pending_friend_requests = [];
     u.setPassword(req.body.password);
 
     /*  ----------PER CONTAINS E DELETE DA UN ARRAY-----------
