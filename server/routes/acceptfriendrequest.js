@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
         })
         res.json('Friends List updated')
         } catch (err) {
-        res.json({ message: err })
+            res.json({ message: err })
         }
     });
    

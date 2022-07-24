@@ -14,31 +14,36 @@ che essendo UNIQUE identificherà univocamente l'utente a cui si invia la richie
 */
 router.post("/", async (req, res) => {
     //Prendiamo il nome utente del sender e del receiver
-    console.log('REQ BODY: ', req.body)
     const receiver = req.body.receiver
     const sender = req.body.sender
+    const user = await User.findOne({username: receiver})
     //Creiamo un array in cui verrà copiata la pending_friend_requests di B
     var list_to_change = new Array();
-    var list_to_change = (await User.findOne({username: receiver})).pending_friend_requests;
-    //Aggiungiamo il nome utente di A nella pending_friend_requests di B
-    list_to_change.push(sender)
+    var list_to_change = user.pending_friend_requests;
 
-    //Ora effettuiamo la UPDATE sull'utente B sostituendone la vecchia pending_fiend_requests con quella nuova, che ora ha anche lo
-    //username di A
-    try {
-        const update = await User.updateOne({username: receiver}, {pending_friend_requests: list_to_change}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log("Updated Docs : ", docs);
-            }
-        })
-        res.json('Friend Requests List updated')
-        } catch (err) {
-        res.json({ message: err })
+    //Se A non è nella blacklist di B
+    if(!list_to_change.includes(sender)){
+        list_to_change.push(sender) //Aggiungiamo il nome utente di A nella pending_friend_requests di B
+
+        //Ora effettuiamo la UPDATE sull'utente B sostituendone la vecchia pending_fiend_requests con quella nuova, che ora ha anche lo
+        //username di A
+        try {
+            const update = await User.updateOne({username: receiver}, {pending_friend_requests: list_to_change}, function(err, docs){
+                if (err){
+                    console.log(err)
+                }
+                else{
+                    console.log("Updated Docs : ", docs);
+                }
+            })
+            res.json('Friend Requests List updated')
+            } catch (err) {
+            res.json({ message: err })
         }
-
+    }
+    else{
+        res.json('Impossibile inviare la richiesta di amicizia: l\'utente a cui vuoi chiedere l\'amicizia ti ha inserito nella sua blacklist.')
+    }
 });
 
 module.exports = router;

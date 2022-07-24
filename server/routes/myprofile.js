@@ -24,7 +24,6 @@ router.get('/', auth, function (req, res) {
     Ma noi vogliamo solo lo username quindi scriviamo username.username
     */
     current_username = username.username;
-    console.log(current_username);
     res.send('MyArea')
 });
 
