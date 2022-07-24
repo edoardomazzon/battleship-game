@@ -10,10 +10,12 @@
 <br>
 <br>
 <div>
-  <ul> PENDING FRIEND REQUESTS
+  <ul *ngIf="this.friend_requests_list.length > 0"> PENDING FRIEND REQUESTS
     <li *ngFor="let friendrequest of this.friend_requests_list">
       {{ friendrequest }}
       <button (click)="acceptFriendRequest(friendrequest)">Accetta richiesta</button>
+      <button (click)="rejectFriendRequest(friendrequest)">Rifiuta richiesta</button>
+      <button (click)="blacklistUser(friendrequest)">Blocca utente</button>
     </li>
   </ul>
 </div>

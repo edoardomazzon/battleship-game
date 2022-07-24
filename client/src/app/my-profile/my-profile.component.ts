@@ -37,4 +37,23 @@ export class MyProfileComponent implements OnInit {
     accepted_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
     this._friendRequestService.acceptFriendRequest(accepted_request)
   }
+
+  //Il reject receiver è chi riceve la risposta negativa alla richiesta di amicizia (cioè chi per primo ha inviato la richiesta)
+  rejectFriendRequest(reject_receiver: String): void {
+    var rejected_request = new FriendRequest();
+    rejected_request.receiver = reject_receiver
+    rejected_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
+    this._friendRequestService.rejectFriendRequest(rejected_request)
+  }
+
+  blacklistUser(blacklisted_user: String): void {
+    //Prima rifiutiamo la richiesta togliendo l'utente dalla pending list
+    this.rejectFriendRequest(blacklisted_user)
+
+    //Poi blacklistiamo l'utente che ha effettuato la richiesta
+    var blacklist_request = new FriendRequest();
+    blacklist_request.receiver = blacklisted_user
+    blacklist_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
+    this._friendRequestService.blacklistUser(blacklist_request)
+  }
 }
