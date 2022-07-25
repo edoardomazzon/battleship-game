@@ -20,12 +20,10 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser(): void {
-    console.log('printing user', this.newuser);
     this._registerService.addUser(this.newuser).subscribe(newuser =>{
       if (newuser){
-        this._router.navigateByUrl('/')
+        this._router.navigateByUrl('/login')
       }
     });
   }
-
 }
