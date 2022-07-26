@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply text-base font-regular; // bg-navy
+}
+h1 {
+  @apply text-xl font-bold;
+}
+h2 {
+  @apply text-l font-bold;
+}
+h3 {
+  @apply text-m font-bold;
+}
+h4 {
+  @apply text-s font-bold;
+}
+h5 {
+  @apply text-xs font-bold;
+}
+.btn {
+  @apply px-4 py-2 bg-navy text-white rounded-lg;
+  &:hover {
+    opacity: .8;
+  }
+}
+form label {
+  @apply block pb-1;
+}
+form input {
+  @apply w-full block relative py-3 px-2 border-2 border-navy rounded-lg text-black text-base focus:outline-navy;
+}

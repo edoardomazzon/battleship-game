@@ -1,29 +1,30 @@
-<h1>Registrati</h1>
-
-<div>
-  <form>
-    <div>
-      <label for="email">Email</label>
-      <!-- Qui mettiamo [(ngModel)] per il two-way-binding di angular grazie all'import del modulo FormsModule da @angular/forms -->
-      <input type="text" id="email" [(ngModel)]="newuser.email" name="email"/>
-      <!-- Chiamiamo la registerUser() nella register.component.ts che a sua volta chiamerà la addUser() di register.service.ts -->
-    </div>
-    <div>
-      <label for="username">Username</label>
-      <input type="text" id="username" [(ngModel)]="newuser.username" name="username"/>
-    </div>
-    <div>
-      <label for="password">Password</label>
-      <input type="password" id="password" [(ngModel)]="newuser.password" name="password"/>
-    </div>
-    <div>
-      <label for="firstname">First Name</label>
-      <input type="text" id="firstname" [(ngModel)]="newuser.firstname" name="firstname"/>
-    </div>
-    <div>
-      <label for="lastname">Last Name</label>
-      <input type="text" id="lastname" [(ngModel)]="newuser.lastname" name="lastname"/>
-    </div>
-    <button (click)="registerUser()">Conferma</button>
-  </form>
+<div class="mt-5 mb-16">
+  <h1 class="text-center pb-5">Signup</h1>
+  <div class="container max-w-[768px]">
+    <form class="shadow-2xl container py-8">
+      <div>
+        <label for="email">Email</label>
+        <!-- Qui mettiamo [(ngModel)] per il two-way-binding di angular grazie all'import del modulo FormsModule da @angular/forms -->
+        <input type="text" id="email" [(ngModel)]="newuser.email" name="email"/>
+        <!-- Chiamiamo la registerUser() nella register.component.ts che a sua volta chiamerà la addUser() di register.service.ts -->
+      </div>
+      <div class="my-7">
+        <label for="username">Username</label>
+        <input type="text" id="username" [(ngModel)]="newuser.username" name="username"/>
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="newuser.password" name="password"/>
+      </div>
+      <div class="my-7">
+        <label for="firstname">First Name</label>
+        <input type="text" id="firstname" [(ngModel)]="newuser.firstname" name="firstname"/>
+      </div>
+      <div class="mb-7">
+        <label for="lastname">Last Name</label>
+        <input type="text" id="lastname" [(ngModel)]="newuser.lastname" name="lastname"/>
+      </div>
+      <button (click)="registerUser()"  class="btn w-full">Conferma</button>
+    </form>
+  </div>
 </div>

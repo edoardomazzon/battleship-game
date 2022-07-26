@@ -1,17 +1,37 @@
-<p>home works!</p>
-<button (click)="gotoprofile()">Vai al profilo</button>
-<a href="/register">Registrati qui</a>
-<p>or <a href="/login">login</a> login if you are already registered</p>
-<button (click)="logoutUser()">Effettua il LogOut</button>
-
-
 <div>
-  <form>
-    <div>
-      <label for="username">Username</label>
-      <input type="text" id="username" [(ngModel)]="friendrequest.receiver" name="username"/>
+  <!-- Commentare il div sottostante se si vuole avere i campi di prova subito in alto nella home -->
+  <div class="game-container h-screen w-50 bg-navy">
+    <h1 class="text-center pt-5">Battleship game</h1>
+    
+    <div class="md:flex mt-6">
+      <div class="game md:flex w-3/4">
+        <div class="bg-gray-700 h-80 w-1/2 mr-5"><p>avv1</p></div>
+        <div class="bg-gray-700 h-80 w-1/2"><p>avv2</p></div>
+      </div>
+      <div class="chat-live w-1/4 ml-8 h-full">
+        <div class="bg-gray-300 h-80"><p>chat</p></div>
+      </div>
     </div>
-    <button (click)="newFriendRequest()">Richiedi amicizia</button>
-  </form>
+  </div>
+  <!-- Commentare fino a qui-->
+
+
+  <h1>Prove</h1>
+  <p class="font-bold">home works!</p>
+  <button (click)="gotoprofile()">Vai al profilo</button>
+  <a href="/register">Registrati qui</a>
+  <p>or <a href="/login">login</a> login if you are already registered</p>
+  <button (click)="logoutUser()">Effettua il LogOut</button>
+
+
+  <div>
+    <form>
+      <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" [(ngModel)]="friendrequest.receiver" name="username"/>
+      </div>
+      <button (click)="newFriendRequest()">Richiedi amicizia</button>
+    </form>
+  </div>
+  <!-- form con username e sassord e bottone login -->
 </div>
-<!-- form con username e sassord e bottone login -->
