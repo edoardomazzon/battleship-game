@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   loginUser(): void {
     this._loginService.login(this.authuser).subscribe(authuser =>{ //serve la .subscribe() per eseguire la chiamata http
       if (authuser){ //se siamo loggati correttamente allora reindirizziamo alla myprofile
-        this._router.navigateByUrl('/myprofile')
+        this._router.navigateByUrl('/')
       }
     });
   }
