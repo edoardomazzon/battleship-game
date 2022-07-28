@@ -27,7 +27,7 @@ export class ProfileService {
 
   profile() {
     //Prendiamo il token in storage e lo mandiamo al server
-    this.usertoken = localStorage.getItem('auth_token');
-    return this._httpClient.get(this.baseURL, this.create_options()).subscribe();
+    //this.usertoken = localStorage.getItem('auth_token');
+    return this._httpClient.get(this.baseURL/*, this.create_options()*/).subscribe();
   }
 }

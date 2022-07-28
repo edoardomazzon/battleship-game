@@ -26,7 +26,6 @@ export class MyProfileComponent implements OnInit {
     if (this.current_user != null){ //Se l'utente è stato trovato perché è loggato
       this.current_user = JSON.parse(this.current_user)
       this.friend_requests_list = this.current_user.pending_friend_requests
-      console.log(this.friend_requests_list)
     } else { this.current_user = new User();} //Se l'utente non è stato trovato allora ne creiamo uno vuoto altrimenti avremmo un errore nell'html
   }
 

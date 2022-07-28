@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 /*
 Questo service ha una funzione utile che ci dice se l'utente è autenticato oppure no
@@ -19,7 +19,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const jwthelper: JwtHelperService = new JwtHelperService() //Questa classe serve per il metodo .isTokenExpired()
     const token = localStorage.getItem('auth_token');
-    if(token){
+    if(token != null){
       return !jwthelper.isTokenExpired(token);
     }
     return false;
