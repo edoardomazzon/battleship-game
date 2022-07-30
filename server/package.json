@@ -20,6 +20,7 @@
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.1",
     "passport": "^0.6.0",
-    "passport-http": "^0.3.0"
+    "passport-http": "^0.3.0",
+    "socketio": "^1.0.0"
   }
 }

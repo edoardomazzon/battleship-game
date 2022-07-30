@@ -15,6 +15,8 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { ChatComponent } from './chat/chat.component';
+import { GameComponent } from './game/game.component';
 
 
 const routes: Routes = [
@@ -35,7 +37,9 @@ const routes: Routes = [
     MyProfileComponent,
     AdminDashboardComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ChatComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
