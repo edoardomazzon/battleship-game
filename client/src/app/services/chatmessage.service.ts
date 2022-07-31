@@ -58,7 +58,7 @@ export class ChatmessageService {
   sendMessage(newmessage: any){
     this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
     console.log('faccio la emit di newmessage')
-    this.socket.emit('new message', newmessage.text_content)
+    this.socket.emit('new message', newmessage)
   }
 
 }
