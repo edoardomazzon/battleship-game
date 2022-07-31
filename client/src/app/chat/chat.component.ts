@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/chatmessage';
 import { ChatmessageService } from '../services/chatmessage.service';
-
-
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -13,6 +12,7 @@ export class ChatComponent implements OnInit {
   private player1: any;
   private player2: any;
   public messages: any[] = [];
+  public newmessage: String =''
 
   constructor(private _chatmessageservice: ChatmessageService) {
     this.player1 = localStorage.getItem('current_user')
@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
     var channel_name = ''
-
+    var ob = new Observable< any >;
     //Ordiniamo alfabeticamente i nomi degli utenti così otteniamo per entrambi un nome comune del canale su cui comunicare,
     //Perché se uno si aspetta dei messaggi su USER1USER2 ma l'altro li emette sul canale USER2USER1 non li riceverà mai
     if(this.player1.localeCompare(this.player2) < 0){
@@ -36,15 +36,28 @@ export class ChatComponent implements OnInit {
     }else{
         channel_name = ''+this.player2+''+this.player1
     }
-    console.log('IL CHANNEL NAME DEL CLIENT E\': ', channel_name)
+
     this.getMessages()
-    this._chatmessageservice.receiveMessage(channel_name).subscribe((message) => {
+
+    this._chatmessageservice.receiveMessages('broadcast').subscribe((message) => { //per ora mettiamo broadcast finché facciamo le prove, poi metteremo channel_name
+      console.log('STAMPO L\'OBSERVABLE: ', message)
       this.getMessages()
     })
+
+
   }
 
   public getMessages(){
     this.messages = this._chatmessageservice.getMessagesFromDb(this.player1, this.player2)
   }
 
+  //Invia un messaggio quando l'utente preme sul bottone "invia"
+  public sendMessage(){
+    if(this.newmessage != ''){
+      const sent_message = this.newmessage
+      this.newmessage = ''
+      this._chatmessageservice.sendMessage({from: this.player1, to: this.player2, text_content: sent_message})
+      this.ngOnInit() //SBAGLIATO: lo faccio solo per ricaricare i messaggi finché non va socket
+    }
+  }
 }

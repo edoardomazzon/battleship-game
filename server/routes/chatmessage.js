@@ -1,10 +1,10 @@
 const express = require('express');
-const User = require('../models/User');
 const ChatMessage = require('../models/ChatMessage');
-const io = require('../app') //importiamo io da app.js
+var ios = require('../app') //importiamo ios da app.js
 const router = express.Router();
-
-router.post("/", async (req, res) => {
+ 
+router.post("/", async (req, res, next) => {
+    console.log(req.body)
     const newmessage = ChatMessage.newChatMessage(req.body)
     const from_username = newmessage.from;
     const to_username = newmessage.to;
@@ -17,16 +17,15 @@ router.post("/", async (req, res) => {
     }else{
         channel_name = ''+to_username+''+from_username
     }
-    console.log('Il nome del canale è: ', channel_name)
     
-    
-
     const insert = await newmessage.save().then( () => {
-        io.emit(channel_name, newmessage.text_content)
         return res.status(200).json({error: false, errormessage: "", message: "Messaggio inviato e salvato in DB"})
     }).catch((reason) => {
         return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });
     })
+
+    console.log('FACCIO LA EMIT SU new message DI: ', newmessage.text_content)
+    ios.emit('new message', newmessage.text_content)
 });
 
 
@@ -35,27 +34,22 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
 
     var last10messages = [] //Lista dei messaggi inviati da player1 a player2
-    console.log('PLAYER 1 E\':', req.body)
     try{
         const select = await ChatMessage.find( {$or: [{from: req.body.from, to: req.body.to}, {from: req.body.to, to: req.body.from}]},
             function(err, docs){
                 if (err){
-                    console.log(err)
+                    console.log('Errore', err)
                 }
                 else{
                     for(let i = 0; i < docs.length; i++){
                         last10messages.push(docs[i])                        
                     }
-                    console.log('LAST 10 MESSAGES BETWEEN ', req.body.from, ' AND ', req.body.to, ' ARE:', last10messages)
                     res.json(last10messages)                   
                 }
             }).sort({timestamp: -1}).skip(0).limit(10)
     }catch(err){
-        console.log(err)
+        console.log('Errore:', err)
     }
-
-    
-
 });
 
 module.exports = router;

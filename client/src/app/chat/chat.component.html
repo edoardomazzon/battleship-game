@@ -1,7 +1,12 @@
 
-<ul>LISTA MESSAGGI
+<ul>CHAT
   <li *ngFor=" let message of this.messages">
-    {{ message.from }}:
-    {{ message.text_content }}
+    <a style="font-weight: bold; font-size:small">{{ message.from }}:</a><a style="font-size:small">{{ message.text_content }}</a>
   </li>
+  <div>
+    <form>
+      <input type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
+      <button class="btn mr-5" (click)="sendMessage()"  class="btn w-full">Invia</button>
+    </form>
+  </div>
 </ul>

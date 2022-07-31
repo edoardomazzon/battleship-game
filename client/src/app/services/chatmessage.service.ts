@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ChatMessage } from '../models/chatmessage';
 import { HttpClient } from '@angular/common/http';
-import io from 'socket.io-client';
-import { response } from 'express';
-
+import {io, Socket} from 'socket.io-client';
 
 
 @Injectable({
@@ -12,29 +10,28 @@ import { response } from 'express';
 })
 export class ChatmessageService {
 
-  private baseURL = 'http://localhost:3000/chatmessage'
-  private socket: any;
-  constructor(private _httpClient: HttpClient) { }
+  public baseURL = 'http://localhost:3000/'
+  public socket: Socket
 
-  receiveMessage(channel_name: String): Observable<any>{
+
+  constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
+  }
+
+  receiveMessages(channel_name: String): Observable<any>{
     return new Observable((observer) => {
 
-      this.socket.on(channel_name, (message: any) => {
-        console.log('Socket.io ha ricevuto dal canale ', channel_name, ' questo messaggio: ', JSON.stringify(message));
+      this.socket.on('connect', ()=>{
+        console.log('Mi sto connettendo')
+      })
+
+      this.socket.on('message', (message: any) => {
+        console.log('Socket.io ha ricevuto questo messaggio: ', JSON.stringify(message));
         observer.next(message);
       });
 
-      this.socket.on('error', (err: any) => {
-        console.log('Socket.io error: ', err);
-        observer.error(err);
-      });
-
-      var a = this.socket
-      return {
-        unsubscribe(){
-          a.disconnect()
-        }
+      return () => {
+        this.socket.disconnect()
       }
     });
   }
@@ -47,17 +44,21 @@ export class ChatmessageService {
     var messages_list: any[] = []
 
     var json = JSON.parse(JSON.stringify(from_to))
-    console.log('COSA PASSIAMO AL SERVER: ', json)
 
-    this._httpClient.put(this.baseURL, json).subscribe((response) => {
-      console.log('LA RESPONSE DAL SERVER QUANDO FACCIAMO GETMESSAGESFROMDB: ', response)
+    this._httpClient.put(this.baseURL+'chatmessage', json).subscribe((response) => {
       var returned_list = JSON.parse(JSON.stringify((response)))
-      console.log('RETURNED LIST: ', returned_list)
       for(let i = 0; i < returned_list.length; i++){
-        console.log('SINGOLO ELEMENTO DELLA RETURNED LIST: ', returned_list[i])
         messages_list.push(returned_list[i])
       }
     })
     return messages_list
   }
+
+
+  sendMessage(newmessage: any){
+    this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
+    console.log('faccio la emit di newmessage')
+    this.socket.emit('new message', newmessage.text_content)
+  }
+
 }
