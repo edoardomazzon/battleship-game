@@ -8,7 +8,14 @@ const server = http.createServer(app)
 const port = 3000
 const bodyParser = require('body-parser'); // Serve per il parsing in json del body delle request GET, POST, PUT, etc.
 const io = require('socket.io')
-const ios = io.listen(server);
+
+const ios = io(server, {
+  cors: {
+    origin: "http://localhost:4200",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With", "cache-control"]
+  }
+});
 module.exports = ios //esportiamo ios per le altre route
 
 app.all('/*', (req, res, next) => {
@@ -54,11 +61,14 @@ app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
 
 ios.on('connection', (socket) => {
-  console.log("Socket.io client connected")
+  console.log("A Socket.io client connected", socket.id)
   socket.on('new message', (data) => {
-    console.log('Dal server ho sentito la new message inviata dal client')
-    socket.broadcast.emit('message', data)
+    console.log('Dal server ho sentito la new message inviata dal client; il messaggio inviato è: ', data)
+    socket.emit('message', data)
   })
+})
+ios.on('disconnect', () => {
+  console.log("A client disconnected from Socket.io")
 })
 
 //Facciamo partire il server in ascolto sulla porta 3000

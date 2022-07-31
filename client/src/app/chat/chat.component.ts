@@ -38,13 +38,10 @@ export class ChatComponent implements OnInit {
     }
 
     this.getMessages()
-
-    this._chatmessageservice.receiveMessages('broadcast').subscribe((message) => { //per ora mettiamo broadcast finché facciamo le prove, poi metteremo channel_name
+    this._chatmessageservice.receiveMessages().subscribe((message) => { //per ora mettiamo broadcast finché facciamo le prove, poi metteremo channel_name
       console.log('STAMPO L\'OBSERVABLE: ', message)
       this.getMessages()
     })
-
-
   }
 
   public getMessages(){
@@ -57,7 +54,6 @@ export class ChatComponent implements OnInit {
       const sent_message = this.newmessage
       this.newmessage = ''
       this._chatmessageservice.sendMessage({from: this.player1, to: this.player2, text_content: sent_message})
-      this.ngOnInit() //SBAGLIATO: lo faccio solo per ricaricare i messaggi finché non va socket
     }
   }
 }

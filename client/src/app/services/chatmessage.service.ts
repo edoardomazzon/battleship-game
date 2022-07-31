@@ -18,7 +18,7 @@ export class ChatmessageService {
     this.socket = io(this.baseURL)
   }
 
-  receiveMessages(channel_name: String): Observable<any>{
+  receiveMessages(): Observable<any>{
     return new Observable((observer) => {
 
       this.socket.on('connect', ()=>{

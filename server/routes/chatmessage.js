@@ -23,9 +23,6 @@ router.post("/", async (req, res, next) => {
     }).catch((reason) => {
         return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });
     })
-
-    console.log('FACCIO LA EMIT SU new message DI: ', newmessage.text_content)
-    ios.emit('new message', newmessage.text_content)
 });
 
 
