@@ -41,8 +41,8 @@ router.put("/", async (req, res) => {
                     for(let i = 0; i < docs.length; i++){
                         last10messages.push(docs[i])                        
                     }
-                    res.json(last10messages)                   
-                }
+                    res.json(last10messages.reverse())//Li invertiamo così il client li stampa già nell'ordine giusto
+                 }
             }).sort({timestamp: -1}).skip(0).limit(10)
     }catch(err){
         console.log('Errore:', err)

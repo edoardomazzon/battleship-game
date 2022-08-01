@@ -21,12 +21,7 @@ export class ChatmessageService {
   receiveMessages(): Observable<any>{
     return new Observable((observer) => {
 
-      this.socket.on('connect', ()=>{
-        console.log('Mi sto connettendo')
-      })
-
       this.socket.on('message', (message: any) => {
-        console.log('Socket.io ha ricevuto questo messaggio: ', JSON.stringify(message));
         observer.next(message);
       });
 
@@ -37,7 +32,7 @@ export class ChatmessageService {
   }
 
   getMessagesFromDb(player1: String, player2: String): ChatMessage[]{
-    //Riutilizziamo il model di angular "ChatMessage" perché ha i cami from e to che dobbiamno inviare al db incapsulati in un unico oggetto
+    //Riutilizziamo il model di angular "ChatMessage" perché ha i campi from e to che dobbiamno inviare al db incapsulati in un unico oggetto
     var from_to = new ChatMessage()
     from_to.from = player1
     from_to.to = player2
@@ -46,9 +41,9 @@ export class ChatmessageService {
     var json = JSON.parse(JSON.stringify(from_to))
 
     this._httpClient.put(this.baseURL+'chatmessage', json).subscribe((response) => {
-      var returned_list = JSON.parse(JSON.stringify((response)))
+      var returned_list = JSON.parse(JSON.stringify((response))) //La repsonse ha l'array (già invertito dal lato server) degli ultimi 10 messaggi
       for(let i = 0; i < returned_list.length; i++){
-        messages_list.push(returned_list[i])
+        messages_list.push(returned_list[i])//Riempiamo la message list che ritorniamo a chat component
       }
     })
     return messages_list
@@ -57,7 +52,6 @@ export class ChatmessageService {
 
   sendMessage(newmessage: any){
     this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
-    console.log('faccio la emit di newmessage')
     this.socket.emit('new message', newmessage)
   }
 

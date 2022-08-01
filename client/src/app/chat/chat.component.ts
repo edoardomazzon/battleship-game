@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class ChatComponent implements OnInit {
   private player1: any;
   private player2: any;
-  public messages: any[] = [];
+  public messages: any = [];
   public newmessage: String =''
 
   constructor(private _chatmessageservice: ChatmessageService) {
@@ -39,8 +39,9 @@ export class ChatComponent implements OnInit {
 
     this.getMessages()
     this._chatmessageservice.receiveMessages().subscribe((message) => { //per ora mettiamo broadcast finché facciamo le prove, poi metteremo channel_name
-      console.log('STAMPO L\'OBSERVABLE: ', message)
-      this.getMessages()
+      this.messages.push(message) //Inserisco il messaggio inviato nella lista messages senza dover fare la query
+      this.messages.shift() //Shifto l'array di una posizione per eliminare il messaggio più vecchio
+      console.log(this.messages[0])
     })
   }
 
