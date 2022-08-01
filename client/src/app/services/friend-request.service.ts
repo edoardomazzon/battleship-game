@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FriendRequest } from '../models/friend-request';
+import {io, Socket} from 'socket.io-client';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class FriendRequestService {
+  private baseURL = 'http://localhost:3000/'
   private sendRequestURL = 'http://localhost:3000/friendrequest'
   private acceptRequestURL = 'http://localhost:3000/acceptfriendrequest'
   private rejectRequestURL = 'http://localhost:3000/rejectfriendrequest'
   private blacklistRequestURL = 'http://localhost:3000/blacklistuser'
-
-  constructor(private _httpClient: HttpClient) { }
+  private socket: Socket;
+  constructor(private _httpClient: HttpClient) {
+    this.socket = io(this.baseURL)
+   }
 
   //Effettua una chiamata HTTP alla route "friendrequest" passando la friendrequest che come sender ha l'username di chi ha chiesto l'amicizia
   // e come receiver ha l'username di chi la riceve
   sendFriendRequest(friendrequest: FriendRequest) {
-    return this._httpClient.post(this.sendRequestURL, friendrequest).subscribe()
+    this._httpClient.post(this.sendRequestURL, friendrequest).subscribe()
+    // this.socket.emit('newfriendrequest'+friendrequest.receiver, friendrequest)
   }
 
   acceptFriendRequest(accepted_request: FriendRequest){
@@ -33,8 +39,12 @@ export class FriendRequestService {
         user.pending_friend_requests = response
         localStorage.removeItem('current_user')
         localStorage.setItem('current_user', JSON.stringify(user))
+        this.socket.emit('newrejectedrequest', {
+          request_type: 'reject',
+          rejecting_user: ''+rejected_request.sender,
+          rejected_user: ''+rejected_request.receiver
+        })
       }
-      location.reload() //ricarichiamo la pagina per mostrare la pending request scomparsa (FACCIAMO COSI' FINCHE' NON USIAMO SOCKET)
     })
   }
 
@@ -48,8 +58,32 @@ export class FriendRequestService {
         localStorage.removeItem('current_user')
         localStorage.setItem('current_user', JSON.stringify(user))
       }
-      location.reload() //ricarichiamo la pagina per mostrare la blacklist aggiornata (FACCIAMO COSI' FINCHE' NON USIAMO SOCKET)
+      this.socket.emit('newblockeduser',{
+        request_type: 'block',
+        blocker: ''+blacklist_request.sender
+      })
     })
   }
 
+  listenToAnsweredRequests(current_username: String): Observable <any>{
+    return new Observable((observer) => {
+
+      this.socket.on('acceptedrequest', (message: any) => {
+        observer.next(message);
+      });
+
+      this.socket.on('rejectedrequest'+current_username, (message: any) => {
+        console.log('ho sentito la rejectedrequest'+current_username)
+        observer.next(message);
+      });
+
+      this.socket.on('blockeduser'+current_username, (message: any) => {
+        observer.next(message);
+      });
+
+      return () => {
+        this.socket.disconnect()
+      }
+    });
+  }
 }

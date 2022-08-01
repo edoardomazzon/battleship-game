@@ -15,6 +15,8 @@ export class MyProfileComponent implements OnInit {
   private baseURL: string = 'http://localhost:3000/myprofile'
   public current_user: any;
   public friend_requests_list: Array<String> = [];
+  public blacklisted_users: Array<String> = [];
+  public friends: Array<String> = [];
 
   constructor(private _httpClient: HttpClient,
               private _profileService: ProfileService,
@@ -24,10 +26,37 @@ export class MyProfileComponent implements OnInit {
     //Prendiamo il json in localStorage che contiene i dati dell'utente loggato
     this.current_user = localStorage.getItem('current_user')
     if (this.current_user != null){ //Se l'utente è stato trovato perché è loggato
+
+      this.getFriendRequests((JSON.parse(this.current_user)).username)
+
+      this._friendRequestService.listenToAnsweredRequests(((JSON.parse(this.current_user)).username)).subscribe((observer)=>{
+
+        if(observer.request_type == 'reject'){
+          console.log('Siamo nel caso di reject')
+          var current = localStorage.getItem('current_user')
+          if(current != null){
+            this.friend_requests_list = (JSON.parse(JSON.parse(JSON.stringify(current)))).pending_friend_requests
+          }
+        }
+        else if(observer.request_type == 'block'){
+          console.log('Siamo nel caso di block')
+          var current = localStorage.getItem('current_user')
+          if(current != null){
+            this.blacklisted_users = (JSON.parse(JSON.parse(JSON.stringify(current)))).blacklisted_users
+          }
+        }
+      })
+
       this.current_user = JSON.parse(this.current_user)
       this.friend_requests_list = this.current_user.pending_friend_requests
     } else { this.current_user = new User();} //Se l'utente non è stato trovato allora ne creiamo uno vuoto altrimenti avremmo un errore nell'html
   }
+
+
+  getFriendRequests(current_username: String){
+    //Query che prende le pending_friend_requests e le salva in localhost
+  }
+
 
   //L'acceptance receiver è chi riceve la risposta positiva della richiesta di amicizia (cioè chi per primo ha inviato la richiesta)
   acceptFriendRequest(acceptance_receiver: String): void {

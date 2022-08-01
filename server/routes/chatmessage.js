@@ -1,6 +1,5 @@
 const express = require('express');
 const ChatMessage = require('../models/ChatMessage');
-var ios = require('../app') //importiamo ios da app.js
 const router = express.Router();
  
 router.post("/", async (req, res, next) => {

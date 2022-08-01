@@ -8,6 +8,7 @@ var auth = jwt({
 });
 
 
+
 /*
 Attivata quando un utente A invia la richiesta di amicizia ad un altro utente B. Il parametro principale nel body è lo username di B
 che essendo UNIQUE identificherà univocamente l'utente a cui si invia la richiesta.

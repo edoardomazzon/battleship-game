@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatMessage } from '../models/chatmessage';
 import { ChatmessageService } from '../services/chatmessage.service';
 import { Observable } from 'rxjs';
 
@@ -28,7 +27,6 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
     var channel_name = ''
-    var ob = new Observable< any >;
     //Ordiniamo alfabeticamente i nomi degli utenti così otteniamo per entrambi un nome comune del canale su cui comunicare,
     //Perché se uno si aspetta dei messaggi su USER1USER2 ma l'altro li emette sul canale USER2USER1 non li riceverà mai
     if(this.player1.localeCompare(this.player2) < 0){
@@ -41,7 +39,6 @@ export class ChatComponent implements OnInit {
     this._chatmessageservice.receiveMessages().subscribe((message) => { //per ora mettiamo broadcast finché facciamo le prove, poi metteremo channel_name
       this.messages.push(message) //Inserisco il messaggio inviato nella lista messages senza dover fare la query
       this.messages.shift() //Shifto l'array di una posizione per eliminare il messaggio più vecchio
-      console.log(this.messages[0])
     })
   }
 

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
               private _friendRequestService: FriendRequestService,
               private _router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   gotoprofile(): void {
     this._router.navigateByUrl('/myprofile')

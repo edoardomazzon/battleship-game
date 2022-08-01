@@ -16,7 +16,7 @@ const ios = io(server, {
     allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With", "cache-control"]
   }
 });
-module.exports = ios //esportiamo ios per le altre route
+
 
 app.all('/*', (req, res, next) => {
   //Abilitiamo le policy CORS che altrimenti ci bloccherebbero il traffico in uscita
@@ -47,7 +47,6 @@ const blacklistUserRoute = require('./routes/blacklistuser');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
 
-
 //Qui diciamo di utilizzare le route dichiarate prima in base a dove ci troviamo, se in /login o in /register in questo caso
 app.use('/', indexRoute);
 app.use('/login', loginRoute);
@@ -60,16 +59,28 @@ app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
 
+//Setting up Socket.io server side (ios stands for Io Server)
 ios.on('connection', (socket) => {
-  console.log("A Socket.io client connected", socket.id)
+  console.log("Socekt.io client connected with ID: ", socket.id)
+
   socket.on('new message', (data) => {
-    console.log('Dal server ho sentito la new message inviata dal client; il messaggio inviato è: ', data)
     socket.emit('message', data)
   })
+
+  socket.on('newrejectedrequest', (newrejectedrequest) => {
+    socket.emit('rejectedrequest'+newrejectedrequest.rejecting_user, newrejectedrequest)
+  })
+  
+  socket.on('newblockeduser', (newblock) => {
+    socket.emit('blockeduser'+newblock.blocker, newrejectedrequest)
+  })
+  
+  socket.on('disconnect', () => {
+    console.log("Client " + socket.id + " disconnected from Socket.io")
+  })
+
 })
-ios.on('disconnect', () => {
-  console.log("A client disconnected from Socket.io")
-})
+
 
 //Facciamo partire il server in ascolto sulla porta 3000
 server.listen(port, () => {
