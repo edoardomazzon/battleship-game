@@ -47,28 +47,18 @@ router.post("/", async (req, res) => {
     try {
         //Prima update -- Friends List
         const update1 = await User.updateOne({username: accept_sender}, {friends_list: friendslist1}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log(docs)
-            }
+            if (err){}
+            else{}
         })
-        } catch (err) { console.log(err) }
+        } catch (err) {}
 
     try {
         //seconda update -- Friend Requests List
         const update2 = await User.updateOne({username: accept_sender}, {pending_friend_requests: new_pending_list}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log(docs)
-            }
+            if (err){}
+            else{}
         })
-        } catch (err) {
-            console.log(err)
-        }
+        } catch (err) {}
         
     //Nella lista di chi ha inviato la richiesta mettiamo il nome di chi l'ha accettata
     //Ovvero: nella friends_list di A compare il nome di B
@@ -77,16 +67,12 @@ router.post("/", async (req, res) => {
     friendslist2.push(accept_sender)
     try {
         const update3 = await User.updateOne({username: accept_receiver}, {friends_list: friendslist2}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log("Updated Docs : ", docs);
-            }
+            if (err){}
+            else{}
         })
-        res.json('Friends List updated')
+        res.json(friendslist1) //Ritorno al client di chi ha accettato l'amicizia la sua nuova lista di amici
         } catch (err) {
-            res.json({ message: err })
+            res.json(friendslist1)
         }
     });
    

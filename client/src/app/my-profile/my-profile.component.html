@@ -16,5 +16,10 @@
         <button (click)="blacklistUser(receiver)">Blocca utente</button>
       </li>
     </ul>
+    <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
+      <li *ngFor="let friend of this.friends">
+        {{ friend }}
+      </li>
+    </ul>
   </div>
 </div>

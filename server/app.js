@@ -67,6 +67,14 @@ ios.on('connection', (socket) => {
     socket.emit('message', data)
   })
 
+  socket.on('newacceptedrequest', (newacceptedrequest) => {
+    socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)//Avvisiamo chi accetta che deve aggiornare la sua component
+    socket.emit('yougotaccepted'+newacceptedrequest.accepted_user, { //uso broadcast così la emit non arriva a me stesso, è un controllo in più
+      request_type: 'yougotaccepted',
+      accepting_user: ''+newacceptedrequest.accepting_user
+    })//Avvsiamo chi è stato accettato di aggiornare la sua component
+  })
+  
   socket.on('newrejectedrequest', (newrejectedrequest) => {
     socket.emit('rejectedrequest'+newrejectedrequest.rejecting_user, newrejectedrequest)
   })

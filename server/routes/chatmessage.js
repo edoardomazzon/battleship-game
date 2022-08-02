@@ -33,9 +33,7 @@ router.put("/", async (req, res) => {
     try{
         const select = await ChatMessage.find( {$or: [{from: req.body.from, to: req.body.to}, {from: req.body.to, to: req.body.from}]},
             function(err, docs){
-                if (err){
-                    console.log('Errore', err)
-                }
+                if (err){}
                 else{
                     for(let i = 0; i < docs.length; i++){
                         last10messages.push(docs[i])                        
@@ -43,9 +41,7 @@ router.put("/", async (req, res) => {
                     res.json(last10messages.reverse())//Li invertiamo così il client li stampa già nell'ordine giusto
                  }
             }).sort({timestamp: -1}).skip(0).limit(10)
-    }catch(err){
-        console.log('Errore:', err)
-    }
+    }catch(err){}
 });
 
 module.exports = router;

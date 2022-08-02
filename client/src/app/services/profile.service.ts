@@ -30,4 +30,11 @@ export class ProfileService {
     //this.usertoken = localStorage.getItem('auth_token');
     return this._httpClient.get(this.baseURL/*, this.create_options()*/).subscribe();
   }
+
+  getUserInfo(username: String): any{
+    this._httpClient.post(this.baseURL, {username: username}).subscribe((response) => {
+      localStorage.removeItem('current_user')
+      localStorage.setItem('current_user', JSON.stringify(response))
+    })
+  }
 }

@@ -27,7 +27,25 @@ export class FriendRequestService {
   }
 
   acceptFriendRequest(accepted_request: FriendRequest){
-    return this._httpClient.post(this.acceptRequestURL, accepted_request).subscribe()
+    return this._httpClient.post(this.acceptRequestURL, accepted_request).subscribe((response) => { //nella response c'è la nostra nuova friendslist
+      //Una volta accettata la richiesta aggiorniamo il localstorage del current_user con la nuova friends list e la nuova pending_friend_requests
+      var user: any = localStorage.getItem('current_user')
+      if(user != null){
+        console.log('La response dal server è: ', response)
+        user = JSON.parse(user)
+        user.friends_list = response //aggiorno la lista di amici del current user
+        localStorage.removeItem('current_user')
+        localStorage.setItem('current_user', JSON.stringify(user))
+
+
+        //Avviso il server di una nuova accepted request
+        this.socket.emit('newacceptedrequest', {
+          request_type: 'accept',
+          accepting_user: ''+accepted_request.sender,
+          accepted_user: ''+accepted_request.receiver
+        })
+      }
+    })
   }
 
   rejectFriendRequest(rejected_request: FriendRequest){
@@ -68,7 +86,11 @@ export class FriendRequestService {
   listenToAnsweredRequests(current_username: String): Observable <any>{
     return new Observable((observer) => {
 
-      this.socket.on('acceptedrequest', (message: any) => {
+      this.socket.on('acceptedrequest'+current_username, (message: any) => {
+        observer.next(message);
+      });
+
+      this.socket.on('yougotaccepted'+current_username, (message: any) => {
         observer.next(message);
       });
 
