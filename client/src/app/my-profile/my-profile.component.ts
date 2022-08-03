@@ -30,6 +30,12 @@ export class MyProfileComponent implements OnInit {
       this.getUserInfo((JSON.parse(this.current_user)).username)//Aggiorniamo il localstorage con le nuove info dell'utente dal db
 
       this._friendRequestService.listenToAnsweredRequests(((JSON.parse(this.current_user)).username)).subscribe((observer)=>{
+        if(observer.request_type == 'friendrequest'){
+          var current = localStorage.getItem('current_user') //Magari conviene unire questa request_type a quella sotto di reject così risparmiamo codice
+          if(current != null){
+            this.friend_requests_list = (JSON.parse(JSON.parse(JSON.stringify(current)))).pending_friend_requests
+          }
+        }
         if(observer.request_type == 'reject'){
           var current = localStorage.getItem('current_user')
           if(current != null){
