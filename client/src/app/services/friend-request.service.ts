@@ -23,18 +23,12 @@ export class FriendRequestService {
   // e come receiver ha l'username di chi la riceve
   sendFriendRequest(friendrequest: FriendRequest) {
     this._httpClient.post(this.sendRequestURL, friendrequest).subscribe(() => {
-      var user: any = localStorage.getItem('current_user')
-      if(user != null){
-        user = JSON.parse(user)
-        user.friends_list.push(friendrequest.sender)
-        localStorage.removeItem('current_user')
-        localStorage.setItem('current_user', JSON.stringify(user))
-        
-        this.socket.emit('newfriendrequest', {
-        request_type: 'friendrequest',
-        request_sender: friendrequest.sender,
-        request_receiver: friendrequest.receiver
-      }
+      console.log('FACCIO LA EMIT DI newfriendrequest')
+      this.socket.emit('newfriendrequest', {
+      request_type: 'friendrequest',
+      sender: friendrequest.sender,
+      receiver: friendrequest.receiver
+      })
     })
     /* Da qui il server dovrà ascoltare la emit e a sua volta fare una emit
        di 'friendrequest'+friendrequest.receiver così chi riceve la richiesta di amicizia è subito avvisato e di conseguenza aggiorna la sua lista
@@ -100,9 +94,19 @@ export class FriendRequestService {
   }
 
   listenToAnsweredRequests(current_username: String): Observable <any>{
+    console.log('STO ASCOLTANDO LE RISPOSTE - ', current_username)
     return new Observable((observer) => {
       //If this Socket.io emit is listened, it means a user sent us a friend request
       this.socket.on('friendrequest'+current_username, (message:any) => {
+        console.log('Il message è: ', message)
+        console.log('DAL SERVICE: ho sentito la friendrequest'+current_username + 'inviata da '+ message.sender)
+        var user: any = localStorage.getItem('current_user')
+        if(user != null){
+          user = JSON.parse(user)
+          user.pending_friend_requests.push(message.sender)
+          localStorage.removeItem('current_user')
+          localStorage.setItem('current_user', JSON.stringify(user))
+        }
         observer.next(message);
       });
       //If this Socket.io emit is listened, it means we accepted a friend request
@@ -111,6 +115,14 @@ export class FriendRequestService {
       });
       //If this Socket.io emit is listened, it means a user accepted our friend request
       this.socket.on('yougotaccepted'+current_username, (message: any) => {
+        console.log('DAL SERVICE: ho sentito la yougotaccepted'+message.accepting_user)
+        var user: any = localStorage.getItem('current_user')
+        if(user != null){
+          user = JSON.parse(user)
+          user.friends_list.push(message.accepting_user)
+          localStorage.removeItem('current_user')
+          localStorage.setItem('current_user', JSON.stringify(user))
+        }
         observer.next(message);
       });
       //If this Socket.io emit is listened, it means we rejected a friend request

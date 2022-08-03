@@ -68,13 +68,15 @@ ios.on('connection', (socket) => {
   })
   
   socket.on('newfriendrequest', (friendrequest) =>{
-    socket.emit('friendrequest'+friendrequest.receiver, friendrequest) //Avvisiamo chi ha ricevuto la richiesta così che aggiorni la sua pending list 
+    console.log('HO SENTITO LA newfriendrequest INVIATA DA '+ friendrequest.sender + 'A '+ friendrequest.receiver)
+    console.log('FACCIO LA EMIT DI friendrequest'+friendrequest.receiver)
+    socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest) //Avvisiamo chi ha ricevuto la richiesta così che aggiorni la sua pending list 
                                                                        //in tempo reale senza dover fare di nuovo la query a db
   })
 
   socket.on('newacceptedrequest', (newacceptedrequest) => {
     socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)//Avvisiamo chi accetta che deve aggiornare la sua component
-    socket.emit('yougotaccepted'+newacceptedrequest.accepted_user, { //uso broadcast così la emit non arriva a me stesso, è un controllo in più
+    socket.broadcast.emit('yougotaccepted'+newacceptedrequest.accepted_user, { //uso broadcast così la emit non arriva a me stesso, è un controllo in più
       request_type: 'yougotaccepted',
       accepting_user: ''+newacceptedrequest.accepting_user
     })//Avvsiamo chi è stato accettato di aggiornare la sua component

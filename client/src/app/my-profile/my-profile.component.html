@@ -8,7 +8,7 @@
     </ul>
   </div>
   <div>
-    <ul *ngIf="this.friend_requests_list.length != undefined && this.friend_requests_list.length > 0"> PENDING FRIEND REQUESTS
+    <ul *ngIf="this.friend_requests_list.length > 0"> PENDING FRIEND REQUESTS
       <li *ngFor="let receiver of this.friend_requests_list">
         {{ receiver }}
         <button (click)="acceptFriendRequest(receiver)">Accetta richiesta</button>
