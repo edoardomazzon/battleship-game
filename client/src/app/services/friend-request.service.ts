@@ -22,11 +22,19 @@ export class FriendRequestService {
   //Effettua una chiamata HTTP alla route "friendrequest" passando la friendrequest che come sender ha l'username di chi ha chiesto l'amicizia
   // e come receiver ha l'username di chi la riceve
   sendFriendRequest(friendrequest: FriendRequest) {
-    this._httpClient.post(this.sendRequestURL, friendrequest).subscribe()
-    this.socket.emit('newfriendrequest', {
-      request_type: 'friendrequest',
-      request_sender: friendrequest.sender,
-      request_receiver: friendrequest.receiver
+    this._httpClient.post(this.sendRequestURL, friendrequest).subscribe(() => {
+      var user: any = localStorage.getItem('current_user')
+      if(user != null){
+        user = JSON.parse(user)
+        user.friends_list.push(friendrequest.sender)
+        localStorage.removeItem('current_user')
+        localStorage.setItem('current_user', JSON.stringify(user))
+        
+        this.socket.emit('newfriendrequest', {
+        request_type: 'friendrequest',
+        request_sender: friendrequest.sender,
+        request_receiver: friendrequest.receiver
+      }
     })
     /* Da qui il server dovrà ascoltare la emit e a sua volta fare una emit
        di 'friendrequest'+friendrequest.receiver così chi riceve la richiesta di amicizia è subito avvisato e di conseguenza aggiorna la sua lista
