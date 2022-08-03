@@ -23,10 +23,15 @@ export class FriendRequestService {
   // e come receiver ha l'username di chi la riceve
   sendFriendRequest(friendrequest: FriendRequest) {
     this._httpClient.post(this.sendRequestURL, friendrequest).subscribe()
-    this.socket.emit('newfriendrequest', friendrequest) //Da qui il server dovrà ascoltare la emit e a sua volta fare una emit
-    //di 'friendrequest'+friendrequest.receiver così chi riceve la richiesta di amicizia è subito avvisato e di conseguenza aggiorna la sua lista
-    //di pending_friend_requests senza dover rifare la query; in myprofile.component.ts basterà fare this.friend_requests.push(friendrequest.sender)
-    //e in più aggiornare anche il localstorage con la nuova friendrequest inserita in lista.
+    this.socket.emit('newfriendrequest', {
+      request_type: 'friendrequest',
+      request_sender: friendrequest.sender,
+      request_receiver: friendrequest.receiver
+    })
+    /* Da qui il server dovrà ascoltare la emit e a sua volta fare una emit
+       di 'friendrequest'+friendrequest.receiver così chi riceve la richiesta di amicizia è subito avvisato e di conseguenza aggiorna la sua lista
+       di pending_friend_requests senza dover rifare la query; in myprofile.component.ts basterà fare this.friend_requests.push(friendrequest.sender)
+       e in più aggiornare anche il localstorage con la nuova friendrequest inserita in lista. */
   }
 
   acceptFriendRequest(accepted_request: FriendRequest){
@@ -88,20 +93,24 @@ export class FriendRequestService {
 
   listenToAnsweredRequests(current_username: String): Observable <any>{
     return new Observable((observer) => {
-
+      //If this Socket.io emit is listened, it means a user sent us a friend request
+      this.socket.on('friendrequest'+current_username, (message:any) => {
+        observer.next(message);
+      });
+      //If this Socket.io emit is listened, it means we accepted a friend request
       this.socket.on('acceptedrequest'+current_username, (message: any) => {
         observer.next(message);
       });
-
+      //If this Socket.io emit is listened, it means a user accepted our friend request
       this.socket.on('yougotaccepted'+current_username, (message: any) => {
         observer.next(message);
       });
-
+      //If this Socket.io emit is listened, it means we rejected a friend request
       this.socket.on('rejectedrequest'+current_username, (message: any) => {
         console.log('ho sentito la rejectedrequest'+current_username)
         observer.next(message);
       });
-
+      //If this Socket.io emit is listened, it means we blocked a user
       this.socket.on('blockeduser'+current_username, (message: any) => {
         observer.next(message);
       });
