@@ -2,5 +2,11 @@ In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli pro
 L'obiettivo è finire il progetto in modo che non lanci nessun warning, o comunque che non avvengano errori. Ad esempio quando faccio una query su mongoose,
 la query funziona ma mongoose da errore perché dice "query was already executed" e quindi finiamo nel campo catch(error) e non ritorniamo bene le risposte 
 in json al client che ha fatto la richiesta.
-Mi è toccato mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
+Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
 E questo è solo un esempio
+
+
+- risolvere errori mongoose
+- bloccare richiesta di amicizia se sei già amico o bloccato (controlli lato server+db anche se da frontend non faremo neanche comparire i bottoni)
+- mettere commenti in inglese
+- togliere console.log() inutili
