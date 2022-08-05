@@ -1,11 +1,7 @@
-//Importiamo mongoose
 const mongoose = require('mongoose');
 var crypto = require("crypto");
 
-
-//Costruiamo uno schema per l'utente con il costruttore Schema() di mongoose
 const UserSchema = mongoose.Schema({
-    //Per ogni attributo diamo il tipo e se è richiesto (oltre ad altre qualsiasi proprietà vogliamo)
     role:{
         type: String,
         required: false
@@ -76,7 +72,6 @@ const UserSchema = mongoose.Schema({
     }
 })
 
-
 UserSchema.methods.setPassword = function (pwd) {
     this.salt = crypto.randomBytes(16).toString('hex'); // We use a random 16-bytes hex string for salt
     // We use the hash function sha512 to hash both the password and salt to
@@ -93,8 +88,6 @@ UserSchema.methods.setPassword = function (pwd) {
     this.digest = hmac.digest('hex'); // The final digest depends both by the password and the salt
 };
 
-
-
 UserSchema.methods.validatePassword = function (pwd) {
     // To validate the password, we compute the digest with the
     // same HMAC to check if it matches with the digest we stored
@@ -105,8 +98,6 @@ UserSchema.methods.validatePassword = function (pwd) {
     var digest = hmac.digest('hex');
     return (this.digest === digest);
 };
-
-
 
 function getSchema() { return UserSchema; }
 module.exports.getSchema = getSchema;
@@ -119,8 +110,6 @@ function getModel() {
     return userModel;
 }
 
-
-
 function newUser(data) {
     var _usermodel = getModel();
     var user = new _usermodel(data);
@@ -129,7 +118,5 @@ function newUser(data) {
 
 
 module.exports = mongoose.model('User', UserSchema);
-
 module.exports.getModel = getModel;
-
 module.exports.newUser = newUser;

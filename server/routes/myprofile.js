@@ -6,21 +6,23 @@ router.get('/', function (req, res) {
     res.send('MyProfile')
 });
 
+//This method is called when getUserInfo() function is called from myprofile.component.ts; that function refreshes the user's
+//localstorage as well as its component's fields with updated info from the database, so we send a response with the user.
 router.post('/', async(req, res) => {
     var user = req.body.username
     try{
         const select = await User.findOne( {username: user},
             function(err, docs){
                 if (err){
-                    console.log('Errore', err)
+                    console.log(err)
                 }
                 else{
-                    console.log('Restituisco le info sull\'utente')
+                    console.log('Returning user\s info')
                  }
                 res.json(docs)
             })
     }catch(err){
-        console.log('Errore:', err)
+        console.log(err)
     }
 })
 

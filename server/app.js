@@ -1,14 +1,16 @@
-//Con dotenv e la costante DB_CONNECTION che non carichiamo su GitHub teniamo nascoste le credenziali nella stringa di connessione al db su Atlas
 require('dotenv/config');
 const http = require('http');
-const express = require('express')
 const mongoose = require('mongoose')
+const express = require('express')
+const io = require('socket.io')
+const bodyParser = require('body-parser');
+
 const app = express()
 const server = http.createServer(app)
 const port = 3000
-const bodyParser = require('body-parser'); // Serve per il parsing in json del body delle request GET, POST, PUT, etc.
-const io = require('socket.io')
 
+
+//Setting the Socket.io instance to listen on the localhost server and enabling CORS policies for it
 const ios = io(server, {
   cors: {
     origin: "http://localhost:4200",
@@ -16,27 +18,27 @@ const ios = io(server, {
     allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With", "cache-control"]
   }
 });
-
-
+//Enabling CORS policies for the app as well
 app.all('/*', (req, res, next) => {
-  //Abilitiamo le policy CORS che altrimenti ci bloccherebbero il traffico in uscita
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, PATCH, *');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, cache-control');
   next();
 })
 
-app.use(bodyParser.json()); // Ogni volta che arriva una request ne trasformiamo il body in json
+//Everytime the server receives a request from the client, the request gets parsed
+app.use(bodyParser.json());
 
-
+//Connecting the database to MongoDB Atlas service through the connection string stored in .env
 mongoose.connect(
-  process.env.DB_CONNECTION, () => console.log("Connesso al db"),
+  process.env.DB_CONNECTION, () => console.log("Connected to Atlas Database"),
   (err) => {
     if(err) console.log(err) 
     else console.log("mongdb is connected");
    });
 
-//Dichiariamo tutte le route esistenti, per ora abbiamo fatto solo due esempi di login e register
+
+//Declaring all existing routes
 const indexRoute = require('./routes/index');
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
@@ -47,7 +49,7 @@ const blacklistUserRoute = require('./routes/blacklistuser');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
 
-//Qui diciamo di utilizzare le route dichiarate prima in base a dove ci troviamo, se in /login o in /register in questo caso
+//Telling the app which route (declared above) to use in correspondace to a given localhost URL path
 app.use('/', indexRoute);
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
@@ -59,7 +61,7 @@ app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
 
-//Setting up Socket.io server side (ios stands for Io Server)
+//Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
   console.log("Socekt.io client connected with ID: ", socket.id)
 
@@ -68,36 +70,38 @@ ios.on('connection', (socket) => {
   })
   
   socket.on('newfriendrequest', (friendrequest) =>{
-    console.log('HO SENTITO LA newfriendrequest INVIATA DA '+ friendrequest.sender + 'A '+ friendrequest.receiver)
-    console.log('FACCIO LA EMIT DI friendrequest'+friendrequest.receiver)
-    socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest) //Avvisiamo chi ha ricevuto la richiesta così che aggiorni la sua pending list 
-                                                                       //in tempo reale senza dover fare di nuovo la query a db
+    // Notifying the request receiver's client so that it can immediately update its pending requests list without having
+    // to query the database. We use BROADCAST since we need to notify other sockets and not ours.
+    socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest) 
   })
 
   socket.on('newacceptedrequest', (newacceptedrequest) => {
-    socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)//Avvisiamo chi accetta che deve aggiornare la sua component
-    socket.broadcast.emit('yougotaccepted'+newacceptedrequest.accepted_user, { //uso broadcast così la emit non arriva a me stesso, è un controllo in più
+    // Notifying the accepter to update its client data
+    socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)
+    // Notifying the accepted user to update its client
+    socket.broadcast.emit('yougotaccepted'+newacceptedrequest.accepted_user, { 
       request_type: 'yougotaccepted',
       accepting_user: ''+newacceptedrequest.accepting_user
-    })//Avvsiamo chi è stato accettato di aggiornare la sua component
+    })
   })
   
   socket.on('newrejectedrequest', (newrejectedrequest) => {
+    // Notifying the rejecting user's client so it can immediately update its component fields and localstorage
     socket.emit('rejectedrequest'+newrejectedrequest.rejecting_user, newrejectedrequest)
   })
   
   socket.on('newblockeduser', (newblock) => {
+    // Notifying the blocking user's client so it can immediately update its component fields and localstorage
     socket.emit('blockeduser'+newblock.blocker, newrejectedrequest)
   })
   
   socket.on('disconnect', () => {
     console.log("Client " + socket.id + " disconnected from Socket.io")
   })
-
 })
 
 
-//Facciamo partire il server in ascolto sulla porta 3000
+// Server starts listening on port 3000
 server.listen(port, () => {
   console.log('App listening on port', port)
 })

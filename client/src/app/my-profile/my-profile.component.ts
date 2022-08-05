@@ -20,6 +20,7 @@ export class MyProfileComponent implements OnInit {
     var user = localStorage.getItem('current_user')
     if(user != null){
       this.current_user = JSON.parse(user)
+      this.getUserInfo(this.current_user.username)
     }
   }
 

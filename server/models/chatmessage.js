@@ -23,9 +23,7 @@ function getSchema() {
     return ChatMessageSchema; 
 }
 
-
-// Mongoose Model
-var chatmessageModel; // This is not exposed outside the model
+var chatmessageModel;
 
 function getModel() {
     if (!chatmessageModel) {
@@ -33,8 +31,6 @@ function getModel() {
     }
     return chatmessageModel;
 }
-
-
 
 function newChatMessage(data) {
     var _chatmessagemodel = getModel();

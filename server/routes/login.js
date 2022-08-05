@@ -4,14 +4,8 @@ const passportHTTP = require('passport-http'); // implements Basic and Digest au
 const jwt_decode = require('jwt-decode'); // Decoding of jwt tokens   
 const jsonwebtoken = require('jsonwebtoken'); // JWT generation
 const { expressjwt: jwt } = require("express-jwt");
-
-
-
 const User = require('../models/User');
 const router = express.Router();
-var crypto = require('crypto'); //Anche qui hashiamo la password per confrontarla con quella nel db che è già hashata di per sè
-const { use } = require('passport');
-
 
 
 const result = require("dotenv").config(); 
@@ -71,10 +65,7 @@ passport.use(
 );
 
 
-router.get("/", passport.authenticate("basic", {
-    session: false
-}),
-async (req, res, next) => {
+router.get("/", passport.authenticate("basic", {session: false}), async (req, res) => {
     // If we reach this point, the user is successfully authenticated and
     // has been injected into req.user
 
@@ -84,7 +75,7 @@ async (req, res, next) => {
         username: req.user.username,
         role: req.user.role
     };
-    //Login avvenuto con successo, genera il token
+    // Here we generate the signed user authorization token
     var token_signed = jsonwebtoken.sign(
         tokendata,
         process.env.JWT_SECRET, {
@@ -92,8 +83,7 @@ async (req, res, next) => {
         }
     );
 
-    //Costruiamo un JSON con i dati non sensibili dell'utente da ritornare al client
-    //così che il client possa salvarselo in localstorage e recuperarne i dati in modo semplice
+    // Creting a json with user data to save in local storage, but first we have to delete the password, salt and digest fields
     const logged_username = jwt_decode(token_signed);
     var logged_user = await User.findOne({username: logged_username.username});
     logged_user.password = undefined;
@@ -105,8 +95,8 @@ async (req, res, next) => {
         .json({
             error: false,
             errormessage: "",
-            token: token_signed, //Rispondiamo con il token
-            user: logged_user    //e con il JSON contenente i dati dell'utente
+            token: token_signed,
+            user: logged_user
         });
     }
 );

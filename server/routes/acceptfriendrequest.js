@@ -1,54 +1,49 @@
 const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
-const { expressjwt: jwt } = require("express-jwt");
-const { update } = require('../models/User');
-var auth = jwt({
-    secret: process.env.JWT_SECRET,
-    algorithms: ['sha1', 'RS256', 'HS256']
-});
 
-
-/*
-Attivata quando un utente A invia la richiesta di amicizia ad un altro utente B. Il parametro principale nel body è lo username di B
-che essendo UNIQUE identificherà univocamente l'utente a cui si invia la richiesta.
-*/
+// Activated when a user A accepts a user B's friend request
 router.post("/", async (req, res) => {
-    const accept_sender = req.body.sender
-    const accept_receiver = req.body.receiver
+    const accept_sender = req.body.sender // The accept sender is A, becaus it is the one who sends the "accept" message
+    const accept_receiver = req.body.receiver // The accept receiver is B, since it is the one who sent the request in the first place
     var friendslist1 = new Array()
     user = await User.findOne({username: accept_sender})
 
-    //Nella lista di chi ha accettato la richiesta mettiamo il nome di chi l'ha inviata
-    //Ovvero: nella friends_list di B compare il nome di A    
+    // Pushing B's username into A's Friends List
     friendslist1 = user.friends_list
     friendslist1.push(accept_receiver)
 
     try {
-        //Prima update -- Friends List
         const update1 = await User.updateOne({username: accept_sender}, {friends_list: friendslist1}, function(err, docs){
-            if (err){}
-            else{}
+            if (err){
+                console.log(err)
+            }
+            else{
+                console.log(accept_sender+' ha accettato la richiesta di amicizia di '+accept_receiver)
+            }
         })
-        } catch (err) {}
+        } catch (err) {
+            console.log(err)
+        }
         
-    //Nella lista di chi ha inviato la richiesta mettiamo il nome di chi l'ha accettata
-    //Ovvero: nella friends_list di A compare il nome di B
+    // Pushing A's username into B's Friends List
     var friendslist2 = new Array()
     user2 = await User.findOne({username: accept_receiver})
     friendslist2 = user2.friends_list
     friendslist2.push(accept_sender)
     try {
         const update2 = await User.updateOne({username: accept_receiver}, {friends_list: friendslist2}, function(err, docs){
-            if (err){}
-            else{}
+            if (err){
+                console.log(err)
+            }
+            else{
+                console.log(accept_receiver+' è stato accettato come amico da '+accept_sender)
+            }
         })
-        res.json(friendslist1) //Ritorno al client di chi ha accettato l'amicizia la sua nuova lista di amici
+        res.json(friendslist1) // Returning to A's client his new friends list so it can update its localstorage and component fields
         } catch (err) {
             res.json(friendslist1)
         }
     });
-   
-
 
 module.exports = router;

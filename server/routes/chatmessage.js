@@ -1,22 +1,10 @@
 const express = require('express');
 const ChatMessage = require('../models/ChatMessage');
 const router = express.Router();
- 
-router.post("/", async (req, res, next) => {
-    console.log(req.body)
-    const newmessage = ChatMessage.newChatMessage(req.body)
-    const from_username = newmessage.from;
-    const to_username = newmessage.to;
-    var channel_name = ''
 
-    //Ordiniamo alfabeticamente i nomi degli utenti così otteniamo per entrambi un nome comune del canale su cui comunicare,
-    //Perché se uno si aspetta dei messaggi su USER1USER2 ma l'altro li emette sul canale USER2USER1 non li riceverà mai
-    if(from_username.localeCompare(to_username) < 0){
-        channel_name = ''+from_username+''+to_username
-    }else{
-        channel_name = ''+to_username+''+from_username
-    }
-    
+// When a new chat message is sent, the server is notified through a POST request and saves it in the database
+router.post("/", async (req, res, next) => {
+    const newmessage = ChatMessage.newChatMessage(req.body)
     const insert = await newmessage.save().then( () => {
         return res.status(200).json({error: false, errormessage: "", message: "Messaggio inviato e salvato in DB"})
     }).catch((reason) => {
@@ -25,11 +13,9 @@ router.post("/", async (req, res, next) => {
 });
 
 
-// Troviamo gli ultimi 10 messaggi (ma possiamo parametrizzarlo con le options nella request) tra player1 e player2
-// e li restituiamo al client che poi se li salverà nella lista "messages" di tipo ChatMessage[]
+// This method returns the last 10 messages between two users
 router.put("/", async (req, res) => {
-
-    var last10messages = [] //Lista dei messaggi inviati da player1 a player2
+    var last10messages = []
     try{
         const select = await ChatMessage.find( {$or: [{from: req.body.from, to: req.body.to}, {from: req.body.to, to: req.body.from}]},
             function(err, docs){
@@ -38,10 +24,12 @@ router.put("/", async (req, res) => {
                     for(let i = 0; i < docs.length; i++){
                         last10messages.push(docs[i])                        
                     }
-                    res.json(last10messages.reverse())//Li invertiamo così il client li stampa già nell'ordine giusto
+                    res.json(last10messages.reverse())
                  }
             }).sort({timestamp: -1}).skip(0).limit(10)
-    }catch(err){}
+    }catch(err){
+        console.log(err)
+    }
 });
 
 module.exports = router;
