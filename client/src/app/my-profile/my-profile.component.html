@@ -19,6 +19,7 @@
     <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
       <li *ngFor="let friend of this.friends">
         {{ friend }}
+        <button class="btn" (click)="removeFriend(friend)">Remove friend</button>
       </li>
     </ul>
   </div>

@@ -73,9 +73,46 @@ export class MyProfileComponent implements OnInit {
       // catches it and notifies the component through the observer. We then update our friends list and pending friend requests list.
       else if(observer.request_type = 'yougotaccepted'){ //Qualcuno ha accettato la mia richiesta
         console.log('L\'utente '+observer.accepting_user+' ha accettato la nostra richiesta di amicizia')
+        this.friends.push(observer.accepting_user)
+      }
+
+      // A 'deletedfriend'+current_username emit is sent from the server when we delete another user from our friends list. At this point the localstrage
+      // has already been updated with the new friends list, and all we have to do is to update this component's "friends" field
+      else if(observer.request_type = 'delete'){
+        console.log('L\'utente '+observer.deleted+ ' è stato eliminato dalla tua lista di amici.')
         var current = localStorage.getItem('current_user')
         if(current != null){
-          this.friends.push(observer.accepting_user)
+          this.friends = new Array<String>()
+          var newlist = (JSON.parse(current)).friends_list
+          for(let i = 0; i < newlist.length; i++){
+            this.friends.push(newlist[i])
+          }
+        }
+      }
+
+      // A 'yougotdeleted'+current_username emit is sent from the server when someone deleted us from his friends list. Now we need to update both
+      // our localstorage and our component's "friends" field
+      else if(observer.request_type = 'yougotdeleted'){
+        console.log('L\'utente '+observer.deleter+ ' ti ha elminiato dalla sua lista di amici.')
+        var current = localStorage.getItem('current_user')
+        if(current != null){
+          var newuser = JSON.parse(current)
+          var newfriendslist = newuser.friends_list
+          var deleter_index = newfriendslist.indexOf(observer.deleter)
+          console.log('inexof: ', deleter_index)
+          for(let i = deleter_index; i < newfriendslist.length-1; i++){
+            newfriendslist[i] = newfriendslist[i+1]
+          }
+          newfriendslist.lenght = newfriendslist.length -1
+
+          newuser.friends_list = newfriendslist
+          localStorage.removeItem('current_user')
+          localStorage.setItem('current_user', newuser)
+
+          this.friends = new Array<String>()
+          for(let i = 0; i < newfriendslist.length; i++){
+            this.friends.push(newlist[i])
+          }
         }
       }
     })
@@ -94,6 +131,7 @@ export class MyProfileComponent implements OnInit {
     //Here we update this component's fields
     var u = localStorage.getItem('current_user')
     if(u!=null){
+      this.current_user = JSON.parse(u)
       var friendslist = JSON.parse(u).friends_list
       if(friendslist!=null){
         for(let i = 0; i < friendslist.length; i++){
@@ -144,5 +182,12 @@ export class MyProfileComponent implements OnInit {
     blacklist_request.receiver = blacklisted_user
     blacklist_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
     this._friendRequestService.blacklistUser(blacklist_request)
+  }
+
+  removeFriend(removed_user: String){
+    var remove_request = new FriendRequest()
+    remove_request.sender = this.current_user.username
+    remove_request.receiver = removed_user
+    this._friendRequestService.removeFriend(remove_request)
   }
 }

@@ -6,6 +6,8 @@ Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel t
 E questo è solo un esempio
 
 
+- quando facciamo logout dobbiamo anche far ricomparire i tasti register e login e scomparire il tasto logout
+- quando facciamo logout dobbiamo svuotare/chiudere la chat
 - la onInit() di myprofile non viene chiamata
 - risolvere errori mongoose
 - quando riapriamo la home, controlliamo che l'auth token non sia scaduto e riportiamo subito in login 

@@ -9,11 +9,12 @@ and B's name as "receiver". All this function has to do is to update B's pending
 router.post("/", async (req, res) => {
     const receiver = req.body.receiver
     const sender = await User.findOne({username:  req.body.sender})
+    const receiver_user = await User.findOne({username: req.body.receiver})
     var new_pending_requests = sender.pending_friend_requests;
 
     //Here we obtain B's blacklist and friends list
-    var blacklist = receiver.blacklisted_users;
-    var friends_list = receiver.friends_list;
+    var blacklist = receiver_user.blacklisted_users;
+    var friends_list = receiver_user.friends_list;
 
     //If A is not blacklisted by B or if A and B are not already friends, then the friend request can be sent
     if(!blacklist.includes(sender.username) || friends_list.includes(sender.username)){

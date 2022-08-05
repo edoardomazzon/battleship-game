@@ -44,6 +44,7 @@ const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
 const chatMessageRoute = require('./routes/chatmessage');
+const removeFriendRoute = require('./routes/removefriend')
 const friendRequestRoute = require('./routes/friendrequest');
 const blacklistUserRoute = require('./routes/blacklistuser');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
@@ -55,6 +56,7 @@ app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/chatmessage', chatMessageRoute);
+app.use('/removefriend', removeFriendRoute);
 app.use('/friendrequest', friendRequestRoute);
 app.use('/blacklistuser', blacklistUserRoute);
 app.use('/acceptfriendrequest', acceptFriendRequestRoute);
@@ -93,6 +95,16 @@ ios.on('connection', (socket) => {
   socket.on('newblockeduser', (newblock) => {
     // Notifying the blocking user's client so it can immediately update its component fields and localstorage
     socket.emit('blockeduser'+newblock.blocker, newrejectedrequest)
+  })
+
+  socket.on('newdeletedfriend', (deleterequest) => {
+    // Notifying the deleting user's client so it can immediately update its component fields and localstorage
+    socket.emit('deletedfriend'+deleterequest.deleter, deleterequest)
+    // Notifying the deleted user's client so it can immediately update its component fields and localstorage
+    socket.broadcast.emit('yougotdeleted'+deleterequest.deleted,{
+      request_type: 'yougotdeleted',
+      deleter: deleterequest.deleter
+    })
   })
   
   socket.on('disconnect', () => {

@@ -14,6 +14,7 @@ export class FriendRequestService {
   private acceptRequestURL = 'http://localhost:3000/acceptfriendrequest'
   private rejectRequestURL = 'http://localhost:3000/rejectfriendrequest'
   private blacklistRequestURL = 'http://localhost:3000/blacklistuser'
+  private removeFriendURL = 'http://localhost:3000/removefriend'
   private socket: Socket;
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
@@ -93,13 +94,29 @@ export class FriendRequestService {
     })
   }
 
+  removeFriend(remove_request: FriendRequest){
+    return this._httpClient.post(this.removeFriendURL, remove_request).subscribe((response) => {
+      // Once the two users are updated at db level we can update our localstorage with our new friends list in the response
+      var user: any = localStorage.getItem('current_user')
+      if(user != null){
+        user = JSON.parse(user)
+        user.friends_list = response
+        localStorage.removeItem('current_user')
+        localStorage.setItem('current_user', JSON.stringify(user))
+      }
+      this.socket.emit('newdeletedfriend',{
+        request_type: 'delete',
+        deleter: ''+remove_request.sender,
+        deleted: ''+remove_request.receiver
+      })
+    })
+  }
+
+
   listenToAnsweredRequests(current_username: String): Observable <any>{
-    console.log('STO ASCOLTANDO LE RISPOSTE - ', current_username)
     return new Observable((observer) => {
       //If this Socket.io emit is listened, it means a user sent us a friend request
       this.socket.on('friendrequest'+current_username, (message:any) => {
-        console.log('Il message è: ', message)
-        console.log('DAL SERVICE: ho sentito la friendrequest'+current_username + 'inviata da '+ message.sender)
         var user: any = localStorage.getItem('current_user')
         if(user != null){
           user = JSON.parse(user)
@@ -115,7 +132,6 @@ export class FriendRequestService {
       });
       //If this Socket.io emit is listened, it means a user accepted our friend request
       this.socket.on('yougotaccepted'+current_username, (message: any) => {
-        console.log('DAL SERVICE: ho sentito la yougotaccepted'+message.accepting_user)
         var user: any = localStorage.getItem('current_user')
         if(user != null){
           user = JSON.parse(user)
@@ -127,13 +143,35 @@ export class FriendRequestService {
       });
       //If this Socket.io emit is listened, it means we rejected a friend request
       this.socket.on('rejectedrequest'+current_username, (message: any) => {
-        console.log('ho sentito la rejectedrequest'+current_username)
         observer.next(message);
       });
       //If this Socket.io emit is listened, it means we blocked a user
       this.socket.on('blockeduser'+current_username, (message: any) => {
         observer.next(message);
       });
+      //If this Socket.io emit is listened, it means we deleted a user from our friends list
+      this.socket.on('deletedfriend'+current_username, (message: any) => {
+        console.log('Sto eliminando', message.deleted, ' dagli amici')
+        observer.next(message)
+      })
+      //If this Socket.io emit is listened, it means a user deleted us from his friends list
+      this.socket.on('yougotdeleted'+current_username, (message: any) => {
+        console.log('Sono stato eliminato da ', message.deleter)
+        var user: any = localStorage.getItem('current_user')
+        if(user != null){
+          user = JSON.parse(user)
+          var deleter_index = user.friends_list.indexOf(message.deleter)
+          console.log(deleter_index + ' è il deleter index')
+          for(let i=deleter_index; i < user.friends_list.length; i++){
+            user.friends_list[i] = user.friends_list[i+1]
+          }
+          user.friends_list.length = user.friends_list.length-1
+
+          localStorage.removeItem('current_user')
+          localStorage.setItem('current_user', JSON.stringify(user))
+        }
+        observer.next(message)
+      })
 
       return () => {
         this.socket.disconnect()
