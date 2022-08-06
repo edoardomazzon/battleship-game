@@ -19,7 +19,7 @@ export class MyProfileComponent implements OnInit {
     // so we can access it
     var user = localStorage.getItem('current_user')
     if(user != null){
-      this.current_user = JSON.parse(user)
+      this.current_user = JSON.parse(JSON.parse(JSON.stringify(user)))
       this.getUserInfo(this.current_user.username)
     }
   }
@@ -58,28 +58,19 @@ export class MyProfileComponent implements OnInit {
       // As for updating the pending requests list, the acceptFriendRequest() counterintuitively invokes rejectFriendRequest(), since its only
       // function is that of deleting the rejected (in this case accepted) user from the pending requests list. That's beacuse, wether we accept
       // or reject someone's request, we still have to pop that someone's username out of our pending requests list, since the request is not pending anymore.
-      else if(observer.request_type = 'accept'){ //Io ho accettato la richiesta
-        var current = localStorage.getItem('current_user')
-        if(current != null){
-          this.friends = new Array<String>()
-          var newlist = (JSON.parse(current)).friends_list
-          for(let i = 0; i < newlist.length; i++){
-            this.friends.push(newlist[i])
-          }
-        }
+      else if(observer.request_type == 'accept'){
+        this.friends.push(observer.accepted_user)
       }
 
       // A 'yougotaccepted'+current_username emit is sent from the server when our friend request to some other user gets accepted, so the service
       // catches it and notifies the component through the observer. We then update our friends list and pending friend requests list.
-      else if(observer.request_type = 'yougotaccepted'){ //Qualcuno ha accettato la mia richiesta
-        console.log('L\'utente '+observer.accepting_user+' ha accettato la nostra richiesta di amicizia')
+      else if(observer.request_type == 'yougotaccepted'){ //Qualcuno ha accettato la mia richiesta
         this.friends.push(observer.accepting_user)
       }
 
       // A 'deletedfriend'+current_username emit is sent from the server when we delete another user from our friends list. At this point the localstrage
       // has already been updated with the new friends list, and all we have to do is to update this component's "friends" field
-      else if(observer.request_type = 'delete'){
-        console.log('L\'utente '+observer.deleted+ ' è stato eliminato dalla tua lista di amici.')
+      else if(observer.request_type == 'delete'){
         var current = localStorage.getItem('current_user')
         if(current != null){
           this.friends = new Array<String>()
@@ -92,26 +83,26 @@ export class MyProfileComponent implements OnInit {
 
       // A 'yougotdeleted'+current_username emit is sent from the server when someone deleted us from his friends list. Now we need to update both
       // our localstorage and our component's "friends" field
-      else if(observer.request_type = 'yougotdeleted'){
+      else if(observer.request_type == 'yougotdeleted'){
         console.log('L\'utente '+observer.deleter+ ' ti ha elminiato dalla sua lista di amici.')
         var current = localStorage.getItem('current_user')
         if(current != null){
           var newuser = JSON.parse(current)
           var newfriendslist = newuser.friends_list
           var deleter_index = newfriendslist.indexOf(observer.deleter)
-          console.log('inexof: ', deleter_index)
-          for(let i = deleter_index; i < newfriendslist.length-1; i++){
-            newfriendslist[i] = newfriendslist[i+1]
+          console.log('indexof: ', deleter_index)
+          for(let i = deleter_index; i < newfriendslist.length; i++){
+              newfriendslist[i] = newfriendslist[i+1]
           }
-          newfriendslist.lenght = newfriendslist.length -1
+          newfriendslist.pop()
 
           newuser.friends_list = newfriendslist
           localStorage.removeItem('current_user')
-          localStorage.setItem('current_user', newuser)
+          localStorage.setItem('current_user', JSON.stringify(newuser))
 
           this.friends = new Array<String>()
           for(let i = 0; i < newfriendslist.length; i++){
-            this.friends.push(newlist[i])
+            this.friends.push(newfriendslist[i])
           }
         }
       }

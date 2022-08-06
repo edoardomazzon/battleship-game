@@ -15,7 +15,7 @@ export class ChatComponent implements OnInit {
 
   constructor(private _chatmessageservice: ChatmessageService) {
     this.player1 = localStorage.getItem('current_user')
-    if(this.player1){
+    if(this.player1 != null || this.player1 != undefined){
       this.player1 = JSON.parse(this.player1)
       this.player1 = this.player1.username
     }
@@ -29,7 +29,7 @@ export class ChatComponent implements OnInit {
     var channel_name = ''
     //Ordiniamo alfabeticamente i nomi degli utenti così otteniamo per entrambi un nome comune del canale su cui comunicare,
     //Perché se uno si aspetta dei messaggi su USER1USER2 ma l'altro li emette sul canale USER2USER1 non li riceverà mai
-    if(this.player1.localeCompare(this.player2) < 0){
+    if(this.player1 != null && this.player1.localeCompare(this.player2) < 0){
         channel_name = ''+this.player1+''+this.player2
     }else{
         channel_name = ''+this.player2+''+this.player1

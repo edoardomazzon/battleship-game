@@ -5,7 +5,7 @@ in json al client che ha fatto la richiesta.
 Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
 E questo è solo un esempio
 
-
+- problema: la getUserInfo in myprofile.component.ts fa una post al server che ritorna l'utente che però include anche password salt e digest
 - quando facciamo logout dobbiamo anche far ricomparire i tasti register e login e scomparire il tasto logout
 - quando facciamo logout dobbiamo svuotare/chiudere la chat
 - la onInit() di myprofile non viene chiamata

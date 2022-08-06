@@ -24,11 +24,10 @@ export class FriendRequestService {
   // e come receiver ha l'username di chi la riceve
   sendFriendRequest(friendrequest: FriendRequest) {
     this._httpClient.post(this.sendRequestURL, friendrequest).subscribe(() => {
-      console.log('FACCIO LA EMIT DI newfriendrequest')
       this.socket.emit('newfriendrequest', {
-      request_type: 'friendrequest',
-      sender: friendrequest.sender,
-      receiver: friendrequest.receiver
+        request_type: 'friendrequest',
+        sender: friendrequest.sender,
+        receiver: friendrequest.receiver
       })
     })
     /* Da qui il server dovrà ascoltare la emit e a sua volta fare una emit
@@ -42,14 +41,10 @@ export class FriendRequestService {
       //Una volta accettata la richiesta aggiorniamo il localstorage del current_user con la nuova friends list e la nuova pending_friend_requests
       var user: any = localStorage.getItem('current_user')
       if(user != null){
-        console.log('La response dal server è: ', response)
         user = JSON.parse(user)
         user.friends_list = response //aggiorno la lista di amici del current user
         localStorage.removeItem('current_user')
         localStorage.setItem('current_user', JSON.stringify(user))
-
-
-        //Avviso il server di una nuova accepted request
         this.socket.emit('newacceptedrequest', {
           request_type: 'accept',
           accepting_user: ''+accepted_request.sender,
@@ -98,8 +93,9 @@ export class FriendRequestService {
     return this._httpClient.post(this.removeFriendURL, remove_request).subscribe((response) => {
       // Once the two users are updated at db level we can update our localstorage with our new friends list in the response
       var user: any = localStorage.getItem('current_user')
-      if(user != null){
+      if(user != null || user != undefined){
         user = JSON.parse(user)
+        console.log(user)
         user.friends_list = response
         localStorage.removeItem('current_user')
         localStorage.setItem('current_user', JSON.stringify(user))
@@ -151,25 +147,10 @@ export class FriendRequestService {
       });
       //If this Socket.io emit is listened, it means we deleted a user from our friends list
       this.socket.on('deletedfriend'+current_username, (message: any) => {
-        console.log('Sto eliminando', message.deleted, ' dagli amici')
         observer.next(message)
       })
       //If this Socket.io emit is listened, it means a user deleted us from his friends list
       this.socket.on('yougotdeleted'+current_username, (message: any) => {
-        console.log('Sono stato eliminato da ', message.deleter)
-        var user: any = localStorage.getItem('current_user')
-        if(user != null){
-          user = JSON.parse(user)
-          var deleter_index = user.friends_list.indexOf(message.deleter)
-          console.log(deleter_index + ' è il deleter index')
-          for(let i=deleter_index; i < user.friends_list.length; i++){
-            user.friends_list[i] = user.friends_list[i+1]
-          }
-          user.friends_list.length = user.friends_list.length-1
-
-          localStorage.removeItem('current_user')
-          localStorage.setItem('current_user', JSON.stringify(user))
-        }
         observer.next(message)
       })
 

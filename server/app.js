@@ -78,13 +78,15 @@ ios.on('connection', (socket) => {
   })
 
   socket.on('newacceptedrequest', (newacceptedrequest) => {
+    console.log(newacceptedrequest)
     // Notifying the accepter to update its client data
     socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)
     // Notifying the accepted user to update its client
-    socket.broadcast.emit('yougotaccepted'+newacceptedrequest.accepted_user, { 
-      request_type: 'yougotaccepted',
-      accepting_user: ''+newacceptedrequest.accepting_user
-    })
+    var message = {
+      request_type: "yougotaccepted",
+      accepting_user: ""+newacceptedrequest.accepting_user
+    }
+    socket.broadcast.emit('yougotaccepted'+newacceptedrequest.accepted_user, message)
   })
   
   socket.on('newrejectedrequest', (newrejectedrequest) => {
@@ -97,13 +99,13 @@ ios.on('connection', (socket) => {
     socket.emit('blockeduser'+newblock.blocker, newrejectedrequest)
   })
 
-  socket.on('newdeletedfriend', (deleterequest) => {
+  socket.on('newdeletedfriend', (newdelete) => {
     // Notifying the deleting user's client so it can immediately update its component fields and localstorage
-    socket.emit('deletedfriend'+deleterequest.deleter, deleterequest)
+    socket.emit('deletedfriend'+newdelete.deleter, newdelete)
     // Notifying the deleted user's client so it can immediately update its component fields and localstorage
-    socket.broadcast.emit('yougotdeleted'+deleterequest.deleted,{
+    socket.broadcast.emit('yougotdeleted'+newdelete.deleted,{
       request_type: 'yougotdeleted',
-      deleter: deleterequest.deleter
+      deleter: newdelete.deleter
     })
   })
   
