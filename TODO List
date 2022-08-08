@@ -14,3 +14,5 @@ E questo è solo un esempio
 - bloccare richiesta di amicizia se sei già amico o bloccato (controlli lato server+db anche se da frontend non faremo neanche comparire i bottoni)
 - mettere commenti in inglese
 - togliere console.log() inutili
+- fare in modo DA CLIENT di non poter inviare richieste di amicizia se l'altro utente è già amico (magari si possono inviare anche se siamo bloccati, e possiamo fare
+  in modo che al ricevente non venga mostrata la richiesta se è tra i suoi utenti bloccati)
