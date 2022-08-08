@@ -15,9 +15,10 @@ router.post("/", async (req, res) => {
     //Here we obtain B's blacklist and friends list
     var blacklist = receiver_user.blacklisted_users;
     var friends_list = receiver_user.friends_list;
+    var pending_friend_requests = receiver_user.pending_friend_requests;
 
     //If A is not blacklisted by B or if A and B are not already friends, then the friend request can be sent
-    if(!blacklist.includes(sender.username) || friends_list.includes(sender.username)){
+    if(!blacklist.includes(sender.username) && !friends_list.includes(sender.username) && !pending_friend_requests.includes(sender.username)){
         //Adding A's username to B's new pending friend requests list with the sender's username
         new_pending_requests.push(sender.username)
         //Updating user B's pending_friend_requests by substituting it with the new one

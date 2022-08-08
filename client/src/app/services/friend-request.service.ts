@@ -10,15 +10,25 @@ import { Observable } from 'rxjs';
 
 export class FriendRequestService {
   private baseURL = 'http://localhost:3000/'
+  private searchUsersURL = 'http://localhost:3000/searchusers'
   private sendRequestURL = 'http://localhost:3000/friendrequest'
   private acceptRequestURL = 'http://localhost:3000/acceptfriendrequest'
   private rejectRequestURL = 'http://localhost:3000/rejectfriendrequest'
   private blacklistRequestURL = 'http://localhost:3000/blacklistuser'
   private removeFriendURL = 'http://localhost:3000/removefriend'
   private socket: Socket;
+
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
-   }
+  }
+
+  // Returns all users with the same (or similar) name as the parameter "searched_name"
+  searchUsers(searched_name: String): any{
+    this._httpClient.post(this.searchUsersURL, {searched_name: searched_name}).subscribe((response)=>{
+      localStorage.removeItem('response')
+      localStorage.setItem('response', JSON.stringify(response))
+    })
+  }
 
   //Effettua una chiamata HTTP alla route "friendrequest" passando la friendrequest che come sender ha l'username di chi ha chiesto l'amicizia
   // e come receiver ha l'username di chi la riceve
@@ -95,7 +105,6 @@ export class FriendRequestService {
       var user: any = localStorage.getItem('current_user')
       if(user != null || user != undefined){
         user = JSON.parse(user)
-        console.log(user)
         user.friends_list = response
         localStorage.removeItem('current_user')
         localStorage.setItem('current_user', JSON.stringify(user))

@@ -44,6 +44,7 @@ const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
 const chatMessageRoute = require('./routes/chatmessage');
+const searchUsersRoute = require('./routes/searchusers');
 const removeFriendRoute = require('./routes/removefriend')
 const friendRequestRoute = require('./routes/friendrequest');
 const blacklistUserRoute = require('./routes/blacklistuser');
@@ -56,6 +57,7 @@ app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/chatmessage', chatMessageRoute);
+app.use('/searchusers', searchUsersRoute)
 app.use('/removefriend', removeFriendRoute);
 app.use('/friendrequest', friendRequestRoute);
 app.use('/blacklistuser', blacklistUserRoute);

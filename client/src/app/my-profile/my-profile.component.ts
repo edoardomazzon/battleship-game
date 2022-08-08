@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../services/profile.service';
 import { FriendRequestService } from '../services/friend-request.service';
 import { FriendRequest } from '../models/friend-request';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-my-profile',
@@ -10,175 +11,16 @@ import { FriendRequest } from '../models/friend-request';
 })
 export class MyProfileComponent implements OnInit {
   public current_user: any;
-  public friend_requests_list: Array<String> = [];
-  public blacklisted_users: Array<String> = [];
-  public friends: Array<String> = [];
 
-  constructor(private _profileService: ProfileService, private _friendRequestService: FriendRequestService) {
-    // If the user is able to reach this route, it means he already logged in, and the loginservice saves his data in localstorage
-    // so we can access it
-    var user = localStorage.getItem('current_user')
-    if(user != null){
-      this.current_user = JSON.parse(JSON.parse(JSON.stringify(user)))
-      this.getUserInfo(this.current_user.username)
-    }
-  }
+  constructor(private _profileService: ProfileService) { }
 
   ngOnInit(): void {
-    // Immediately update the browser's localstorage with updated user info from db
-    this.getUserInfo(this.current_user.username)
-
-    // This function is invoked by the friend-request service, which whill return an observable for Socket.io emits.
-    // Once the service listens to an emit from the server, the client's component is notified and is engaged differently
-    // depending on the request type notified by the server.
-    // The "observer" object returned by this function, which has been hit by a next() call, carries within itself some information:
-    // who the request sender is, the request receiver and the request_type (someone accepted us, we accepted somebody's request, we rejected someone's request,
-    // etc.
-    this._friendRequestService.listenToAnsweredRequests(this.current_user.username).subscribe((observer)=>{
-
-      //If we reject someone's request, or if we receive someone's request, we still have to update the component's istance's friend requests list in both cases.
-      if(observer.request_type == 'reject' || observer.request_type == 'friendrequest'){
-        var current = localStorage.getItem('current_user')
-        if(current != null){
-          this.friend_requests_list = (JSON.parse(JSON.parse(JSON.stringify(current)))).pending_friend_requests
-        }
-      }
-
-      //If we blacklisted a user, we have to udpate the component's istances's blacklisted_users list with that new user in it.
-      //Notice how we don't update the pending_friend_requests list: that's because the blacklistUser() function immediately invokes the rejectFriendRequest()
-      //function, which will update the new pending_friend_requests by itself before reaching this point of the execution.
-      else if(observer.request_type == 'block'){
-        var current = localStorage.getItem('current_user')
-        if(current != null){
-          this.blacklisted_users = (JSON.parse(JSON.parse(JSON.stringify(current)))).blacklisted_users
-        }
-      }
-
-      // When we accept someone's request, we have to update our friends list in the component's istance.
-      // As for updating the pending requests list, the acceptFriendRequest() counterintuitively invokes rejectFriendRequest(), since its only
-      // function is that of deleting the rejected (in this case accepted) user from the pending requests list. That's beacuse, wether we accept
-      // or reject someone's request, we still have to pop that someone's username out of our pending requests list, since the request is not pending anymore.
-      else if(observer.request_type == 'accept'){
-        this.friends.push(observer.accepted_user)
-      }
-
-      // A 'yougotaccepted'+current_username emit is sent from the server when our friend request to some other user gets accepted, so the service
-      // catches it and notifies the component through the observer. We then update our friends list and pending friend requests list.
-      else if(observer.request_type == 'yougotaccepted'){ //Qualcuno ha accettato la mia richiesta
-        this.friends.push(observer.accepting_user)
-      }
-
-      // A 'deletedfriend'+current_username emit is sent from the server when we delete another user from our friends list. At this point the localstrage
-      // has already been updated with the new friends list, and all we have to do is to update this component's "friends" field
-      else if(observer.request_type == 'delete'){
-        var current = localStorage.getItem('current_user')
-        if(current != null){
-          this.friends = new Array<String>()
-          var newlist = (JSON.parse(current)).friends_list
-          for(let i = 0; i < newlist.length; i++){
-            this.friends.push(newlist[i])
-          }
-        }
-      }
-
-      // A 'yougotdeleted'+current_username emit is sent from the server when someone deleted us from his friends list. Now we need to update both
-      // our localstorage and our component's "friends" field
-      else if(observer.request_type == 'yougotdeleted'){
-        console.log('L\'utente '+observer.deleter+ ' ti ha elminiato dalla sua lista di amici.')
-        var current = localStorage.getItem('current_user')
-        if(current != null){
-          var newuser = JSON.parse(current)
-          var newfriendslist = newuser.friends_list
-          var deleter_index = newfriendslist.indexOf(observer.deleter)
-          console.log('indexof: ', deleter_index)
-          for(let i = deleter_index; i < newfriendslist.length; i++){
-              newfriendslist[i] = newfriendslist[i+1]
-          }
-          newfriendslist.pop()
-
-          newuser.friends_list = newfriendslist
-          localStorage.removeItem('current_user')
-          localStorage.setItem('current_user', JSON.stringify(newuser))
-
-          this.friends = new Array<String>()
-          for(let i = 0; i < newfriendslist.length; i++){
-            this.friends.push(newfriendslist[i])
-          }
-        }
-      }
-    })
-  }
-
-
-  //Function used to update the browser's localstorage and this component's fields with updated user info from db
-  getUserInfo(current_username: String){
-    this.friends = new Array<String>()
-    this.blacklisted_users = new Array<String>()
-    this.friend_requests_list = new Array<String>()
-
-    //With this function we query the db for the current user's data and save it in the browser's localstorage
-    const user = this._profileService.getUserInfo(current_username)
-
-    //Here we update this component's fields
-    var u = localStorage.getItem('current_user')
-    if(u!=null){
-      this.current_user = JSON.parse(u)
-      var friendslist = JSON.parse(u).friends_list
-      if(friendslist!=null){
-        for(let i = 0; i < friendslist.length; i++){
-          this.friends[i] = friendslist[i]
-        }
-      }
-      var pending_list = JSON.parse(u).pending_friend_requests
-      if(pending_list!=null){
-        for(let i = 0; i < pending_list.length; i++){
-          this.friend_requests_list[i] = pending_list[i]
-        }
-      }
-      var blacklist = JSON.parse(u).blacklisted_users
-      if(blacklist!=null){
-        for(let i = 0; i < blacklist.length; i++){
-          this.blacklisted_users[i] = blacklist[i]
-        }
-      }
+    var u = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    if(u != null){
+      //With this function we query the db for the current user's data and save it in the browser's localstorage
+      this._profileService.getUserInfo(u.username)
     }
-  }
-
-  //Il reject receiver è chi riceve la risposta negativa alla richiesta di amicizia (cioè chi per primo ha inviato la richiesta)
-  rejectFriendRequest(reject_receiver: String): void {
-    var rejected_request = new FriendRequest();
-    rejected_request.receiver = reject_receiver
-    rejected_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
-    this._friendRequestService.rejectFriendRequest(rejected_request)
-  }
-
-  //L'acceptance receiver è chi riceve la risposta positiva della richiesta di amicizia (cioè chi per primo ha inviato la richiesta)
-  acceptFriendRequest(acceptance_receiver: String): void {
-    this.rejectFriendRequest(acceptance_receiver)//È controintuitivo ma questa funzione in verità non fa altro che togliere
-    // l'accettato dalla pending list dell'accettante, così ci risparmiamo molta più logica front end dopo. In questo modo
-    // togliamo subito l'utente accettato dalle pending list dell'accettante, così dovremo preoccuparci solo di aggiornare la friends list dei due
-
-    var accepted_request = new FriendRequest();
-    accepted_request.receiver = acceptance_receiver
-    accepted_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
-    this._friendRequestService.acceptFriendRequest(accepted_request)
-  }
-
-  blacklistUser(blacklisted_user: String): void {
-    //Prima rifiutiamo la richiesta togliendo l'utente dalla pending list
-    this.rejectFriendRequest(blacklisted_user)
-
-    //Poi blacklistiamo l'utente che ha effettuato la richiesta
-    var blacklist_request = new FriendRequest();
-    blacklist_request.receiver = blacklisted_user
-    blacklist_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
-    this._friendRequestService.blacklistUser(blacklist_request)
-  }
-
-  removeFriend(removed_user: String){
-    var remove_request = new FriendRequest()
-    remove_request.sender = this.current_user.username
-    remove_request.receiver = removed_user
-    this._friendRequestService.removeFriend(remove_request)
+    u = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    this.current_user = u
   }
 }

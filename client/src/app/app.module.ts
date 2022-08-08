@@ -17,6 +17,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ChatComponent } from './chat/chat.component';
 import { GameComponent } from './game/game.component';
+import { FriendsComponent } from './friends/friends.component';
 
 
 const routes: Routes = [
@@ -39,7 +40,8 @@ const routes: Routes = [
     HeaderComponent,
     FooterComponent,
     ChatComponent,
-    GameComponent
+    GameComponent,
+    FriendsComponent
   ],
   imports: [
     BrowserModule,
