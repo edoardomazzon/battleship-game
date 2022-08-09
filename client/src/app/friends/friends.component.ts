@@ -3,6 +3,7 @@ import { ProfileService } from '../services/profile.service';
 import { FriendRequestService } from '../services/friend-request.service';
 import { FriendRequest } from '../models/friend-request';
 import { Router } from '@angular/router'
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-friends',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router'
 })
 export class FriendsComponent implements OnInit {
   public inputname: any
-  public foundUsers: Array<any> = [];
+  public foundUsers: Array<any> = new Array<any>();
   public current_user: any;
   public friend_requests_list: Array<String> = [];
   public blacklisted_users: Array<String> = [];
@@ -19,7 +20,8 @@ export class FriendsComponent implements OnInit {
 
   constructor(private _profileService: ProfileService,
               private _friendRequestService: FriendRequestService,
-              private _router: Router) {
+              private _router: Router,
+              private _httpClient: HttpClient) {
     // If the user is able to reach this route, it means he already logged in, and the loginservice saves his data in localstorage
     // so we can access it
     var user = localStorage.getItem('current_user')
@@ -32,7 +34,7 @@ export class FriendsComponent implements OnInit {
   ngOnInit(): void {
     // Immediately update the browser's localstorage with updated user info from db
     this.getUserInfo(this.current_user.username)
-
+    localStorage.removeItem('response')
     // This function is invoked by the friend-request service, which whill return an observable for Socket.io emits.
     // Once the service listens to an emit from the server, the client's component is notified and is engaged differently
     // depending on the request type notified by the server.
@@ -41,8 +43,9 @@ export class FriendsComponent implements OnInit {
     // etc.
     this._friendRequestService.listenToAnsweredRequests(this.current_user.username).subscribe((observer)=>{
 
-      //If we reject someone's request, or if we receive someone's request, we still have to update the component's istance's friend requests list in both cases.
-      if(observer.request_type == 'reject' || observer.request_type == 'friendrequest'){
+      //If we reject someone's request or if we receive someone's request, we still have to update the component's friend requests list in both cases.
+      if(observer.request_type == 'reject' || (observer.request_type == 'friendrequest' && !this.blacklisted_users.includes(observer.sender))){
+        // If we received a friendrequest from a user who's in our blacklist, nothing happenes and this "if" branch is not entered
         var current = localStorage.getItem('current_user')
         if(current != null){
           this.friend_requests_list = (JSON.parse(JSON.parse(JSON.stringify(current)))).pending_friend_requests
@@ -148,17 +151,17 @@ export class FriendsComponent implements OnInit {
 
   //Function called when a user searches up a username
   searchUsers(searched_name: String): void{
-    this.foundUsers = new Array<any>()
-    this._friendRequestService.searchUsers(searched_name)
-    const found = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('response'))))
-    localStorage.removeItem('response')
-    for (let i = 0; i < found.length; i++){
-      this.foundUsers.push(found[i])
+    if(searched_name != null && searched_name != '' && searched_name != undefined){
+      this.inputname = null // Resetting the text form's content
+      this._httpClient.post('http://localhost:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
+          this.foundUsers = response // Getting 5 users with most similar username to the typed one
+        })
     }
   }
 
   //Funzione chiamata quando un utente A preme su "Send friend request" di fianco a un utente B
   newFriendRequest(receiver: String): void{
+    this.foundUsers = new Array()
     var friendrequest = new FriendRequest();
     friendrequest.receiver = receiver
     friendrequest.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
@@ -186,8 +189,16 @@ export class FriendsComponent implements OnInit {
   }
 
   blacklistUser(blacklisted_user: String): void {
-    //Prima rifiutiamo la richiesta togliendo l'utente dalla pending list
-    this.rejectFriendRequest(blacklisted_user)
+    this.foundUsers = new Array()
+    /* Here we have two situations:
+        1. the user we want to blacklist is in our friend requests list --> we first have to delete him from the pending list and
+           then add him to our blacklisted_users list, otherwise it will cause a server error since mongoose won't find said username
+           in the receiver's pending_fiend_requests
+        2. we searched up his username and then clicked on "block user"; that means he's not in our friend requests list --> we don't
+           have to remove him from the pending friend requests. */
+    if (this.friend_requests_list.includes(blacklisted_user)){
+      this.rejectFriendRequest(blacklisted_user)
+    }
 
     //Poi blacklistiamo l'utente che ha effettuato la richiesta
     var blacklist_request = new FriendRequest();

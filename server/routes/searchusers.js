@@ -13,6 +13,7 @@ router.post('/', async(req, res) => {
                 else{
                     console.log('Returning searched users')
                  }
+                console.log('returned users:', docs)
                 res.json(docs)
             }).limit(5).select('username -_id')
     }catch(err){

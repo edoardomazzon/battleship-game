@@ -98,7 +98,7 @@ ios.on('connection', (socket) => {
   
   socket.on('newblockeduser', (newblock) => {
     // Notifying the blocking user's client so it can immediately update its component fields and localstorage
-    socket.emit('blockeduser'+newblock.blocker, newrejectedrequest)
+    socket.emit('blockeduser'+newblock.blocker, newblock)
   })
 
   socket.on('newdeletedfriend', (newdelete) => {

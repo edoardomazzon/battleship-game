@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 
 export class FriendRequestService {
   private baseURL = 'http://localhost:3000/'
-  private searchUsersURL = 'http://localhost:3000/searchusers'
   private sendRequestURL = 'http://localhost:3000/friendrequest'
   private acceptRequestURL = 'http://localhost:3000/acceptfriendrequest'
   private rejectRequestURL = 'http://localhost:3000/rejectfriendrequest'
@@ -20,14 +19,6 @@ export class FriendRequestService {
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
-  }
-
-  // Returns all users with the same (or similar) name as the parameter "searched_name"
-  searchUsers(searched_name: String): any{
-    this._httpClient.post(this.searchUsersURL, {searched_name: searched_name}).subscribe((response)=>{
-      localStorage.removeItem('response')
-      localStorage.setItem('response', JSON.stringify(response))
-    })
   }
 
   //Effettua una chiamata HTTP alla route "friendrequest" passando la friendrequest che come sender ha l'username di chi ha chiesto l'amicizia
@@ -125,9 +116,13 @@ export class FriendRequestService {
         var user: any = localStorage.getItem('current_user')
         if(user != null){
           user = JSON.parse(user)
-          user.pending_friend_requests.push(message.sender)
-          localStorage.removeItem('current_user')
-          localStorage.setItem('current_user', JSON.stringify(user))
+          console.log(message.sender + ' sta chiedendo l\'amicizia a ' + message.receiver)
+          // If the request sender is not in our blacklist then we can update the localstorage
+          if(!user.blacklisted_users.includes(message.sender) && !user.pending_friend_requests.includes(message.sender)){
+            user.pending_friend_requests.push(message.sender)
+            localStorage.removeItem('current_user')
+            localStorage.setItem('current_user', JSON.stringify(user))
+          }
         }
         observer.next(message);
       });
