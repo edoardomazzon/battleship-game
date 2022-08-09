@@ -26,20 +26,12 @@ router.post("/", async (req, res) => {
     }
     
     new_pending_list.length = new_pending_list.length - 1; // Deleting last element of the array which is a copy of the shifted last element
-    try { // Updating the use A with the new pending friend request list
-        const update = await User.updateOne({username: reject_sender}, {pending_friend_requests: new_pending_list}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log(docs)
-            }            
-        })
+    try { // Updating the user A with the new pending friend request list
+        const update = await User.updateOne({username: reject_sender}, {pending_friend_requests: new_pending_list})
         res.json(new_pending_list)
-        } catch (err) {
-            console.log(err)
-            res.json(new_pending_list)
-        }
+    } catch (err) {
+        console.log(err)
+    }
 });
 
 

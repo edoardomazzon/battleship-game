@@ -5,17 +5,10 @@ const User = require('../models/User');
 router.post('/', async(req, res) => {
     const input = req.body.searched_name
     try{
-        const select = await User.find({username: { $regex: '.*' + input + '.*', $options: 'i' }},
-            function(err, docs){
-                if (err){
-                    console.log(err)
-                }
-                else{
-                    console.log('Returning searched users')
-                 }
-                console.log('returned users:', docs)
-                res.json(docs)
-            }).limit(5).select('username -_id')
+        const query = await User
+        .find({username: { $regex: '.*' + input + '.*', $options: 'i' }})
+        .limit(5).select('username -_id')
+        .then((select) => {res.json(select)})
     }catch(err){
         console.log(err)
     }

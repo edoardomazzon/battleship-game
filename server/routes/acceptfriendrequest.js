@@ -14,15 +14,8 @@ router.post("/", async (req, res) => {
     friendslist1.push(accept_receiver)
 
     try {
-        const update1 = await User.updateOne({username: accept_sender}, {friends_list: friendslist1}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log(accept_sender+' ha accettato la richiesta di amicizia di '+accept_receiver)
-            }
-        })
-        } catch (err) {
+        const update1 = await User.updateOne({username: accept_sender}, {friends_list: friendslist1})
+    } catch (err) {
             console.log(err)
         }
         
@@ -32,17 +25,10 @@ router.post("/", async (req, res) => {
     friendslist2 = user2.friends_list
     friendslist2.push(accept_sender)
     try {
-        const update2 = await User.updateOne({username: accept_receiver}, {friends_list: friendslist2}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log(accept_receiver+' è stato accettato come amico da '+accept_sender)
-            }
-        })
+        const update2 = await User.updateOne({username: accept_receiver}, {friends_list: friendslist2})
         res.json(friendslist1) // Returning to A's client his new friends list so it can update its localstorage and component fields
-        } catch (err) {
-            res.json(friendslist1)
+    } catch (err) {
+            console.log(err)
         }
     });
 

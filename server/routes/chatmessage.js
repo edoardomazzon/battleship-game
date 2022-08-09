@@ -17,16 +17,16 @@ router.post("/", async (req, res, next) => {
 router.put("/", async (req, res) => {
     var last10messages = []
     try{
-        const select = await ChatMessage.find( {$or: [{from: req.body.from, to: req.body.to}, {from: req.body.to, to: req.body.from}]},
-            function(err, docs){
-                if (err){}
-                else{
-                    for(let i = 0; i < docs.length; i++){
-                        last10messages.push(docs[i])                        
-                    }
-                    res.json(last10messages.reverse())
-                 }
-            }).sort({timestamp: -1}).skip(0).limit(10)
+        const query = await ChatMessage
+        .find( {$or: [{from: req.body.from, to: req.body.to}, {from: req.body.to, to: req.body.from}]})
+        .sort({timestamp: -1})
+        .skip(0)
+        .limit(10)
+        .then((select) => {
+            for(let i = 0; i < select.length; i++){
+                last10messages.push(select[i])                        
+            }
+            res.json(last10messages.reverse())})
     }catch(err){
         console.log(err)
     }

@@ -11,21 +11,12 @@ router.get('/', function (req, res) {
 router.post('/', async(req, res) => {
     var user = req.body.username
     try{
-        const select = await User.findOne( {username: user},
-            function(err, docs){
-                if (err){
-                    console.log(err)
-                }
-                else{
-                    console.log('Returning user\s info')
-                 }
-                res.json(docs)
-            })
+        const query = await User.findOne( {username: user})
+        .then((select) => {res.json(select)})
     }catch(err){
         console.log(err)
     }
 })
-
 
 module.exports = router;
  

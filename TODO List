@@ -5,12 +5,8 @@ in json al client che ha fatto la richiesta.
 Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
 E questo è solo un esempio
 
-- problema: la getUserInfo in myprofile.component.ts fa una post al server che ritorna l'utente che però include anche password salt e digest
-- quando facciamo logout dobbiamo anche far ricomparire i tasti register e login e scomparire il tasto logout
-- quando facciamo logout dobbiamo svuotare/chiudere la chat
+- controllare TUTTE le volte che viene salvato il current user in localstorage e togliergli salt digest e password mettendoli a null
+  prima di fare la localStorage.setItem('current user')
 - la onInit() di myprofile non viene chiamata
-- risolvere errori mongoose
 - quando riapriamo la home, controlliamo che l'auth token non sia scaduto e riportiamo subito in login 
-- bloccare richiesta di amicizia se sei già amico o bloccato (controlli lato server+db anche se da frontend non faremo neanche comparire i bottoni)
 - mettere commenti in inglese
-- togliere console.log() inutili

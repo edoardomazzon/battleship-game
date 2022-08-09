@@ -18,23 +18,14 @@ router.post("/", async (req, res) => {
     var pending_friend_requests = receiver_user.pending_friend_requests;
     //If A is not blacklisted by B or if A and B are not already friends, then the friend request can be sent
     if(!blacklist.includes(sender.username) && !friends_list.includes(sender.username) && !pending_friend_requests.includes(sender.username)){
-        console.log('HO FATTO LA RICHIESTA DI AMICIZIA')
         //Adding A's username to B's new pending friend requests list with the sender's username
         new_pending_requests.push(sender.username)
         //Updating user B's pending_friend_requests by substituting it with the new one
         try {
-            const update = await User.updateOne({username: receiver}, {pending_friend_requests: new_pending_requests}, 
-                function(err, docs){
-                    if (err){
-                        console.log(err)
-                    }
-                    else{
-                        console.log("Updated "+ receiver+"\'s friend requests list with "+ sender+"\'s request");
-                    }
-                })
-            res.json('Friend Requests List updated')
-            } catch (err) {
-            res.json({ message: err })
+            const update = await User.updateOne({username: receiver}, {pending_friend_requests: new_pending_requests})
+            res.json('Sent a friend request')
+        } catch (err) {
+            console.log(err)
         }
     }
     else{

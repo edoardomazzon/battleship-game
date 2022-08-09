@@ -13,18 +13,10 @@ router.post("/", async (req, res) => {
     
     // Updating A's blacklist with B's name in it
     try {
-        const update = await User.updateOne({username: blacklist_sender}, {blacklisted_users: new_blacklist}, function(err, docs){
-            if (err){
-                console.log(err)
-            }
-            else{
-                console.log(docs)
-            }            
-        })
+        const update = await User.updateOne({username: blacklist_sender}, {blacklisted_users: new_blacklist})
         res.json(new_blacklist)
-        } catch (err) {
+    } catch (err) {
             console.log(err)
-            res.json(new_blacklist)
         }
 });
 

@@ -80,7 +80,6 @@ ios.on('connection', (socket) => {
   })
 
   socket.on('newacceptedrequest', (newacceptedrequest) => {
-    console.log(newacceptedrequest)
     // Notifying the accepter to update its client data
     socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)
     // Notifying the accepted user to update its client

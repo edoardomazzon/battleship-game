@@ -117,6 +117,7 @@ export class FriendsComponent implements OnInit {
 
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
   getUserInfo(current_username: String){
+    console.log('GET USER INFO')
     this.friends = new Array<String>()
     this.blacklisted_users = new Array<String>()
     this.friend_requests_list = new Array<String>()
@@ -128,6 +129,9 @@ export class FriendsComponent implements OnInit {
     var u = localStorage.getItem('current_user')
     if(u!=null){
       this.current_user = JSON.parse(u)
+      this.current_user.salt = null
+      this.current_user.digest = null
+      this.current_user.password = null
       var friendslist = JSON.parse(u).friends_list
       if(friendslist!=null){
         for(let i = 0; i < friendslist.length; i++){
