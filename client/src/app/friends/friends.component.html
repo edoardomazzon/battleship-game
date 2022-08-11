@@ -1,37 +1,46 @@
-<h1>Prove</h1>
-<div>
-  <form>
+<div class="min-w-[480px]">
+  <div class="grid grid-cols-2">
+    <button (click)="openFriendSection1()" class="btn">Amici</button>
+    <button (click)="openFriendSection2()" class="btn">Cazzi</button>
+  </div>
+
+  <div *ngIf="this.friendsSection1">contenuto</div>
+  <div *ngIf="this.friendsSection2">
     <div>
-      <label for="username">Username</label>
-      <input type="text" id="username" [(ngModel)]="inputname" name="username"/>
-      <button class="btn" (click)="searchUsers(inputname)">Look up username</button>
+      <form>
+        <div>
+          <label for="username">Username</label>
+          <input type="text" id="username" [(ngModel)]="inputname" name="username"/>
+          <button class="btn" (click)="searchUsers(inputname)">Look up username</button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
-<br>
-<div>
-  <ul *ngIf="this.foundUsers.length > 0">
-    FOUND USERS
-    <li *ngFor="let user of this.foundUsers">
-      <div *ngIf="!this.friends.includes(user.username)">
-        {{ user.username }}
-        <button (click)="newFriendRequest(user.username)">Aggiungi agli amici</button>
-        <button (click)="blacklistUser(user.username)">Blocca utente</button>
-      </div>
-    </li>
-  </ul>
-  <ul *ngIf="this.friend_requests_list.length > 0"> PENDING FRIEND REQUESTS
-    <li *ngFor="let receiver of this.friend_requests_list">
-      {{ receiver }}
-      <button (click)="acceptFriendRequest(receiver)">Accetta richiesta</button>
-      <button (click)="rejectFriendRequest(receiver)">Rifiuta richiesta</button>
-      <button (click)="blacklistUser(receiver)">Blocca utente</button>
-    </li>
-  </ul>
-  <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
-    <li *ngFor="let friend of this.friends">
-      {{ friend }}
-      <button class="btn" (click)="removeFriend(friend)">Remove friend</button>
-    </li>
-  </ul>
+    <br>
+    <div>
+      <ul *ngIf="this.foundUsers.length > 0">
+        FOUND USERS
+        <li *ngFor="let user of this.foundUsers">
+          <div *ngIf="!this.friends.includes(user.username)">
+            <span class="font-bold">{{ user.username }} </span>
+            <button (click)="newFriendRequest(user.username)">Aggiungi agli amici</button>
+            <button (click)="blacklistUser(user.username)">Blocca utente</button>
+          </div>
+        </li>
+      </ul>
+      <ul *ngIf="this.friend_requests_list.length > 0"> PENDING FRIEND REQUESTS
+        <li *ngFor="let receiver of this.friend_requests_list">
+          {{ receiver }}
+          <button (click)="acceptFriendRequest(receiver)">Accetta richiesta</button>
+          <button (click)="rejectFriendRequest(receiver)">Rifiuta richiesta</button>
+          <button (click)="blacklistUser(receiver)">Blocca utente</button>
+        </li>
+      </ul>
+      <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
+        <li *ngFor="let friend of this.friends">
+          {{ friend }}
+          <button class="btn" (click)="removeFriend(friend)">Remove friend</button>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

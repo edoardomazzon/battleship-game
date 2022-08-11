@@ -79,7 +79,7 @@ ios.on('connection', (socket) => {
   socket.on('newfriendrequest', (friendrequest) =>{
     // Notifying the request receiver's client so that it can immediately update its pending requests list without having
     // to query the database. We use BROADCAST since we need to notify other sockets and not ours.
-    socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest) 
+    socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest)
   })
 
   socket.on('newacceptedrequest', (newacceptedrequest) => {

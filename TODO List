@@ -9,3 +9,4 @@ E questo è solo un esempio
   prima di fare la localStorage.setItem('current user')
 - la onInit() di myprofile non viene chiamata
 - mettere commenti in inglese
+- segnalare con un errore che il login non è andato a buon fine

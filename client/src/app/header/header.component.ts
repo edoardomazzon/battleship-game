@@ -9,20 +9,35 @@ import { AuthService} from '../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private _router: Router,
-              public _authservice: AuthService) { }
+  public profileTab: Boolean
+  public friendsTab: Boolean
 
-  ngOnInit(): void {
+  constructor(private _router: Router, public _authservice: AuthService) {
+    this.friendsTab = false
+    this.profileTab = false
   }
-  gotoprofile(): void {
+
+  ngOnInit() {
+  }
+  gotoprofile() {
+    this.profileTab = false
     this._router.navigateByUrl('/myprofile')
   }
 
-  logoutUser(): void{
+  logoutUser(){
+    this.profileTab = false
     localStorage.removeItem('current_user');
     localStorage.removeItem('auth_token');
     this._router.navigateByUrl('/')
     location.reload()
   }
 
+  openProfileMenu(){
+    this.profileTab = !this.profileTab
+    this.friendsTab = false
+  }
+  openFriendsMenu(){
+    this.friendsTab = !this.friendsTab
+    this.profileTab = false
+  }
 }

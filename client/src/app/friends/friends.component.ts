@@ -17,10 +17,11 @@ export class FriendsComponent implements OnInit {
   public friend_requests_list: Array<String> = [];
   public blacklisted_users: Array<String> = [];
   public friends: Array<String> = [];
+  public friendsSection1: Boolean
+  public friendsSection2: Boolean
 
   constructor(private _profileService: ProfileService,
               private _friendRequestService: FriendRequestService,
-              private _router: Router,
               private _httpClient: HttpClient) {
     // If the user is able to reach this route, it means he already logged in, and the loginservice saves his data in localstorage
     // so we can access it
@@ -29,6 +30,8 @@ export class FriendsComponent implements OnInit {
       this.current_user = JSON.parse(JSON.parse(JSON.stringify(user)))
       this.getUserInfo(this.current_user.username)
     }
+    this.friendsSection1 = false
+    this.friendsSection2 = false
   }
 
   ngOnInit(): void {
@@ -216,5 +219,14 @@ export class FriendsComponent implements OnInit {
     remove_request.sender = this.current_user.username
     remove_request.receiver = removed_user
     this._friendRequestService.removeFriend(remove_request)
+  }
+
+  openFriendSection1(){
+    this.friendsSection1 = !this.friendsSection1
+    this.friendsSection2 = false
+  }
+  openFriendSection2(){
+    this.friendsSection2 = !this.friendsSection2
+    this.friendsSection1 = false
   }
 }
