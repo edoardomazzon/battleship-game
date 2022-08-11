@@ -14,18 +14,11 @@
         <input type="text" id="username" [(ngModel)]="newuser.username" name="username"/>
         <p class="text-error font-light" *ngIf="this.case == 'case0' || this.case == 'case1'"> Username already in use</p>
       </div>
-      <div>
+      <div class="mb-7">
         <label for="password">Password</label>
         <input type="password" id="password" [(ngModel)]="newuser.password" name="password"/>
       </div>
-      <div class="my-7">
-        <label for="firstname">First Name</label>
-        <input type="text" id="firstname" [(ngModel)]="newuser.firstname" name="firstname"/>
-      </div>
-      <div class="mb-7">
-        <label for="lastname">Last Name</label>
-        <input type="text" id="lastname" [(ngModel)]="newuser.lastname" name="lastname"/>
-      </div>
+
       <button (click)="registerUser()"  class="btn w-full">Conferma</button>
       <p class="my-1"> Already have an account? Sign in <a href="/login" class="text-navy font-bold">here</a></p>
     </form>

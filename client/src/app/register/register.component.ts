@@ -12,7 +12,7 @@ import { RegisterService } from '../services/register.service';
 export class RegisterComponent implements OnInit {
 
   public newuser: User = new User()
-  public case: any = ''
+  public case: any
 
   constructor(private _registerService: RegisterService,
               private _router: Router) { }

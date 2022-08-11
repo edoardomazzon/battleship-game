@@ -2,9 +2,13 @@
   <h1 class="text-center pb-5">My profile</h1>
   <div class="mb-10">
     <ul>
-      <li> Nome Utente:     {{ this.current_user.username }}</li>
+      <li> Username:     {{ this.current_user.username }}</li>
       <li> E-mail:          {{ this.current_user.email }}</li>
-      <li> Partite giocate: {{ this.current_user.games_played }}</li>
+      <li> Games played: {{ this.current_user.games_played }}</li>
+      <li> Games won: {{ this.current_user.games_won }}</li>
+      <li> Accuracy: {{ this.current_user.accuracy }}%</li>
+      <li> Current Winstreak: {{ this.current_user.current_winstreak }}</li>
+      <li> Longest Winstreak: {{ this.current_user.max_winstreak }}</li>
     </ul>
   </div>
 </div>

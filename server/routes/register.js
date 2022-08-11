@@ -28,6 +28,7 @@ router.post('/', async (req, res) => {
       u.friends_list = [];
       u.blacklisted_users = [];
       u.pending_friend_requests = [];
+      u.isready = false
       u.setPassword(req.body.password);
       // Inserting the user in the db
       try {

@@ -64,6 +64,9 @@ app.use('/blacklistuser', blacklistUserRoute);
 app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
+// Setting up MatchMaking logic
+var ready_players_list = new Array()
+
 
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
@@ -108,6 +111,38 @@ ios.on('connection', (socket) => {
       request_type: 'yougotdeleted',
       deleter: newdelete.deleter
     })
+  })
+
+  socket.on('readytoplay', (player) => {
+    ready_players_list.push(player) // Here we add the player that clicked on "ready up" to the "ready_players_list"
+    console.log(ready_players_list)
+    // Here we should sort the list based on their overall skill level
+
+    // Here goes the logic for the matchup based on skill level
+
+    // Here we delete the two players we chose to match up from the "ready_players_list" and then notify them
+  })
+
+
+  // In case a user canceled the matchmaking,remove it from the "ready_players_list"
+  socket.on('cancelmatchmaking', (player) => {
+    var playerindex = 0
+    for(let j = 0; j < ready_players_list.length; j++){
+      if(ready_players_list[j] == player){
+        playerindex = j
+        break
+      }
+    }
+    console.log('PLAYERINDEX', playerindex)
+    delete ready_players_list[playerindex]
+    for(let i = playerindex; i < ready_players_list.length; i++){
+      ready_players_list[i] = ready_players_list[i+1]
+    }
+    
+    if(ready_players_list.length != 0){
+      ready_players_list.length = ready_players_list.length -1
+    }
+    console.log('AFTER CANCELING', ready_players_list)
   })
   
   socket.on('disconnect', () => {

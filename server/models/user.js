@@ -18,14 +18,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    firstname: {
-        type: String,
-        required: false
-    },
-    lastname: {
-        type: String,
-        required: false
-    },
     max_winstreak: {
         type: Number,
         required: false

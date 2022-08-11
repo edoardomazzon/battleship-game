@@ -14,6 +14,9 @@
         </div>
       </div>
     </div>
+
+    <button *ngIf="this.isready == false" class="btn" (click)="readyUp()"> Ready up</button>
+    <button *ngIf="this.isready == true" class="btn" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
   </div>
   <!-- Commentare fino a qui-->
 </div>
