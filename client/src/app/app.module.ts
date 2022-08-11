@@ -25,7 +25,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate : [IsNotAuthenticatedService]},
   {path: 'myprofile', component: MyProfileComponent, canActivate: [IsAuthenticatedService]},
   {path: 'admindashboard', component: AdminDashboardComponent, canActivate: [IsAdminService]},
-  {path: '', component: HomeComponent},
+  {path: '', component: HomeComponent, canActivate: [IsAuthenticatedService]},
   {path: '**', redirectTo: '/'}
 ]
 

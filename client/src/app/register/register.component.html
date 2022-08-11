@@ -7,10 +7,12 @@
         <!-- Qui mettiamo [(ngModel)] per il two-way-binding di angular grazie all'import del modulo FormsModule da @angular/forms -->
         <input type="text" id="email" [(ngModel)]="newuser.email" name="email"/>
         <!-- Chiamiamo la registerUser() nella register.component.ts che a sua volta chiamerà la addUser() di register.service.ts -->
+        <p class="text-error font-light" *ngIf="this.case == 'case0' || this.case == 'case2'"> E-mail address already in use</p>
       </div>
       <div class="my-7">
         <label for="username">Username</label>
         <input type="text" id="username" [(ngModel)]="newuser.username" name="username"/>
+        <p class="text-error font-light" *ngIf="this.case == 'case0' || this.case == 'case1'"> Username already in use</p>
       </div>
       <div>
         <label for="password">Password</label>
@@ -25,6 +27,7 @@
         <input type="text" id="lastname" [(ngModel)]="newuser.lastname" name="lastname"/>
       </div>
       <button (click)="registerUser()"  class="btn w-full">Conferma</button>
+      <p class="my-1"> Already have an account? Sign in <a href="/login" class="text-navy font-bold">here</a></p>
     </form>
   </div>
 </div>

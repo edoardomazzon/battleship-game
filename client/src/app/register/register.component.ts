@@ -12,6 +12,7 @@ import { RegisterService } from '../services/register.service';
 export class RegisterComponent implements OnInit {
 
   public newuser: User = new User()
+  public case: any = ''
 
   constructor(private _registerService: RegisterService,
               private _router: Router) { }
@@ -21,7 +22,10 @@ export class RegisterComponent implements OnInit {
 
   registerUser(): void {
     this._registerService.addUser(this.newuser).subscribe(newuser =>{
-      if (newuser){
+      if (newuser == 'case0' || newuser == 'case1' || newuser == 'case2'){
+        this.case = newuser
+      }
+      else if(newuser){
         this._router.navigateByUrl('/login')
       }
     });

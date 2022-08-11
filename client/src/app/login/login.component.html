@@ -10,11 +10,12 @@
       <div class="my-7">
         <div class="flex justify-between items-center">
           <label for="password">Password</label>
-          <a href="/reset-password" class="text-navy font-bold">Password dimenticata?</a> <!-- capire come fare -->
+          <a href="/reset-password" class="text-navy font-bold">Forgot your password?</a> <!-- capire come fare -->
         </div>
         <input type="password" id="password" [(ngModel)]="authuser.password" name="password" />
       </div>
-      <button (click)="loginUser()" class="btn w-full">Conferma</button>
+      <button (click)="loginUser()" class="btn w-full">Sign in</button>
+      <p class="my-1"> Don't have an account? Sign up <a href="/register" class="text-navy font-bold">here</a></p>
     </form>
   </div>
 </div>

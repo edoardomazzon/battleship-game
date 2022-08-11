@@ -8,5 +8,4 @@ E questo è solo un esempio
 - controllare TUTTE le volte che viene salvato il current user in localstorage e togliergli salt digest e password mettendoli a null
   prima di fare la localStorage.setItem('current user')
 - la onInit() di myprofile non viene chiamata
-- quando riapriamo la home, controlliamo che l'auth token non sia scaduto e riportiamo subito in login 
 - mettere commenti in inglese

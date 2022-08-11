@@ -33,6 +33,9 @@ module.exports = {
         },
         navy: {
           DEFAULT: '#3F5277'
+        },
+        error: {
+          DEFAULT: '#a61212'
         }
       },
       // height: {
