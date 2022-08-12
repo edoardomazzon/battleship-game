@@ -1,10 +1,21 @@
 <div class="min-w-[480px]">
   <div class="grid grid-cols-2">
-    <button (click)="openFriendSection1()" class="btn">Amici</button>
-    <button (click)="openFriendSection2()" class="btn">Cazzi</button>
+    <button (click)="openFriendSection1()" class="btn">Friends and invites</button>
+    <button (click)="openFriendSection2()" class="btn">Manage friends and requests</button>
   </div>
 
-  <div *ngIf="this.friendsSection1">contenuto</div>
+  <!-- In this section we show our friends list with the possibility of inviting to play, messaging, removing or blocking them -->
+  <div *ngIf="this.friendsSection1">
+    <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
+      <li *ngFor="let friend of this.friends">
+        {{ friend }}
+        <button class="btn" (click)="removeFriend(friend)">Remove friend</button>
+        <button class="btn" (click)="openChat(friend)">Open chat</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- In this section we show our friend requests with the possibility of looking up users to send them a friend request or block them -->
   <div *ngIf="this.friendsSection2">
     <div>
       <form>
@@ -33,12 +44,6 @@
           <button (click)="acceptFriendRequest(receiver)">Accetta richiesta</button>
           <button (click)="rejectFriendRequest(receiver)">Rifiuta richiesta</button>
           <button (click)="blacklistUser(receiver)">Blocca utente</button>
-        </li>
-      </ul>
-      <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
-        <li *ngFor="let friend of this.friends">
-          {{ friend }}
-          <button class="btn" (click)="removeFriend(friend)">Remove friend</button>
         </li>
       </ul>
     </div>

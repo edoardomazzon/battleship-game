@@ -72,8 +72,15 @@ var ready_players_list = new Array()
 ios.on('connection', (socket) => {
   console.log("Socekt.io client connected with ID: ", socket.id)
 
-  socket.on('new message', (data) => {
-    socket.emit('message', data)
+  socket.on('chatstarted', (players) => {
+    console.log('starting chat')
+    socket.emit('openchat', players)
+  })
+
+  socket.on('newmessage', (message) => {
+    console.log('Ho sentito il newmessage da: '+message.from+' a: '+message.to+ ' che ha scritto: '+ message.text_content)
+    socket.emit('yousentmessage'+message.from, message)
+    socket.broadcast.emit('youreceivedmessage'+message.to, message)
   })
   
   socket.on('newfriendrequest', (friendrequest) =>{

@@ -4,6 +4,8 @@ import { FriendRequestService } from '../services/friend-request.service';
 import { FriendRequest } from '../models/friend-request';
 import { Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http';
+import { ChatComponent } from '../chat/chat.component';
+import { ChatmessageService } from '../services/chatmessage.service';
 
 @Component({
   selector: 'app-friends',
@@ -22,7 +24,8 @@ export class FriendsComponent implements OnInit {
 
   constructor(private _profileService: ProfileService,
               private _friendRequestService: FriendRequestService,
-              private _httpClient: HttpClient) {
+              private _httpClient: HttpClient,
+              private _chatMessageService: ChatmessageService) {
     // If the user is able to reach this route, it means he already logged in, and the loginservice saves his data in localstorage
     // so we can access it
     var user = localStorage.getItem('current_user')
@@ -116,6 +119,7 @@ export class FriendsComponent implements OnInit {
         }
       }
     })
+    this.openFriendSection1()
   }
 
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
@@ -228,5 +232,13 @@ export class FriendsComponent implements OnInit {
   openFriendSection2(){
     this.friendsSection2 = !this.friendsSection2
     this.friendsSection1 = false
+  }
+  openChat(friend: String){
+    this.friendsSection1 = false
+    console.log('Starting chat between '+this.current_user.username+' and '+ friend)
+    this._chatMessageService.startChat({
+      current_user: this.current_user.username,
+      other_user: friend
+    })
   }
 }

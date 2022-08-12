@@ -1,11 +1,15 @@
-<ul>CHAT
-  <li *ngFor=" let message of this.messages">
-    <a style="font-weight: bold; font-size:small">{{ message.from }}:</a><a style="font-size:small">{{ message.text_content }}</a>
-  </li>
-</ul>
-<div>
-  <form>
-    <input type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
-    <button class="btn mr-5" (click)="sendMessage()"  class="btn w-full">Invia</button>
-  </form>
+<div *ngIf="this.chatopened == true">
+  <ul>CHAT <button class="btn mr-5" (click)="closeChat()">Close chat</button>
+    <li *ngFor=" let message of this.messages">
+
+      <a *ngIf="message.text_content != '' " style="font-weight: bold; font-size:small">{{ message.from + ':' }}</a><a style="font-size:small">{{ message.text_content }}</a>
+      <a *ngIf="message.text_content == '' " style="font-weight: bold; font-size:small"> ></a>
+    </li>
+  </ul>
+  <div>
+    <form>
+      <input type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
+      <button class="btn mr-5" (click)="sendMessage()"  class="btn w-full">Invia</button>
+    </form>
+  </div>
 </div>

@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
 
   logoutUser(){
     this.profileTab = false
+    this.friendsTab = false
     localStorage.removeItem('current_user');
     localStorage.removeItem('auth_token');
     this._router.navigateByUrl('/')

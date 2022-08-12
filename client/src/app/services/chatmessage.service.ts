@@ -12,7 +12,7 @@ export class ChatmessageService {
 
   public baseURL = 'http://localhost:3000/'
   public socket: Socket
-
+  private current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
@@ -21,9 +21,35 @@ export class ChatmessageService {
   receiveMessages(): Observable<any>{
     return new Observable((observer) => {
 
-      this.socket.on('message', (message: any) => {
+      this.socket.on('yousentmessage'+this.current_user.username, (message: any) => {
+        message = {
+          from: message.from,
+          to: message.to,
+          text_content: message.text_content,
+          message_type: 'yousentmessage'
+        }
         observer.next(message);
       });
+
+      this.socket.on('youreceivedmessage'+this.current_user.username, (message: any) => {
+        message = {
+          from: message.from,
+          to: message.to,
+          text_content: message.text_content,
+          message_type: 'youreceivedmessage'
+        }
+        observer.next(message);
+      });
+
+      this.socket.on('openchat', (message: any) => {
+        console.log(message)
+        message = {
+          current_user: message.current_user,
+          other_user: message.other_user,
+          message_type: 'openchat'
+        }
+        observer.next(message)
+      })
 
       return () => {
         this.socket.disconnect()
@@ -42,17 +68,33 @@ export class ChatmessageService {
 
     this._httpClient.put(this.baseURL+'chatmessage', json).subscribe((response) => {
       var returned_list = JSON.parse(JSON.stringify((response))) //La repsonse ha l'array (già invertito dal lato server) degli ultimi 10 messaggi
-      for(let i = 0; i < returned_list.length; i++){
-        messages_list.push(returned_list[i])//Riempiamo la message list che ritorniamo a chat component
+      if(returned_list.length > 0){
+        for(let i = 0; i < returned_list.length; i++){
+          messages_list.push(returned_list[i])//Riempiamo la message list che ritorniamo a chat component
+        }
       }
+      else{
+        var blankmessage = new ChatMessage()
+        blankmessage.from = ''
+        blankmessage.to = ''
+        blankmessage.text_content = ''
+        for(let i = 0; i < 10; i++){
+          messages_list.push(blankmessage)//Riempiamo la message list che ritorniamo a chat component
+        }
+      }
+
     })
     return messages_list
   }
 
-
   sendMessage(newmessage: any){
     this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
-    this.socket.emit('new message', newmessage)
+    this.socket.emit('newmessage', newmessage)
   }
 
+
+  startChat(players: any){
+    console.log('Starting chat')
+    this.socket.emit('chatstarted', players)
+  }
 }

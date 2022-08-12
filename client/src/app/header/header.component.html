@@ -14,7 +14,7 @@
     <span class="text-xxs uppercase font-bold">Game</span>
   </a>
 
-  <div class="flex"> <!--*ngIf="this._authservice.isAuthenticated()" -->
+  <div class="flex" *ngIf="this._authservice.isAuthenticated()">
     <div class="btn mr-5 cursor-pointer" (click)="openFriendsMenu()">
       <svg class="w-8 h-8" viewBox="0 0 475.851 475.851">
         <g>
