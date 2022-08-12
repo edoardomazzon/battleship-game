@@ -66,7 +66,27 @@ app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
 // Setting up MatchMaking logic
 var ready_players_list = new Array()
+ // Qua facciamo che ogni 15 secondi vengono tolti dalla lista gli utenti che si sono emssi in ready più di 15 secondi fa
+ // E poi li accoppiamo e facciamo le varie emit per ogni coppia
+setInterval(() => {
+  const data = new Date()
+  var timereadyusers = new Array()
 
+  // Qua stiamo aggiungendo a timereadyusers tutti gli utenti che hanno messo ready più di 15 sec fa
+  for(let i = 0; i < ready_players_list.length; i++){
+    console.log(ready_players_list[i].readyuptime < data.getTime())
+    if(ready_players_list[i].readyuptime < data){
+      timereadyusers.push(ready_players_list[i])
+    }
+  }
+  for(let i = 0; i < timereadyusers.length; i++){
+    ready_players_list = ready_players_list.filter((user) => user !== timereadyusers[i])
+  }
+  if(timereadyusers.length % 2 != 0){
+    ready_players_list.push(timereadyusers[timereadyusers.length-1])
+    timereadyusers.length -= 1
+  }
+}, 5000);
 
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
@@ -78,7 +98,6 @@ ios.on('connection', (socket) => {
   })
 
   socket.on('newmessage', (message) => {
-    console.log('Ho sentito il newmessage da: '+message.from+' a: '+message.to+ ' che ha scritto: '+ message.text_content)
     socket.emit('yousentmessage'+message.from, message)
     socket.broadcast.emit('youreceivedmessage'+message.to, message)
   })
@@ -121,15 +140,13 @@ ios.on('connection', (socket) => {
   })
 
   socket.on('readytoplay', (player) => {
+    console.log('Da client il readyuptime:', player.readyuptime)
     ready_players_list.push(player) // Here we add the player that clicked on "ready up" to the "ready_players_list"
-    console.log(ready_players_list)
     // Here we should sort the list based on their overall skill level
-
     // Here goes the logic for the matchup based on skill level
 
     // Here we delete the two players we chose to match up from the "ready_players_list" and then notify them
   })
-
 
   // In case a user canceled the matchmaking,remove it from the "ready_players_list"
   socket.on('cancelmatchmaking', (player) => {
@@ -140,16 +157,13 @@ ios.on('connection', (socket) => {
         break
       }
     }
-    console.log('PLAYERINDEX', playerindex)
     delete ready_players_list[playerindex]
     for(let i = playerindex; i < ready_players_list.length; i++){
       ready_players_list[i] = ready_players_list[i+1]
-    }
-    
+    }    
     if(ready_players_list.length != 0){
       ready_players_list.length = ready_players_list.length -1
     }
-    console.log('AFTER CANCELING', ready_players_list)
   })
   
   socket.on('disconnect', () => {

@@ -124,7 +124,6 @@ export class FriendsComponent implements OnInit {
 
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
   getUserInfo(current_username: String){
-    console.log('GET USER INFO')
     this.friends = new Array<String>()
     this.blacklisted_users = new Array<String>()
     this.friend_requests_list = new Array<String>()
@@ -235,7 +234,6 @@ export class FriendsComponent implements OnInit {
   }
   openChat(friend: String){
     this.friendsSection1 = false
-    console.log('Starting chat between '+this.current_user.username+' and '+ friend)
     this._chatMessageService.startChat({
       current_user: this.current_user.username,
       other_user: friend

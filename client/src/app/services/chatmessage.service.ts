@@ -42,7 +42,6 @@ export class ChatmessageService {
       });
 
       this.socket.on('openchat', (message: any) => {
-        console.log(message)
         message = {
           current_user: message.current_user,
           other_user: message.other_user,
@@ -94,7 +93,6 @@ export class ChatmessageService {
 
 
   startChat(players: any){
-    console.log('Starting chat')
     this.socket.emit('chatstarted', players)
   }
 }
