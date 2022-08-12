@@ -5,6 +5,9 @@ in json al client che ha fatto la richiesta.
 Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
 E questo è solo un esempio
 
+- Le richieste di amicizia (e tutto ciò che è relativo al friends component) non si aggiorna con socket finché il menu a tendina
+  è chiuso; bisogna aggirarlo tramite qualche emit verso l'header component, che poi quando apriremo da lì il menu a tendina del
+  friend component chiamerà una funzione che aggiornerà le richieste di amicizia/i nuovi amici/ecc.
 - controllare TUTTE le volte che viene salvato il current user in localstorage e togliergli salt digest e password mettendoli a null
   prima di fare la localStorage.setItem('current user')
 - la onInit() di myprofile non viene chiamata
