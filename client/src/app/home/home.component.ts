@@ -13,54 +13,73 @@ export class HomeComponent implements OnInit {
   private baseURL = 'http://localhost:3000/'
   private readyUpURL = 'http://localhost:3000/readyup'
   public isready = false
+  public isplaying
   private current_user: any
 
-
-  constructor(private _router: Router, private _httpClient: HttpClient, private _matchMakingService: MatchmakingService) { }
+  constructor(private _router: Router, private _httpClient: HttpClient, private _matchMakingService: MatchmakingService) {
+    this.isplaying = false
+  }
 
   ngOnInit(): void {
+    var matchinfo: any = localStorage.getItem('matchinfo')
+    if(matchinfo != null){
+      matchinfo = JSON.parse(matchinfo)
+      console.log(matchinfo)
+      if(matchinfo.isplaying == "true"){
+        this.isplaying = true
+        this.isready = true
+      }
+    }
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this._matchMakingService.listenToMatchmaking(this.current_user).subscribe((observer) => {
-
+      console.log(observer)
+      if(observer.message_type == 'yougotmatched'){
+        this.isready = false
+        if(observer.creatematchprio){
+          console.log('CREO IL MATCH CON UNA POST')
+        }
+        this.isplaying = true
+        localStorage.setItem('matchinfo', JSON.stringify({
+          isplaying: JSON.stringify(true),
+          enemy: observer.enemy,
+          starttime: observer.starttime
+        }))
+        if(observer.creatematchprio == true){
+          var player1
+          var player2
+          if(this.current_user.username.localeCompare(observer.enemy) < 0){
+            player1 = this.current_user.username
+            player2 = observer.enemy
+          }else{
+            player1 = observer.enemy
+            player2 = this.current_user.username
+          }
+          this._matchMakingService.createMatch({
+            player1: player1,
+            player2: player2,
+            winner: '',
+            timestamp: observer.starttime
+          })
+        }
+      }
     })
    }
 
   /*
    A user's skill level for matchmaking is calculated as follows:
    score = (current winstreak * 10) + winrate + accuracy
-    - Skill level 1: score from   0   to   60
-    - Skill level 2: score from   61  to   120
-    - Skill level 3: score from   121 to   180
-    - Skill level 4: score from   181 to   240
-    - Skill level 5: score from   241 to   infinity
 
    A user should not know his current skill level, hence why it will not be shown in its profile stats nor will it be
    permanently stored in the db. A user's skill level is to be calculated everytime that user hits the "ready up" button.
   */
-
   readyUp(){
-    // Calculating the skill score and adding a new temporary field called "skill_level" to the current_user instance
-    var skill_score = (this.current_user.current_winstreak * 10)
-                      + ((this.current_user.games_won* 100) / (this.current_user.games_played))
-                      + (this.current_user.accuracy)
+   // Calculating the skill score and adding a new temporary field called "skill_level" to the current_user instance
+   this.current_user.skill_level = (this.current_user.current_winstreak * 10)
+                                 + ((this.current_user.games_won* 100) / (this.current_user.games_played))
+                                 + (this.current_user.accuracy)
 
-    if(0 <= skill_score && skill_score <= 60){
-      this.current_user.skill_level = 1
-    }
-    if(61 <= skill_score && skill_score <= 120){
-      this.current_user.skill_level = 2
-    }
-    if(121 <= skill_score && skill_score <= 180){
-      this.current_user.skill_level = 3
-    }
-    if(181 <= skill_score && skill_score <= 240){
-      this.current_user.skill_level = 4
-    }
-    if(241 <= skill_score){
-      this.current_user.skill_level = 5
-    }
-    this.current_user.readyuptime = new Date()
-    this.current_user.readyuptime = this.current_user.readyuptime.getTime()
+    var readyuptime = new Date()
+    this.current_user.readyuptime = readyuptime.getTime()
     this._matchMakingService.readyUp(this.current_user)
     this.isready = true
   }
@@ -68,6 +87,11 @@ export class HomeComponent implements OnInit {
   cancelMatchMaking(){
     this._matchMakingService.cancelMatchMaking(this.current_user)
     this.isready = false
+  }
+
+  leaveMatch(){
+    localStorage.removeItem('matchinfo')
+    location.reload()
   }
 
 }

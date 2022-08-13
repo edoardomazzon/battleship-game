@@ -3,20 +3,16 @@
   <div class="game-container h-screen w-50 bg-navy">
     <h1 class="text-center pt-5">Battleship game</h1>
 
-    <div class="md:flex mt-6">
-      <div class="game md:flex w-3/4">
-        <div class="bg-gray-700 h-80 w-1/2 mr-5"><p>avv1</p></div>
-        <div class="bg-gray-700 h-80 w-1/2"><p>avv2</p></div>
-      </div>
-      <div class="chat-live w-1/4 ml-8 h-full">
-        <div class="bg-gray-300 h-80">
-          <app-chat></app-chat>
-        </div>
-      </div>
+    <div *ngIf="this.isplaying == true">
+      <app-game></app-game>
+      <button class="btn" (click)="leaveMatch()"> Leave Match</button>
     </div>
 
+  <div *ngIf="this.isplaying == false">
     <button *ngIf="this.isready == false" class="btn" (click)="readyUp()"> Ready up</button>
     <button *ngIf="this.isready == true" class="btn" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
+  </div>
+
   </div>
   <!-- Commentare fino a qui-->
 </div>

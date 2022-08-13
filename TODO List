@@ -5,7 +5,8 @@ in json al client che ha fatto la richiesta.
 Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
 E questo è solo un esempio
 
-- Le richieste di amicizia (e tutto ciò che è relativo al friends component) non si aggiorna con socket finché il menu a tendina
+PROBLEMI:
+- Le richieste di amicizia (e tutto ciò che è relativo al friends component) non si aggiornano con socket finché il menu a tendina
   è chiuso; bisogna aggirarlo tramite qualche emit verso l'header component, che poi quando apriremo da lì il menu a tendina del
   friend component chiamerà una funzione che aggiornerà le richieste di amicizia/i nuovi amici/ecc.
 - Se un giocatore si mette in attesa (ready up) ma poi va nel suo profilo e poi ritorna alla home, nel frattempo era rimasto comunque 
@@ -17,3 +18,17 @@ E questo è solo un esempio
 - la onInit() di myprofile non viene chiamata
 - mettere commenti in inglese
 - segnalare con un errore che il login non è andato a buon fine
+
+IMPLEMENTAZIONI:
+  MATCH
+  1. ognuno si salva nella sua game component / localStorage il nome dell'enemy e il timestamp di quando è cominciata la partita
+  2. post con creazione partita fatta da chi ha il creatematchprio = true
+  3. gli utenti avvisati caricano il came component
+  4. posizioniamo le navi noi identiche su entrambi i client
+  5. stampiamo le navi e il nome dei rispettivi avversari
+  6. apriamo la chat di fianco
+  7. proviamo a fare stampare la matrice
+  8. capiamo come gestire le coordinate
+  9. proviamo a fare i primi spari (entrambi devono visualizzare il risultato dello sparo quindi A spara --> B sente lo sparo 
+    --> B si calcola cosa gli è stato colpito --> B se lo stampa --> B riavvisa il server che avvisa A di cos ha colpito --> A se lo stampa)
+

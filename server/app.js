@@ -10,7 +10,7 @@ const server = http.createServer(app)
 const port = 3000
 
 
-//Setting the Socket.io instance to listen on the localhost server and enabling CORS policies for it
+// Setting the Socket.io instance to listen on the localhost server and enabling CORS policies for it
 const ios = io(server, {
   cors: {
     origin: "http://localhost:4200",
@@ -18,7 +18,7 @@ const ios = io(server, {
     allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With", "cache-control"]
   }
 });
-//Enabling CORS policies for the app as well
+// Enabling CORS policies for the app as well
 app.all('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS, PATCH, *');
@@ -26,23 +26,23 @@ app.all('/*', (req, res, next) => {
   next();
 })
 
-//Everytime the server receives a request from the client, the request gets parsed
+// Everytime the server receives a request from the client, the request gets parsed
 app.use(bodyParser.json());
 
-//Connecting the database to MongoDB Atlas service through the connection string stored in .env
+// Connecting the database to MongoDB Atlas service through the connection string stored in .env
 mongoose.connect(
-  process.env.DB_CONNECTION, () => console.log("Connected to Atlas Database"),
-  (err) => {
-    if(err) console.log(err) 
-    else console.log("mongdb is connected");
-   });
+  process.env.DB_CONNECTION, () => console.log("Connected to Atlas Database"), (err) => {
+     if(err){ console.log(err) } 
+  }
+);
 
 
-//Declaring all existing routes
+// Declaring all existing routes
 const indexRoute = require('./routes/index');
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
+const createMatchRoute = require('./routes/creatematch');
 const chatMessageRoute = require('./routes/chatmessage');
 const searchUsersRoute = require('./routes/searchusers');
 const removeFriendRoute = require('./routes/removefriend')
@@ -51,11 +51,12 @@ const blacklistUserRoute = require('./routes/blacklistuser');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
 
-//Telling the app which route (declared above) to use in correspondace to a given localhost URL path
+// Telling the app which route (declared above) to use in correspondance to a given localhost URL path
 app.use('/', indexRoute);
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
+app.use('/creatematch', createMatchRoute);
 app.use('/chatmessage', chatMessageRoute);
 app.use('/searchusers', searchUsersRoute)
 app.use('/removefriend', removeFriendRoute);
@@ -65,33 +66,62 @@ app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
 // Setting up MatchMaking logic
-var ready_players_list = new Array()
- // Qua facciamo che ogni 15 secondi vengono tolti dalla lista gli utenti che si sono emssi in ready più di 15 secondi fa
- // E poi li accoppiamo e facciamo le varie emit per ogni coppia
-setInterval(() => {
-  const data = new Date()
-  var timereadyusers = new Array()
+var ready_players_list = new Array() // This list is updated with a new user when he clicks "ready up", sending a "readytoplay" emit
+                                     // containing the user's data, along with the timestamp at which he clicked "ready up"
 
-  // Qua stiamo aggiungendo a timereadyusers tutti gli utenti che hanno messo ready più di 15 sec fa
-  for(let i = 0; i < ready_players_list.length; i++){
-    console.log(ready_players_list[i].readyuptime < data.getTime())
-    if(ready_players_list[i].readyuptime < data){
-      timereadyusers.push(ready_players_list[i])
+// Every 10 seconds, all the users in "ready" state are sorted based on their skill level and on the amount of time they've been
+// waiting in queue to find a match. If the number of these users is odd, one gets put bat in the waiting list; all the other
+// users are matched in pairs and are notified through Socket.io that their match is starting, so they can start loading their
+// front-end resources.
+setInterval(() => {
+    const data = new Date() // Getting the current time
+    timereadyusers = new Array() // Creating the array in which an even number of ready users will be paired up to play
+  
+    // Users that waited at least 10 seconds can be added to timereadyusers, the actual pair-making list:
+    for(let i = 0; i < ready_players_list.length; i++){
+      if(ready_players_list[i].readyuptime < data.getTime() - 1000){
+        timereadyusers.push(ready_players_list[i])
+      }
     }
-  }
-  for(let i = 0; i < timereadyusers.length; i++){
-    ready_players_list = ready_players_list.filter((user) => user !== timereadyusers[i])
-  }
-  if(timereadyusers.length % 2 != 0){
-    ready_players_list.push(timereadyusers[timereadyusers.length-1])
-    timereadyusers.length -= 1
-  }
-}, 5000);
+    // Removing those users from the original waiting queue
+    for(let i = 0; i < timereadyusers.length; i++){
+      ready_players_list = ready_players_list.filter((user) => user !== timereadyusers[i])
+    }
+    // Sorting the players based on skill level and on earlier ready-up time, so users that clicked on "ready up" earlier 
+    // than others are given priority to play before them
+    timereadyusers.sort((a, b) => (a.skill_level > b.skill_level) ? 1 : (a.skill_level == b.skill_level) ? ((a.readyuptime > b.readyuptime) ? 1 : -1) : -1 )
+    
+    // Keeping the players to an even number and reinserting the exceeding one in the waiting queue
+    if(timereadyusers.length % 2 != 0){
+      ready_players_list.push(timereadyusers[timereadyusers.length-1])
+      timereadyusers.length -= 1
+    }
+  
+    // Notifying the ready users, pair by pair, that their game is ready
+    for(let i = 0; i < timereadyusers.length; i+=2){
+      starttime = new Date()
+      // notifying the first player of the pair and telling him that the enemy is the second one of the pair
+      ios.emit('matchstarted'+timereadyusers[i].username, { 
+        message_type: 'yougotmatched',
+        enemy: timereadyusers[i+1].username,
+        creatematchprio: true, // this client is the one who's going to POST the server to create a new match
+        starttime: starttime
+      })
+      // notifying the second player of the pair and telling him that the enemy is the first one of the pair
+      ios.emit('matchstarted'+timereadyusers[i+1].username, {
+        message_type: 'yougotmatched',
+        enemy: timereadyusers[i].username,
+        creatematchprio: false, // this client is NOT going to POST the server to create a new match
+        starttime: starttime
+      })
+    }  
+}, 10000);
+
 
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
   console.log("Socekt.io client connected with ID: ", socket.id)
-
+  
   socket.on('chatstarted', (players) => {
     console.log('starting chat')
     socket.emit('openchat', players)
@@ -139,16 +169,12 @@ ios.on('connection', (socket) => {
     })
   })
 
+  // When a user is ready to play, we add him to the ready_players_list, which is the waiting queue
   socket.on('readytoplay', (player) => {
-    console.log('Da client il readyuptime:', player.readyuptime)
-    ready_players_list.push(player) // Here we add the player that clicked on "ready up" to the "ready_players_list"
-    // Here we should sort the list based on their overall skill level
-    // Here goes the logic for the matchup based on skill level
-
-    // Here we delete the two players we chose to match up from the "ready_players_list" and then notify them
+    ready_players_list.push(player) 
   })
 
-  // In case a user canceled the matchmaking,remove it from the "ready_players_list"
+  // In case a user canceled the matchmaking, we remove it from the "ready_players_list"
   socket.on('cancelmatchmaking', (player) => {
     var playerindex = 0
     for(let j = 0; j < ready_players_list.length; j++){

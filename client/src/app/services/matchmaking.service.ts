@@ -10,7 +10,7 @@ export class MatchmakingService {
   private socket: Socket;
   private baseURL = 'http://localhost:3000/'
 
-  constructor() {
+  constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
   }
 
@@ -22,9 +22,17 @@ export class MatchmakingService {
     this.socket.emit('cancelmatchmaking', current_user)
   }
 
+  createMatch(match_info: any){
+    this._httpClient.post(this.baseURL+'creatematch', match_info).subscribe((response) => {
+      console.log('Il database è stato aggiornato con questo match:', response)
+    })
+  }
+
   listenToMatchmaking(current_user: any): Observable <any>{
     return new Observable((observer) => {
-
+      this.socket.on('matchstarted'+current_user.username, (matchinfo) => {
+        observer.next(matchinfo)
+      })
     })
   }
 }
