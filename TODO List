@@ -23,10 +23,9 @@ IMPLEMENTAZIONI:
   MATCH
   1. ognuno si salva nella sua game component / localStorage il nome dell'enemy e il timestamp di quando è cominciata la partita
   2. post con creazione partita fatta da chi ha il creatematchprio = true
-  3. gli utenti avvisati caricano il came component
+  3. gli utenti avvisati caricano il game component
   4. posizioniamo le navi noi identiche su entrambi i client
-  5. stampiamo le navi e il nome dei rispettivi avversari
-  6. apriamo la chat di fianco
+  5. stampiamo le navi e il nome dei rispettivi avversari  
   7. proviamo a fare stampare la matrice
   8. capiamo come gestire le coordinate
   9. proviamo a fare i primi spari (entrambi devono visualizzare il risultato dello sparo quindi A spara --> B sente lo sparo 
