@@ -1,12 +1,29 @@
 <div class="md:flex mt-6">
   <div class="game md:flex w-3/4">
-    <div class="bg-gray-700 h-80 w-1/2 mr-5"><p>{{ this.current_user.username }}</p></div>
-    <div class="bg-gray-700 h-80 w-1/2"><p>{{ this.enemy}}</p></div>
+    <div class="bg-gray-700 h-80 w-1/2 mr-5"> <!-- MYFIELD-->
+      <p>{{ this.current_user.username }}</p>
+      <div *ngFor="let row of myfield">
+        <tbody>
+            <tr>
+              <td *ngFor="let column of row">
+                <span *ngIf="column == 0">&nbsp;</span>
+                <span *ngIf="column != 0">X</span>
+              </td>
+
+            </tr>
+        </tbody>
+      </div>
+    </div>
+
+    <div class="bg-gray-700 h-80 w-1/2"><!-- ENEMYFIELD-->
+      <p>{{ this.enemy}}</p>
+    </div>
   </div>
   <div class="chat-live w-1/4 ml-8 h-full">
     <div class="bg-gray-300 h-80">
       <app-chat></app-chat>
     </div>
   </div>
+  <button class="btn" (click)="randomPlaceShips()">Place ships randomly</button>
 </div>
 
