@@ -48,6 +48,7 @@ const searchUsersRoute = require('./routes/searchusers');
 const removeFriendRoute = require('./routes/removefriend')
 const friendRequestRoute = require('./routes/friendrequest');
 const blacklistUserRoute = require('./routes/blacklistuser');
+const updateAccuracyRoute = require('./routes/updateaccuracy');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
 
@@ -62,6 +63,7 @@ app.use('/searchusers', searchUsersRoute)
 app.use('/removefriend', removeFriendRoute);
 app.use('/friendrequest', friendRequestRoute);
 app.use('/blacklistuser', blacklistUserRoute);
+app.use('/updateaccuracy', updateAccuracyRoute);
 app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 
@@ -118,12 +120,15 @@ setInterval(() => {
 }, 10000);
 
 
+// Setting up ship positioning confirmation
+var confirmedpositonings = new Array()
+
+
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
   console.log("Socekt.io client connected with ID: ", socket.id)
   
   socket.on('chatstarted', (players) => {
-    console.log('starting chat')
     socket.emit('openchat', players)
   })
 
@@ -190,6 +195,50 @@ ios.on('connection', (socket) => {
     if(ready_players_list.length != 0){
       ready_players_list.length = ready_players_list.length -1
     }
+  })
+
+  // When a user confirms its ship positioning
+  socket.on('confirmshippositioning', (positioning) => {
+    var isalreadyin = false
+    for(let i = 0; i < confirmedpositonings.length; i++){
+      // If the enemy already told the server that he confirms his ship placement, an object like {current_user: ..., enemy: ...}
+      // is already going to be present in the confirmedpositionings list; if this is the case, it means that both the enemy and
+      // the current_user are ready to start the game using their chosen positioning.
+      if(confirmedpositonings[i].current_user == positioning.enemy){
+        isalreadyin = true
+        positioning.message_type = 'enemyconfirmed'
+        socket.broadcast.emit('yourenemyconfirmed'+confirmedpositonings[i].current_user, positioning)
+        socket.emit('yourenemyconfirmed'+confirmedpositonings[i].enemy, positioning)
+  
+        var delete_index
+        for(let j = 0; j < confirmedpositonings.length; j++){
+          if(confirmedpositonings[j] == positioning){
+            delete_index = j
+          }
+        }
+        delete(confirmedpositonings[delete_index])
+        for(let j = delete_index; j < confirmedpositonings.length-1; j++){
+          confirmedpositonings[j] = confirmedpositonings[j+1]
+        }
+        confirmedpositonings.length = confirmedpositonings.length - 1
+      }
+    }
+    // If the enemy still hasn't confirmed his positioning, the current user will be added to the confirmedpositionings list
+    if(!isalreadyin){
+      console.log(positioning)
+      confirmedpositonings.push(positioning)
+    }
+  })
+
+  // When a player1 fires a shot against another player2, player2 gets notified
+  socket.on('shotfired', (shot) => {
+    shot.message_type = 'yougotshot'
+    socket.broadcast.emit('yougotshot'+shot.fired_user, shot)
+  })
+
+  // When a player1 is shot at by a player2, player1 sends the shot result to player1
+  socket.on('shotresult', (shotresult) => {
+    socket.broadcast.emit('shotresult'+shotresult.firing_user, shotresult)
   })
   
   socket.on('disconnect', () => {

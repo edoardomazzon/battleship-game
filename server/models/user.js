@@ -26,6 +26,14 @@ const UserSchema = mongoose.Schema({
         type: Number,
         required: false
     },
+    shots_fired: {
+        type: Number,
+        required: false
+    },
+    shots_hit: {
+        type: Number,
+        required: false
+    },
     accuracy: {
         type: Number,
         required: false

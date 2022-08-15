@@ -36,6 +36,9 @@ module.exports = {
         },
         error: {
           DEFAULT: '#a61212'
+        },
+        success: {
+          DEFAULT: '#1a912c'
         }
       },
       // height: {

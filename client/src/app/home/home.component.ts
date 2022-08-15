@@ -35,9 +35,6 @@ export class HomeComponent implements OnInit {
       console.log(observer)
       if(observer.message_type == 'yougotmatched'){
         this.isready = false
-        if(observer.creatematchprio){
-          console.log('CREO IL MATCH CON UNA POST')
-        }
         this.isplaying = true
         localStorage.setItem('matchinfo', JSON.stringify({
           isplaying: JSON.stringify(true),

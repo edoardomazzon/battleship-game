@@ -5,6 +5,8 @@ export class User {
   username!: string;
   max_winstreak!: number;
   current_winstreak!: number;
+  shots_fired!: number;
+  shots_hit!: number;
   accuracy!: number;
   games_played!: number;
   games_won!: number;

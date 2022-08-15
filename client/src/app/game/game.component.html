@@ -6,10 +6,10 @@
         <tbody>
             <tr>
               <td *ngFor="let column of row">
-                <span *ngIf="column == 0">&nbsp;</span>
-                <span *ngIf="column != 0">X</span>
+                <span *ngIf="column.value == 0">&nbsp;</span>
+                <span *ngIf="column.value != 0 && !column.hit">X</span>
+                <span class="text-error" *ngIf="column.value != 0 && column.hit">X</span>
               </td>
-
             </tr>
         </tbody>
       </div>
@@ -17,13 +17,30 @@
 
     <div class="bg-gray-700 h-80 w-1/2"><!-- ENEMYFIELD-->
       <p>{{ this.enemy}}</p>
+      <div *ngFor="let row of enemyfield; index as i">
+        <tbody>
+            <tr>
+              <td *ngFor="let column of row; index as j">
+                <span *ngIf="column == '?'">
+                  <button (click)="fire(i, j)">H</button>
+                </span>
+                <span *ngIf="column == 'water'">O</span>
+                <span *ngIf="column == 'hit'">/</span>
+                <span class="text-success" *ngIf="column == 'sunk'">X</span>
+              </td>
+            </tr>
+        </tbody>
+      </div>
     </div>
   </div>
   <div class="chat-live w-1/4 ml-8 h-full">
     <div class="bg-gray-300 h-80">
-      <app-chat></app-chat>
+      <div *ngIf="this.gamestarted == true">
+        <app-chat></app-chat>
+      </div>
+
     </div>
   </div>
-  <button class="btn" (click)="randomPlaceShips()">Place ships randomly</button>
 </div>
-
+<button *ngIf="!hasconfirmedpositioning" class="btn" (click)="randomPlaceShips()">Place ships randomly</button>
+<button class="btn" (click)="confirmShipPlacement()">Confirm Ship Placement</button>

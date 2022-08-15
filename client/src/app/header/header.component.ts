@@ -24,6 +24,13 @@ export class HeaderComponent implements OnInit {
     this._router.navigateByUrl('/myprofile')
   }
 
+  gotoHome() {
+    this.profileTab = false
+    this.friendsTab = false
+    this._router.navigateByUrl('/')
+  }
+
+
   logoutUser(){
     this.profileTab = false
     this.friendsTab = false
