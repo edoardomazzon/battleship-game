@@ -21,8 +21,11 @@
         <tbody>
             <tr>
               <td *ngFor="let column of row; index as j">
-                <span *ngIf="column == '?'">
+                <span *ngIf="column == '?' && this.myturn == true">
                   <button (click)="fire(i, j)">H</button>
+                </span>
+                <span *ngIf="column == '?' && this.myturn == false">
+                  <span>H</span>
                 </span>
                 <span *ngIf="column == 'water'">O</span>
                 <span *ngIf="column == 'hit'">/</span>
@@ -43,4 +46,6 @@
   </div>
 </div>
 <button *ngIf="!hasconfirmedpositioning" class="btn" (click)="randomPlaceShips()">Place ships randomly</button>
-<button class="btn" (click)="confirmShipPlacement()">Confirm Ship Placement</button>
+<button *ngIf="!hasconfirmedpositioning" class="btn-success" (click)="confirmShipPlacement()">Confirm Ship Placement</button>
+<button class="btn" (click)="leaveMatch()"> Leave Match</button>
+<a *ngIf="this.youwon">You won</a>

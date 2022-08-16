@@ -1,14 +1,8 @@
-In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli problemi o warning che vediamo e dovremo risolverli tutti.
-L'obiettivo è finire il progetto in modo che non lanci nessun warning, o comunque che non avvengano errori. Ad esempio quando faccio una query su mongoose,
-la query funziona ma mongoose da errore perché dice "query was already executed" e quindi finiamo nel campo catch(error) e non ritorniamo bene le risposte 
-in json al client che ha fatto la richiesta.
-Mi è toccato ad esempio mettere res.json(response) nel catch(error) e non nel try, cosa sbagliatissima ma che per ora fa funzionare tutto perché mongoose va sempre in errore.
-E questo è solo un esempio
+In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli problemi o warning che vediamo e dovremo risolverli tutti. L'obiettivo è finire il progetto in modo che non lanci nessun warning, o comunque che non avvengano errori. 
 
 PROBLEMI:
-- Le richieste di amicizia (e tutto ciò che è relativo al friends component) non si aggiornano con socket finché il menu a tendina
-  è chiuso; bisogna aggirarlo tramite qualche emit verso l'header component, che poi quando apriremo da lì il menu a tendina del
-  friend component chiamerà una funzione che aggiornerà le richieste di amicizia/i nuovi amici/ecc.
+- Mettere in localstorage i dati sulla partita così se ricarichiamo o se cambiamo pagina e poi torniamo nella pagina di gioco, non
+  perdiamo le informazioni e la partita può continuare
 - Se un giocatore si mette in attesa (ready up) ma poi va nel suo profilo e poi ritorna alla home, nel frattempo era rimasto comunque 
   in coda e adesso si può riaggiungere un'altra volta.
     1. O facciamo in modo che non si possa andare da nessuna parte finché sei in stato di ready
@@ -22,6 +16,5 @@ PROBLEMI:
 
 IMPLEMENTAZIONI:
   MATCH
-  9. proviamo a fare i primi spari (entrambi devono visualizzare il risultato dello sparo quindi A spara --> B sente lo sparo 
-    --> B si calcola cosa gli è stato colpito --> B se lo stampa --> B riavvisa il server che avvisa A di cos ha colpito --> A se lo stampa)
+
 

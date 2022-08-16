@@ -40,6 +40,7 @@ mongoose.connect(
 // Declaring all existing routes
 const indexRoute = require('./routes/index');
 const loginRoute = require('./routes/login');
+const winGameRoute = require('./routes/wingame');
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
 const createMatchRoute = require('./routes/creatematch');
@@ -55,6 +56,7 @@ const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
 // Telling the app which route (declared above) to use in correspondance to a given localhost URL path
 app.use('/', indexRoute);
 app.use('/login', loginRoute);
+app.use('/wingame', winGameRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/creatematch', createMatchRoute);
@@ -81,7 +83,7 @@ setInterval(() => {
   
     // Users that waited at least 10 seconds can be added to timereadyusers, the actual pair-making list:
     for(let i = 0; i < ready_players_list.length; i++){
-      if(ready_players_list[i].readyuptime < data.getTime() - 1000){
+      if(ready_players_list[i].readyuptime < data.getTime() - 10000){
         timereadyusers.push(ready_players_list[i])
       }
     }
@@ -207,6 +209,10 @@ ios.on('connection', (socket) => {
       if(confirmedpositonings[i].current_user == positioning.enemy){
         isalreadyin = true
         positioning.message_type = 'enemyconfirmed'
+        // Choosing randomly which user goes first
+        var firstturn = Math.floor(Math.random() * 2);
+        if(firstturn == 0){ positioning.firstturn = confirmedpositonings[i].current_user}
+        else{ positioning.firstturn = confirmedpositonings[i].enemy}
         socket.broadcast.emit('yourenemyconfirmed'+confirmedpositonings[i].current_user, positioning)
         socket.emit('yourenemyconfirmed'+confirmedpositonings[i].enemy, positioning)
   

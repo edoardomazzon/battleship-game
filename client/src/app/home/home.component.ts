@@ -85,10 +85,4 @@ export class HomeComponent implements OnInit {
     this._matchMakingService.cancelMatchMaking(this.current_user)
     this.isready = false
   }
-
-  leaveMatch(){
-    localStorage.removeItem('matchinfo')
-    location.reload()
-  }
-
 }

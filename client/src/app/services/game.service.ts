@@ -25,7 +25,8 @@ export class GameService {
   confirmShipPlacement(current_user: String, enemy: String){
     this.socket.emit('confirmshippositioning', {
       current_user: current_user,
-      enemy: enemy
+      enemy: enemy,
+      firstturn: ''
     })
   }
 
@@ -52,6 +53,14 @@ export class GameService {
 
   sendShotResult(shotresult: any){
     this.socket.emit('shotresult', shotresult)
+  }
+
+  askForRematch(){
+    this.socket.emit('askforrematch')
+  }
+
+  winGameDB(current_user: String){
+    this._httpClient.post(this.baseURL+'wingame', {username: current_user}).subscribe()
   }
 
   updateAccuracy(username: String, hit: Boolean){

@@ -15,17 +15,21 @@ export class GameComponent implements OnInit {
   public myfield: any // Matrix containing the user's ships' positions
   public enemyfield: any // Matrix containing enemy's ships' positions
   private sunkship: Array<any> = new Array() // Array containing the coordinates of the ship our enemy has sunk
+  public myships: Array<any> = new Array()
   public isplaying: Boolean
   public gamestarted: Boolean
   public myturn: Boolean
   public hasconfirmedpositioning: Boolean
+  public youwon: Boolean
 
   constructor(private _chatMessageService: ChatmessageService, private _gameService: GameService) {
     this.resetPlacement()
+    this.initMyShips()
     this.isplaying = false
     this.gamestarted = false
     this.myturn = false
     this.hasconfirmedpositioning = false
+    this.youwon = false
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this.enemy = localStorage.getItem('matchinfo')
     if(this.enemy){
@@ -34,10 +38,19 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // As soon as the game component is loaded, we start waiting for the enemy to confirm his positoning (in case we don't confirm first)
-    this.waitForConfirmation()
+
   }
 
+  // Used to initialized our array of ships with length values and a boolean "sunk" value; if each of these ships is sunk, it means we lost
+  initMyShips(){
+    var myships = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2]
+    for(let i = 0; i < myships.length; i++){
+      this.myships.push({
+        shiplength: myships[i],
+        sunk: false
+      })
+    }
+  }
 
   // Used to initialize the enmy field with empty cells; '?' means we don't know what it's in the cell, 'water' means we shot
   // at it but didn't hit any ship, 'hit' means we shot at it and hit a ship, 'sunk' means that that cell is a part of a sunken ship
@@ -77,8 +90,13 @@ export class GameComponent implements OnInit {
   // confirmed his positioning, the came can start for both users
   waitForConfirmation(){
     this._gameService.waitForConfirmation(this.current_user.username).subscribe((observer: any)=>{
+      console.log('enemyconfirmed')
       if(observer.message_type == 'enemyconfirmed'){
         this.startGame()
+        if(observer.firstturn == this.current_user.username){
+          console.log('it\'s my turn')
+          this.myturn = true
+        }
       }
     })
   }
@@ -161,9 +179,8 @@ export class GameComponent implements OnInit {
   // This function uses all of the above to randomly place ships on the field
   randomPlaceShips(){
     this.resetPlacement() // Deleting all ships from the field
-    var tobeplaced = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2] // Stating the number and length of the ships to be placed
 
-    for (let i = 0; i < tobeplaced.length; i++){
+    for (let i = 0; i < this.myships.length; i++){
       var isplaced = false
       while(!isplaced){
         // This variable is used to avoid prioritizing horizontal or vertical horientation. If set to 1, this function will try
@@ -177,22 +194,22 @@ export class GameComponent implements OnInit {
         // Based on the orientation priority, first we check if that ship is placeable in the randomly chosen coordinates; if it's
         // placeable then it will be placed and we'll move on with the next ship by setting "isplaced = true" to exit the while loop
         if(orientationpriority == 1){
-          if(this.isPlaceable(x, y, tobeplaced[i], "h")){
-            this.placeShip(x, y, tobeplaced[i], "h")
+          if(this.isPlaceable(x, y, this.myships[i].shiplength, "h")){
+            this.placeShip(x, y, this.myships[i].shiplength, "h")
             isplaced = true
           }
-          else if(this.isPlaceable(x, y, tobeplaced[i], "v")){
-            this.placeShip(x, y, tobeplaced[i], "v")
+          else if(this.isPlaceable(x, y, this.myships[i].shiplength, "v")){
+            this.placeShip(x, y, this.myships[i].shiplength, "v")
             isplaced = true
           }
         }
         else{
-          if(this.isPlaceable(x, y, tobeplaced[i], "v")){
-            this.placeShip(x, y, tobeplaced[i], "v")
+          if(this.isPlaceable(x, y, this.myships[i].shiplength, "v")){
+            this.placeShip(x, y, this.myships[i].shiplength, "v")
             isplaced = true
           }
-          else if(this.isPlaceable(x, y, tobeplaced[i], "h")){
-            this.placeShip(x, y, tobeplaced[i], "h")
+          else if(this.isPlaceable(x, y, this.myships[i].shiplength, "h")){
+            this.placeShip(x, y, this.myships[i].shiplength, "h")
             isplaced = true
           }
         }
@@ -205,50 +222,66 @@ export class GameComponent implements OnInit {
   startGame(){
     this.gamestarted = true
     this.initEnemyField()
-    this._gameService.startGame(this.current_user.username, this.enemy).subscribe((observer: any) => {
+    // Now we start listening to shots fired at us or to results of shots we fired at the enemy
+    this._gameService.startGame(this.current_user.username, this.enemy).subscribe((message: any) => {
       // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
-      if(observer.message_type == 'yougotshot'){
+      if(message.message_type == 'yougotshot'){
         var shotresult = {
           message_type: 'shotresult',
           firing_user: this.enemy,
           fired_user: this.current_user.username,
-          x: observer.x,
-          y: observer.y,
+          x: message.x,
+          y: message.y,
           hit: false,
           sunk: false,
           sunkship: new Array(),
           youwon: false
         }
-        if(this.myfield[observer.x][observer.y].value != 0){ // If there's a ship in the coordinates the enemy has shot
-          this.myfield[observer.x][observer.y].hit = true
+        if(this.myfield[message.x][message.y].value != 0){ // If there's a ship in the coordinates the enemy has shot
+          this.myfield[message.x][message.y].hit = true
           shotresult.hit = true
           // If the ship the enemy hit has also been sunk
-          if(this.isSunk(observer.x, observer.y, this.myfield[observer.x][observer.y].value, this.myfield[observer.x][observer.y].orientation)){
+          if(this.isSunk(message.x, message.y, this.myfield[message.x][message.y].value, this.myfield[message.x][message.y].orientation)){
             shotresult.sunk = true
+            this.sinkShip(this.myfield[message.x][message.y].value)
             for(let sunk of this.sunkship){
               shotresult.sunkship.push(sunk)
             }
-            // if(this.youLost){ shotresult.youwon = true}
+            if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
           }
         }
+        else{this.myturn = true} // If the enemy misses then it's our turn
         this._gameService.sendShotResult(shotresult)
-      }
 
+      }
       // If we shot and receive the result from the enemy we update our enemyfield with the appropriate symbols
-      else if(observer.message_type == 'shotresult'){
-        if(observer.hit){
-          this.enemyfield[observer.x][observer.y] = 'hit'
-          if(observer.sunk){
-            for(let coord of observer.sunkship){
+      else if(message.message_type == 'shotresult'){
+        if(message.hit){
+          this.myturn = true
+          this.enemyfield[message.x][message.y] = 'hit'
+          if(message.sunk){
+            for(let coord of message.sunkship){
               this.enemyfield[coord.x][coord.y] = 'sunk'
+            }
+            if(message.youwon){
+              this.winGame()
+              this.youwon = true
             }
           }
         }
-        else if(!observer.hit){
-          this.enemyfield[observer.x][observer.y] = 'water'
+        else if(!message.hit){
+          this.enemyfield[message.x][message.y] = 'water'
         }
         // After every shot we update the user's accuracy
-        this._gameService.updateAccuracy(this.current_user.username, observer.hit)
+        this._gameService.updateAccuracy(this.current_user.username, message.hit)
+      }
+      // If the enemy wants a rematch after the game is finished
+      else if(message.message_type == 'askedforrematch'){
+        // Make the users create a new match
+      }
+      // If the enemy accepted our rematch request after the game is finished
+      else if(message.message_type == 'acceptrematch'){
+        // load the page with new match info
       }
     })
 
@@ -261,7 +294,9 @@ export class GameComponent implements OnInit {
 
   // Used to fire a shot at the enemy in the given coordinates (activated when a user clicks on those coordinates)
   fire(x: any, y: any){
-    console.log('firing at', x, y)
+    this.myturn = false // Immediately prevent the user from shooting again for safety; since the hit confirmation arrives after
+                        // the enemy sent it to us, it's better to keep the "myturn" variable to false in case this user spam-clicks
+                        // other cells on the enemy field while the enemy is still calculating the response.
     this._gameService.fire(this.current_user.username, this.enemy, x, y)
   }
 
@@ -270,8 +305,8 @@ export class GameComponent implements OnInit {
     if(orientation == 'h'){
       var row = this.myfield[x]
       var counter = 0
-      for(let i = -(length-1); i < (9-y + (length - (length-1))) && i < 10; i++){
-        if(y+i >= 0 && row[y+i].value == length && row[y+i].hit){
+      for(let i = -(length-1); i < length; i++){
+        if(y+i >= 0 && y+i < 10 && row[y+i].value == length && row[y+i].hit){
           this.sunkship.push({x: x, y: y+i})
           counter++
         }
@@ -281,17 +316,56 @@ export class GameComponent implements OnInit {
       this.transpose(this.myfield)
       var row = this.myfield[y]
       var counter = 0
-      for(let i = -(length-1); i < (9-x + (length - (length-1))) && i < 10; i++){
-        if(x+i >= 0 && row[x+i].value == length && row[x+i].hit){
+      for(let i = -(length-1); i < length; i++){
+        if(x+i >= 0 && x+i < 10 && row[x+i].value == length && row[x+i].hit){
           this.sunkship.push({x: x+i, y: y})
           counter++
         }
       }
       this.transpose(this.myfield)
     }
-    if(counter != length){ this.sunkship = new Array()}
-
+    if(counter != length){
+      this.sunkship = new Array()
+    }
     return counter == length
+  }
+
+  // Used to update this.myships array by setting the "sunk" value to true of the corresponding sunk ship
+  sinkShip(shiplength: any){
+    for(let i = 0, counter = 0; i < this.myships.length && counter == 0; i++){
+      if(this.myships[i].shiplength == shiplength && this.myships[i].sunk == false){
+        counter++
+        this.myships[i].sunk = true
+      }
+    }
+  }
+
+  // Returns true if all our ships have been sunk, false otherwise
+  youLost(): Boolean{
+    console.log(this.myships)
+    for(let ship of this.myships){
+      if(!ship.sunk){
+        return false
+      }
+    }
+    return true
+  }
+
+  // Activated when the user leaves the match
+  leaveMatch(){
+    localStorage.removeItem('matchinfo')
+    this.loseGame()
+    location.reload()
+  }
+
+  // Used when the user wins a game
+  winGame(){
+    this._gameService.winGameDB(this.current_user.username)
+  }
+
+  // Used when the user loses a game
+  loseGame(){
+
   }
 }
 
