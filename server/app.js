@@ -218,7 +218,7 @@ ios.on('connection', (socket) => {
   
         var delete_index
         for(let j = 0; j < confirmedpositonings.length; j++){
-          if(confirmedpositonings[j] == positioning){
+          if(confirmedpositonings[j].current_user == positioning.enemy){
             delete_index = j
           }
         }
@@ -245,6 +245,21 @@ ios.on('connection', (socket) => {
   // When a player1 is shot at by a player2, player1 sends the shot result to player1
   socket.on('shotresult', (shotresult) => {
     socket.broadcast.emit('shotresult'+shotresult.firing_user, shotresult)
+  })
+
+  // When at the end of a match a player1 sends a rematch request to a player2
+  socket.on('rematchrequest', (request) => {
+    socket.broadcast.emit('enemywantsrematch'+request.receiver, request)
+  })
+
+  // When a player accepts the rematch request of the enemy after the end of a game
+  socket.on('acceptrematch', (request) => {
+    socket.broadcast.emit('enemyacceptedrematch'+request.receiver, request)
+  })
+
+  // When a player1 leaves the match, player2 gets notified and wins the game
+  socket.on('matchleft', (leavenotification) => {
+    socket.broadcast.emit('enemyleft'+leavenotification.winner, leavenotification)
   })
   
   socket.on('disconnect', () => {

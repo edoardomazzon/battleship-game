@@ -23,9 +23,7 @@ export class MatchmakingService {
   }
 
   createMatch(match_info: any){
-    this._httpClient.post(this.baseURL+'creatematch', match_info).subscribe((response) => {
-      console.log('Il database è stato aggiornato con questo match:', response)
-    })
+    this._httpClient.post(this.baseURL+'creatematch', match_info).subscribe()
   }
 
   listenToMatchmaking(current_user: any): Observable <any>{

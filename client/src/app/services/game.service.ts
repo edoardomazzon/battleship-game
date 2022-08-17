@@ -14,7 +14,19 @@ export class GameService {
     this.socket = io(this.baseURL)
   }
 
+  listenToEnemyLeaving(current_user: String){
+    console.log('connecting socket')
+    this.socket.connect()
+    console.log(this.socket)
+    return new Observable((observer) => {
+      this.socket.on('enemyleft'+current_user, (leavenotification) => {
+        observer.next(leavenotification)
+      })
+    })
+  }
+
   waitForConfirmation(current_user: String){
+    console.log('waiting for confirmation')
     return new Observable((observer) => {
       this.socket.on('yourenemyconfirmed'+current_user, (shot) => {
         observer.next(shot)
@@ -39,6 +51,19 @@ export class GameService {
       this.socket.on('shotresult'+current_user, (shot) => {
         observer.next(shot)
       })
+
+      this.socket.on('enemyleft'+current_user, (leavenotification) => {
+        observer.next(leavenotification)
+      })
+
+      this.socket.on('enemywantsrematch'+current_user, (request) => {
+        observer.next(request)
+      })
+
+      this.socket.on('enemyacceptedrematch'+current_user, (request) => {
+        observer.next(request)
+      })
+
     })
   }
 
@@ -55,8 +80,16 @@ export class GameService {
     this.socket.emit('shotresult', shotresult)
   }
 
-  askForRematch(){
-    this.socket.emit('askforrematch')
+  leaveMatch(leavenotification: any){
+    this.socket.emit('matchleft', leavenotification)
+  }
+
+  askForRematch(request: any){
+    this.socket.emit('rematchrequest', request)
+  }
+
+  acceptRematch(request: any){
+    this.socket.emit('acceptrematch', request)
   }
 
   winGameDB(current_user: String){
@@ -65,5 +98,10 @@ export class GameService {
 
   updateAccuracy(username: String, hit: Boolean){
     this._httpClient.post(this.baseURL+'updateaccuracy', {username: username, hit: hit}).subscribe()
+  }
+
+  disconnect(){
+    console.log('disconnecting socket')
+    this.socket.disconnect()
   }
 }

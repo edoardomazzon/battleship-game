@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
     var matchinfo: any = localStorage.getItem('matchinfo')
     if(matchinfo != null){
       matchinfo = JSON.parse(matchinfo)
-      console.log(matchinfo)
       if(matchinfo.isplaying == "true"){
         this.isplaying = true
         this.isready = true

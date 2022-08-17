@@ -1,5 +1,13 @@
 In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli problemi o warning che vediamo e dovremo risolverli tutti. L'obiettivo è finire il progetto in modo che non lanci nessun warning, o comunque che non avvengano errori. 
 
+MIGLIORIE:
+- Sistemare le meccaniche di rematch. Per ora ce la siamo cavata con una pezza, cioè grazie alla variabile "isarematch" che non crea
+  gli observable in modo da evitare di avere dei messaggi doppi (o tripli, quadrupli, ecc. man mano che si fanno rivincite).
+  Secondo me il modo migliore è avere un solo observable con più casi (al posto di avere tre funzioni diverse come listenToEnemyLeaving, poi waitForConfirmation che a sua volta chiama la startGame), così evitiamo tutti questi controlli inutili e
+  creazioni ricorsive di observable che leggono più volte lo stesso messaggio dallo stesso socket.
+  Intanto la pusho così che funziona, ma non mi piace come ho risolto la cosa
+
+
 PROBLEMI:
 - Mettere in localstorage i dati sulla partita così se ricarichiamo o se cambiamo pagina e poi torniamo nella pagina di gioco, non
   perdiamo le informazioni e la partita può continuare
@@ -9,7 +17,7 @@ PROBLEMI:
     2. O facciamo che ogni volta che l'utente esce dalla homepage venga cambiato in false lo stato isready
 - controllare TUTTE le volte che viene salvato il current user in localstorage e togliergli salt digest e password mettendoli a null
   prima di fare la localStorage.setItem('current user')
-- la onInit() di myprofile non viene chiamata
+- la onInit() di myprofile non viene chiamata (ora pare di sì ma lascio comunque questo commento che magari torna utile come cosa da ricontrollare)
 - mettere commenti in inglese
 - segnalare con un errore che il login non è andato a buon fine
 - renew session
