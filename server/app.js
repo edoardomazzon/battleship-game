@@ -41,6 +41,7 @@ mongoose.connect(
 const indexRoute = require('./routes/index');
 const loginRoute = require('./routes/login');
 const winGameRoute = require('./routes/wingame');
+const loseGameRoute = require('./routes/losegame')
 const registerRoute = require('./routes/register');
 const myprofileRoute = require('./routes/myprofile');
 const createMatchRoute = require('./routes/creatematch');
@@ -57,6 +58,7 @@ const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
 app.use('/', indexRoute);
 app.use('/login', loginRoute);
 app.use('/wingame', winGameRoute);
+app.use('/losegame', loseGameRoute);
 app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/creatematch', createMatchRoute);

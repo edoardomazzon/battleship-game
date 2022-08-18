@@ -249,12 +249,10 @@ export class GameComponent implements OnInit {
   // Function invoked once both players have confirmed the ship positioning; once the game starts, the enemy field is initialized
   // With '?' values (meaning we don't know what is in that position) and the chat between the two users can start.
   startGame(){
-    console.log('starting game')
     this.gamestarted = true
     this.initEnemyField()
     if(!this.isarematch){ // If we are playing a rematch, we don't have to recreate another observer
       // Now we start listening to shots fired at us or to results of shots we fired at the enemy
-      console.log('entriamo lo stesso')
       this._gameService.startGame(this.current_user.username, this.enemy).subscribe((message: any) => {
         // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
         if(message.message_type == 'yougotshot'){
@@ -309,6 +307,15 @@ export class GameComponent implements OnInit {
         // If the nemy leaves while we're in the playing phase
         else if(message.message_type == 'enemyleftwhileplaying'){
           console.log('ENEMY LEFT WHILE PLAYING SO YOU WIN')
+          this.winGame()
+          this.enemyleft = true
+          setTimeout(()=>{
+            this.leaveMatch("other")
+          }, 4000)
+        }
+        // If the nemy leaves during the positioning phase
+        else if(message.message_type == 'enemyleftwhilepositining'){
+          console.log('ENEMY LEFT WHILE POSITIONING HIS SHIPS')
           this.winGame()
           this.enemyleft = true
           setTimeout(()=>{
@@ -421,6 +428,9 @@ export class GameComponent implements OnInit {
      the user left after winning and not wanting a rematch, it could be that he left after losing, it could be that he left while
     starting the actual match or even during the positioning */
   leaveMatch(reason: String){
+    if(reason == 'enemyleftwhileplaying' || reason == 'enemyleftwhilepositioning'){
+      this.loseGame()
+    }
     if(reason != 'other'){
       this._gameService.leaveMatch({winner: this.enemy, message_type: reason}) // Notifying the other user that we left the match
     }
@@ -448,6 +458,7 @@ export class GameComponent implements OnInit {
   // Used when the user loses a game
   loseGame(){
     this.youlost = true
+    this._gameService.loseGameDB(this.current_user.username)
   }
 
   askForRematch(){

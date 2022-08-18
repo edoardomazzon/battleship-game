@@ -96,6 +96,10 @@ export class GameService {
     this._httpClient.post(this.baseURL+'wingame', {username: current_user}).subscribe()
   }
 
+  loseGameDB(current_user: String){
+    this._httpClient.post(this.baseURL+'losegame', {username: current_user}).subscribe()
+  }
+
   updateAccuracy(username: String, hit: Boolean){
     this._httpClient.post(this.baseURL+'updateaccuracy', {username: username, hit: hit}).subscribe()
   }
