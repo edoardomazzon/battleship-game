@@ -31,7 +31,6 @@ export class HomeComponent implements OnInit {
     }
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this._matchMakingService.listenToMatchmaking(this.current_user).subscribe((observer) => {
-      console.log(observer)
       if(observer.message_type == 'yougotmatched'){
         this.isready = false
         this.isplaying = true

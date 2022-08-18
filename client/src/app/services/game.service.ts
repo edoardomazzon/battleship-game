@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {io, Socket} from 'socket.io-client';
-import { Observable } from 'rxjs';
+import { EmptyError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,26 +14,6 @@ export class GameService {
     this.socket = io(this.baseURL)
   }
 
-  listenToEnemyLeaving(current_user: String){
-    console.log('connecting socket')
-    this.socket.connect()
-    console.log(this.socket)
-    return new Observable((observer) => {
-      this.socket.on('enemyleft'+current_user, (leavenotification) => {
-        observer.next(leavenotification)
-      })
-    })
-  }
-
-  waitForConfirmation(current_user: String){
-    console.log('waiting for confirmation')
-    return new Observable((observer) => {
-      this.socket.on('yourenemyconfirmed'+current_user, (shot) => {
-        observer.next(shot)
-      })
-    })
-  }
-
   confirmShipPlacement(current_user: String, enemy: String){
     this.socket.emit('confirmshippositioning', {
       current_user: current_user,
@@ -44,6 +24,10 @@ export class GameService {
 
   startGame(current_user: String, enemy: String){
     return new Observable((observer) => {
+      this.socket.on('yourenemyconfirmed'+current_user, (shot) => {
+        observer.next(shot)
+      })
+
       this.socket.on('yougotshot'+current_user, (shot) => {
         observer.next(shot)
       })
@@ -63,7 +47,6 @@ export class GameService {
       this.socket.on('enemyacceptedrematch'+current_user, (request) => {
         observer.next(request)
       })
-
     })
   }
 
@@ -80,8 +63,24 @@ export class GameService {
     this.socket.emit('shotresult', shotresult)
   }
 
+  updateAccuracy(username: String, hit: Boolean){
+    this._httpClient.post(this.baseURL+'updateaccuracy', {username: username, hit: hit}).subscribe()
+  }
+
   leaveMatch(leavenotification: any){
     this.socket.emit('matchleft', leavenotification)
+  }
+
+  winGameDB(current_user: String, enemy: String, timestamp: any){
+    this._httpClient.post(this.baseURL+'wingame', {
+      username: current_user,
+      enemy: enemy,
+      timestamp: timestamp
+    }).subscribe()
+  }
+
+  loseGameDB(current_user: String){
+    this._httpClient.post(this.baseURL+'losegame', {username: current_user}).subscribe()
   }
 
   askForRematch(request: any){
@@ -92,20 +91,6 @@ export class GameService {
     this.socket.emit('acceptrematch', request)
   }
 
-  winGameDB(current_user: String){
-    this._httpClient.post(this.baseURL+'wingame', {username: current_user}).subscribe()
-  }
 
-  loseGameDB(current_user: String){
-    this._httpClient.post(this.baseURL+'losegame', {username: current_user}).subscribe()
-  }
 
-  updateAccuracy(username: String, hit: Boolean){
-    this._httpClient.post(this.baseURL+'updateaccuracy', {username: username, hit: hit}).subscribe()
-  }
-
-  disconnect(){
-    console.log('disconnecting socket')
-    this.socket.disconnect()
-  }
 }

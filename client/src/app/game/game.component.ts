@@ -46,25 +46,14 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if we came back to this game while we're still in a match; in that case we need to reload all the info
-    // (who's turn it was, our ship placement, enemy's ship placement, etc.)
+    // (who's turn it was, our ship placement, enemy's ship placement, our sunken ships, etc.)
     //*****//
 
-    // Immediately start listening on the event that the enemy leaves the match in the positioning phase
-    this.listenToEnemyLeaving()
+    // Immediately start listening to various game-related events such as "enemyleft", "yougotshot", "enemyconfirmedpositioning", etc.
+    this.startGame()
   }
 
-  listenToEnemyLeaving(){
-    this._gameService.listenToEnemyLeaving(this.current_user.username).subscribe((listener: any) => {
-      if(listener.message_type == 'enemyleftwhilepositioning'){ // If the enemy leaves during the positioning phase, we win by default
-        console.log('ENEMY LEFT IN THE POSITIONING PHASE SO YOU WIN')
-        this.winGame()
-        this.enemyleft = true
-        setTimeout(()=>{
-          this.leaveMatch("other")
-        }, 4000)
-      }
-    })
-  }
+                      /* ------------------ PHASE 1: SHIP POSITIONING PHASE ------------------ */
 
   // Used to initialized our array of ships with length values and a boolean "sunk" value; if each of these ships is sunk, it means we lost
   initMyShips(){
@@ -76,57 +65,6 @@ export class GameComponent implements OnInit {
         sunk: false
       })
     }
-  }
-
-  // Used to initialize the enmy field with empty cells; '?' means we don't know what it's in the cell, 'water' means we shot
-  // at it but didn't hit any ship, 'hit' means we shot at it and hit a ship, 'sunk' means that that cell is a part of a sunken ship
-  initEnemyField(){
-    this.enemyfield = new Array()
-    for(let i = 0; i < 10; i++){
-      this.enemyfield[i] = new Array()
-      for(let j = 0; j < 10; j++){
-        this.enemyfield[i][j] = '?'
-      }
-    }
-  }
-
-  // Used to reset the placement of the ships on our field
-  resetPlacement(){
-    this.myfield = new Array()
-    for(let i = 0; i < 10; i++){
-      this.myfield[i] = new Array()
-      for(let j = 0; j < 10; j++){
-        this.myfield[i][j] = {
-          value: 0,
-          orientation: '',
-          hit: false
-        }
-      }
-    }
-  }
-
-  // Used to confirm our ship positioning; once this function is activated, we can no longer change the positionig
-  confirmShipPlacement(){
-    this._gameService.confirmShipPlacement(this.current_user.username, this.enemy)
-    this.hasconfirmedpositioning = true
-    this.waitForConfirmation()
-  }
-
-  // Used to wait for our enemy to confirm his own ship positioning; once the server tells us that our enemy has
-  // confirmed his positioning, the came can start for both users
-  waitForConfirmation(){
-    if(!this.isarematch){ // If we are playing a rematch, we don't have to recreate another observer
-      this._gameService.waitForConfirmation(this.current_user.username).subscribe((observer: any)=>{
-        console.log('enemyconfirmed')
-        if(observer.message_type == 'enemyconfirmed'){
-          this.startGame()
-          if(observer.firstturn == this.current_user.username){
-            this.myturn = true
-          }
-        }
-      })
-    }
-
   }
 
   // This function returns true if a ship of a certain length can be placed in the given coordinates.
@@ -246,123 +184,41 @@ export class GameComponent implements OnInit {
     }
   }
 
-  // Function invoked once both players have confirmed the ship positioning; once the game starts, the enemy field is initialized
-  // With '?' values (meaning we don't know what is in that position) and the chat between the two users can start.
-  startGame(){
-    this.gamestarted = true
-    this.initEnemyField()
-    if(!this.isarematch){ // If we are playing a rematch, we don't have to recreate another observer
-      // Now we start listening to shots fired at us or to results of shots we fired at the enemy
-      this._gameService.startGame(this.current_user.username, this.enemy).subscribe((message: any) => {
-        // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
-        if(message.message_type == 'yougotshot'){
-          var shotresult = {
-            message_type: 'shotresult',
-            firing_user: this.enemy,
-            fired_user: this.current_user.username,
-            x: message.x,
-            y: message.y,
-            hit: false,
-            sunk: false,
-            sunkship: new Array(),
-            youwon: false
-          }
-          if(this.myfield[message.x][message.y].value != 0){ // If there's a ship in the coordinates the enemy has shot
-            this.myfield[message.x][message.y].hit = true
-            shotresult.hit = true
-            // If the ship the enemy hit has also been sunk
-            if(this.isSunk(message.x, message.y, this.myfield[message.x][message.y].value, this.myfield[message.x][message.y].orientation)){
-              shotresult.sunk = true
-              this.sinkShip(this.myfield[message.x][message.y].value)
-              for(let sunk of this.sunkship){
-                shotresult.sunkship.push(sunk)
-              }
-              if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
-            }
-          }
-          else{this.myturn = true} // If the enemy misses then it's our turn
-          this._gameService.sendShotResult(shotresult)
-
+  // Used to reset the placement of the ships on our field
+  resetPlacement(){
+    this.myfield = new Array()
+    for(let i = 0; i < 10; i++){
+      this.myfield[i] = new Array()
+      for(let j = 0; j < 10; j++){
+        this.myfield[i][j] = {
+          value: 0,
+          orientation: '',
+          hit: false
         }
-        // If we shot and receive the result from the enemy we update our enemyfield with the appropriate symbols
-        else if(message.message_type == 'shotresult'){
-          if(message.hit){
-            this.myturn = true
-            this.enemyfield[message.x][message.y] = 'hit'
-            if(message.sunk){
-              for(let coord of message.sunkship){
-                this.enemyfield[coord.x][coord.y] = 'sunk'
-              }
-              if(message.youwon){
-                this.winGame()
-              }
-            }
-          }
-          else if(!message.hit){
-            this.enemyfield[message.x][message.y] = 'water'
-          }
-          // After every shot we update the user's accuracy
-          this._gameService.updateAccuracy(this.current_user.username, message.hit)
-        }
-        // If the nemy leaves while we're in the playing phase
-        else if(message.message_type == 'enemyleftwhileplaying'){
-          console.log('ENEMY LEFT WHILE PLAYING SO YOU WIN')
-          this.winGame()
-          this.enemyleft = true
-          setTimeout(()=>{
-            this.leaveMatch("other")
-          }, 4000)
-        }
-        // If the nemy leaves during the positioning phase
-        else if(message.message_type == 'enemyleftwhilepositining'){
-          console.log('ENEMY LEFT WHILE POSITIONING HIS SHIPS')
-          this.winGame()
-          this.enemyleft = true
-          setTimeout(()=>{
-            this.leaveMatch("other")
-          }, 4000)
-        }
-        // If the enemy leaves after he won and we were waiting to see if he wanted a rematch
-        else if(message.message_type == 'enemyleftaftermatchended'){
-          console.log('ENEMY LEFT SO YOU CAN\'T GET A REMATCH')
-          this.enemyleft = true
-          setTimeout(()=>{
-            this.leaveMatch("other")
-          }, 4000)
-        }
-        // If the enemy wants a rematch after the game is finished
-        else if(message.message_type == 'requestrematch'){
-          this.enemywantsrematch = true // This will make the "accept rematch" button visible
-        }
-        // If the enemy accepted our rematch request after the game is finished
-        else if(message.message_type == 'acceptrematch'){
-          console.log('enemy accepted our rematch request')
-          // Returning to the initial phase, which is the ship positioning phase
-          this._gameService.disconnect()
-          this.myturn = false
-          this.gamestarted = false
-          this.isplaying = false
-          this.hasconfirmedpositioning = false
-          this.youwon = false
-          this.youlost = false
-          this.enemyleft = false
-          this.isarematch = true
-          this.enemywantsrematch = false
-          this.enemyfield = new Array()
-          this.initMyShips()
-          this.resetPlacement()
-          this.listenToEnemyLeaving()
-        }
-      })
+      }
     }
+  }
+
+  // Used to confirm our ship positioning; once this function is activated, we can no longer change the positionig
+  confirmShipPlacement(){
+    this._gameService.confirmShipPlacement(this.current_user.username, this.enemy)
+    this.hasconfirmedpositioning = true
+  }
 
 
 
-    // Once the game starts the two players can also start chatting
-    this._chatMessageService.startChat({
-      current_user: this.current_user.username,
-      other_user: this.enemy
-    })
+                     /* ------------------ PHASE 2: PLAYING PHASE ------------------ */
+
+  // Used to initialize the enmy field with empty cells; '?' means we don't know what it's in the cell, 'water' means we shot
+  // at it but didn't hit any ship, 'hit' means we shot at it and hit a ship, 'sunk' means that that cell is a part of a sunken ship
+  initEnemyField(){
+    this.enemyfield = new Array()
+    for(let i = 0; i < 10; i++){
+      this.enemyfield[i] = new Array()
+      for(let j = 0; j < 10; j++){
+        this.enemyfield[i][j] = '?'
+      }
+    }
   }
 
   // Used to fire a shot at the enemy in the given coordinates (activated when a user clicks on those coordinates)
@@ -448,10 +304,15 @@ export class GameComponent implements OnInit {
     location.reload()
   }
 
-  // Used when the user wins a game
+  // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
     console.log("WE WIN")
-    this._gameService.winGameDB(this.current_user.username)
+    var matchinfo = localStorage.getItem('matchinfo')
+    var timestamp = ''
+    if(matchinfo){
+      timestamp = JSON.parse(matchinfo).starttime
+    }
+    this._gameService.winGameDB(this.current_user.username, this.enemy, timestamp)
     this.youwon = true
   }
 
@@ -461,6 +322,9 @@ export class GameComponent implements OnInit {
     this._gameService.loseGameDB(this.current_user.username)
   }
 
+                    /* ------------------ PHASE 3: AFTER MATCH PHASE ------------------ */
+
+  // Notifies the other player that we want a rematch
   askForRematch(){
     this._gameService.askForRematch({
       sender: this.current_user.username,
@@ -469,26 +333,31 @@ export class GameComponent implements OnInit {
     })
   }
 
-  // When we accept a rematch, it means the page has to start over again; to avoid reloading it, we made it so that with this emit,
-  // the server sends two response emits. One that, once caught by the game service, stops the "waitForConfirmation()" function, and
-  // one that stops the "startGame()" function by making those two sockets disconnect.
-  // If we don't make those sockets disconnect, what will happen is that after starting a new match, every emit (like when we shoot
-  // or when we receive a shot result) will be listened twice, causing the game mechanics to malfunction.
+  // Accepting enemy's rematch request
   acceptRematch(){
     // Creates a new match at DB level (only the user that accepts the rematch will do this, otherwise it will be created twice)
+    var newgametimestamp = new Date()
     this._matchMakingService.createMatch({
       player1: this.current_user.username,
       player2: this.enemy,
       winner: '',
-      timestamp: new Date()
+      timestamp: newgametimestamp
     })
-    // Sending an emit to notify everyone to stop their current game sockets and start new ones
+    // Notifying the other user that we accepted the rematch
     this._gameService.acceptRematch({
       sender: this.current_user.username,
       receiver: this.enemy,
+      newtimestamp: newgametimestamp,
       message_type: 'acceptrematch'
     })
-    this._gameService.disconnect()
+    // Updating the localstorage "matchinfo" item with the new starttime timestamp
+    localStorage.removeItem('matchinfo')
+    localStorage.setItem('matchinfo', JSON.stringify({enemy: this.enemy, isplaying: true, starttime: newgametimestamp}))
+    this.prepareForRematch()
+  }
+
+  // When the two players agree on a rematch, the game is taken to its initial state
+  prepareForRematch(){
     // Returning to the initial phase, which is the ship positioning phase
     this.isarematch = true
     this.myturn = false
@@ -502,7 +371,113 @@ export class GameComponent implements OnInit {
     this.enemyfield = new Array()
     this.initMyShips()
     this.resetPlacement()
-    this.listenToEnemyLeaving()
+  }
+
+  // Function invoked once both players have confirmed the ship positioning; once the game starts, the enemy field is initialized
+  // With '?' values (meaning we don't know what is in that position) and the chat between the two users can start.
+  startGame(){
+    // Now we start listening to shots fired at us or to results of shots we fired at the enemy
+    this._gameService.startGame(this.current_user.username, this.enemy).subscribe((message: any) => {
+      // If the enemy confirms his ship positioning, we can start playing
+      if(message.message_type == 'enemyconfirmed'){
+        this.gamestarted = true
+        this.initEnemyField()
+        this.myturn = (message.firstturn == this.current_user.username)
+        // Once the game starts the two players can also start chatting
+        this._chatMessageService.startChat({
+          current_user: this.current_user.username,
+          other_user: this.enemy
+        })
+      }
+      // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
+      else if(message.message_type == 'yougotshot'){
+        var shotresult = {
+          message_type: 'shotresult',
+          firing_user: this.enemy,
+          fired_user: this.current_user.username,
+          x: message.x,
+          y: message.y,
+          hit: false,
+          sunk: false,
+          sunkship: new Array(),
+          youwon: false
+        }
+        if(this.myfield[message.x][message.y].value != 0){ // If there's a ship in the coordinates the enemy has shot
+          this.myfield[message.x][message.y].hit = true
+          shotresult.hit = true
+          // If the ship the enemy hit has also been sunk
+          if(this.isSunk(message.x, message.y, this.myfield[message.x][message.y].value, this.myfield[message.x][message.y].orientation)){
+            shotresult.sunk = true
+            this.sinkShip(this.myfield[message.x][message.y].value)
+            for(let sunk of this.sunkship){
+              shotresult.sunkship.push(sunk)
+            }
+            if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
+          }
+        }
+        else{this.myturn = true} // If the enemy misses then it's our turn
+        this._gameService.sendShotResult(shotresult)
+
+      }
+      // If we shot and receive the result from the enemy we update our enemyfield with the appropriate symbols
+      else if(message.message_type == 'shotresult'){
+        if(message.hit){
+          this.myturn = true
+          this.enemyfield[message.x][message.y] = 'hit'
+          if(message.sunk){
+            for(let coord of message.sunkship){
+              this.enemyfield[coord.x][coord.y] = 'sunk'
+            }
+            if(message.youwon){
+              this.winGame()
+            }
+          }
+        }
+        else if(!message.hit){
+          this.enemyfield[message.x][message.y] = 'water'
+        }
+        // After every shot we update the user's accuracy
+        this._gameService.updateAccuracy(this.current_user.username, message.hit)
+      }
+      // If the nemy leaves while we're in the playing phase
+      else if(message.message_type == 'enemyleftwhileplaying'){
+        console.log('ENEMY LEFT WHILE PLAYING SO YOU WIN')
+        this.winGame()
+        this.enemyleft = true
+        setTimeout(()=>{
+          this.leaveMatch("other")
+        }, 4000)
+      }
+      // If the nemy leaves during the positioning phase
+      else if(message.message_type == 'enemyleftwhilepositining'){
+        console.log('ENEMY LEFT WHILE POSITIONING HIS SHIPS')
+        this.winGame()
+        this.enemyleft = true
+        setTimeout(()=>{
+          this.leaveMatch("other")
+        }, 4000)
+      }
+      // If the enemy leaves after he won and we were waiting to see if he wanted a rematch
+      else if(message.message_type == 'enemyleftaftermatchended'){
+        console.log('ENEMY LEFT SO YOU CAN\'T GET A REMATCH')
+        this.enemyleft = true
+        setTimeout(()=>{
+          this.leaveMatch("other")
+        }, 4000)
+      }
+      // If the enemy wants a rematch after the game is finished
+      else if(message.message_type == 'requestrematch'){
+        this.enemywantsrematch = true // This will make the "accept rematch" button visible
+      }
+      // If the enemy accepted our rematch request after the game is finished
+      else if(message.message_type == 'acceptrematch'){
+        console.log('enemy accepted our rematch request')
+        // Updating the localstorage "matchinfo" item with the new starttime timestamp
+        localStorage.removeItem('matchinfo')
+        localStorage.setItem('matchinfo', JSON.stringify({enemy: this.enemy, isplaying: true, starttime: message.newtimestamp}))
+        this.prepareForRematch()
+      }
+    })
   }
 }
 

@@ -85,7 +85,7 @@ setInterval(() => {
   
     // Users that waited at least 10 seconds can be added to timereadyusers, the actual pair-making list:
     for(let i = 0; i < ready_players_list.length; i++){
-      if(ready_players_list[i].readyuptime < data.getTime() - 10000){
+      if(ready_players_list[i].readyuptime < data.getTime() - 5000){
         timereadyusers.push(ready_players_list[i])
       }
     }
@@ -121,7 +121,7 @@ setInterval(() => {
         starttime: starttime
       })
     }  
-}, 10000);
+}, 5000);
 
 
 // Setting up ship positioning confirmation
