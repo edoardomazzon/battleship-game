@@ -4,7 +4,12 @@
       <!-- NAVI NOSTRE (o nemiche nella seconda fase)-->
       <div class="bg-gray-700 h-[480px]">
         <!-- Rappresentazioni navi disponibili nella fase di posizionamento (ogni nave scompare da questa lista quando è posizionata) -->
-        <div></div>
+        <div class="mt-2 ml-2">
+          <p>[][][][][]</p>
+          <p>[][][][]</p><p>[][][][]</p>
+          <p>[][][]</p><p>[][][]</p>
+          <p>[][]</p><p>[][]</p><p>[][]</p><p>[][]</p><p>[][]</p><p>[][]</p>
+        </div>
 
         <!-- Rappresentazioni navi nostre durante partita (quindi dopo che entrambi hanno confermato il posizionamento)
              Navi verdi se sono vive, rosse se sono affondate -->
@@ -17,7 +22,8 @@
         <div *ngIf="!hasconfirmedpositioning" class="flex flex-col items-center justify-center gap-y-2 p-5">
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48 whitespace-nowrap" (click)="randomPlaceShips()">Random placement</button>
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48" (click)="resetPlacement()">Reset</button>
-          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn !bg-success text-xxs w-48" (click)="confirmShipPlacement()">Confirm</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && hasplacedallships" class="btn !bg-success text-xxs w-48" (click)="confirmShipPlacement()">Confirm</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && !hasplacedallships" class="btn !bg-error text-xxs w-48" disabled>Confirm</button>
         </div>
       </div>
 
@@ -25,10 +31,11 @@
       <div class="w-[480px] h-[480px] p-3">
         <p class="text-white mb-4">You</p>
 
-        <div *ngFor="let row of myfield" class="grid grid-cols-10 bg-white">
-          <div *ngFor="let cell of row" class="bg-white w-ful h-8">
+        <div *ngFor="let row of myfield; index as y" class="grid grid-cols-10 bg-white">
+          <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
             <div *ngIf="cell.value == 0" class="border border-black w-full h-full"></div>
-            <div *ngIf="cell.value != 0 && !cell.hit" class="border border-black bg-sepia-lighter w-full h-full"></div>
+            <div *ngIf="cell.value != 0 && !cell.hit && !hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)"></div>
+            <div *ngIf="cell.value != 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>
             <div *ngIf="cell.value != 0 && cell.hit" class="border border-red text-red text-bold w-full h-full text-center justify-center">
               <span class="text-bold text-base text-red">X</span>
             </div>
@@ -51,7 +58,9 @@
 
             <div *ngIf="cell == 'water'" class="w-full h-full bg-gray-300 flex items-center justify-center text-white"><span>.</span></div>
             <span *ngIf="cell == 'hit'" class="w-full h-full">/</span>
-            <span *ngIf="cell == 'sunk'" class="w-full h-full text-success">X</span>
+            <div *ngIf="cell == 'sunk'" class="border border-success text-success text-bold w-full h-full text-center justify-center">
+              <span class="text-bold text-base text-success">X</span>
+            </div>
           </div>
         </div>
       </div>

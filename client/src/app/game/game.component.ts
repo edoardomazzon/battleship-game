@@ -15,10 +15,12 @@ export class GameComponent implements OnInit {
   public enemyfield: any // Matrix containing enemy's ships' positions
   private sunkship: Array<any> = new Array() // Array containing the coordinates of the ship our enemy has sunk
   public myships: Array<any> = new Array()
+  private placedShips: Array<any> = new Array()
   public isplaying: Boolean
   public gamestarted: Boolean
   public myturn: Boolean
   public hasconfirmedpositioning: Boolean
+  public hasplacedallships: Boolean
   public youwon: Boolean
   public youlost: Boolean
   public enemyleft: Boolean
@@ -30,6 +32,7 @@ export class GameComponent implements OnInit {
     this.isplaying = false
     this.gamestarted = false
     this.myturn = false
+    this.hasplacedallships = false
     this.hasconfirmedpositioning = false
     this.youwon = false
     this.youlost = false
@@ -61,6 +64,10 @@ export class GameComponent implements OnInit {
       this.myships.push({
         shiplength: myships[i],
         sunk: false
+      })
+      this.placedShips.push({
+        shiplength: myships[i],
+        isplaced: false
       })
     }
   }
@@ -138,10 +145,73 @@ export class GameComponent implements OnInit {
         this.myfield[y+i][x].orientation = 'v'
       }
     }
+    // Updating the placedShips array
+    for(let i = 0, counter = 0; i < this.placedShips.length && counter == 0; i++){
+      if(this.placedShips[i].shiplength == length && this.placedShips[i].isplaced == false){
+        counter++
+        this.placedShips[i].isplaced = true
+      }
+    }
+    // Checking if all the ships have been placed; in that case, this.hasplacedallships is set to TRUE
+    var hasplacedallships = true
+    for(let ship of this.placedShips){
+      if(!ship.isplaced){
+        this.hasplacedallships = false
+      }
+    }
+    this.hasplacedallships = hasplacedallships
+  }
+
+  // This function un-does a ship placement; activated when a user right clicks on one of his positioned ships.
+  // Basically does the same thing that placeShip() does, but this time it sets all values to 0 and all orientations to ''
+  removeShip(x: any, y: any, length: any, orientation: any){
+    if(orientation == "h"){
+      // Scanning left and right
+      for(let i = 0; i < length && i < 10; i++){
+        if(this.myfield[y][x+i].value == length){
+          this.myfield[y][x+i].value = 0
+          this.myfield[y][x+i].orientation = ''
+        }
+        else{ break }
+      }
+      for(let i = 1; i < length && i < 10; i++){
+        if(this.myfield[y][x-i].value == length){
+          this.myfield[y][x-i].value = 0
+          this.myfield[y][x-i].orientation = ''
+        }
+        else{ break }
+      }
+    }
+    else{
+      // Scanning up and down
+      for(let i = 0; i < length && i < 10; i++){
+        if(this.myfield[y+i][x].value == length){
+          this.myfield[y+i][x].value = 0
+          this.myfield[y+i][x].orientation = ''
+        }
+        else{ break }
+      }
+      for(let i = 1; i < length && i < 10; i++){
+        if(this.myfield[y-i][x].value == length){
+          this.myfield[y-i][x].value = 0
+          this.myfield[y-i][x].orientation = ''
+        }
+        else{ break }
+      }
+    }
+    // Updating the placedShips array
+    for(let i = 0, counter = 0; i < this.placedShips.length && counter == 0; i++){
+      if(this.placedShips[i].shiplength == length && this.placedShips[i].isplaced == true){
+        counter++
+        this.placedShips[i].isplaced = false
+      }
+    }
+    this.hasplacedallships = false
   }
 
   // This function uses all of the above to randomly place ships on the field
   randomPlaceShips(){
+    this.hasplacedallships = false
     this.resetPlacement() // Deleting all ships from the field
     this.initMyShips()
     for (let i = 0; i < this.myships.length; i++){
@@ -183,6 +253,8 @@ export class GameComponent implements OnInit {
 
   // Used to reset the placement of the ships on our field
   resetPlacement(){
+    this.hasplacedallships = false
+    this.placedShips = new Array()
     this.myfield = new Array()
     for(let i = 0; i < 10; i++){
       this.myfield[i] = new Array()
@@ -472,4 +544,3 @@ export class GameComponent implements OnInit {
     })
   }
 }
-
