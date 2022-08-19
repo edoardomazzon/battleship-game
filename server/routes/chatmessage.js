@@ -13,7 +13,7 @@ router.post("/", async (req, res, next) => {
 });
 
 
-// This method returns the last 10 messages between two users
+// This method returns the last 25 messages between two users
 router.put("/", async (req, res) => {
     var last10messages = []
     try{
@@ -21,7 +21,7 @@ router.put("/", async (req, res) => {
         .find( {$or: [{from: req.body.from, to: req.body.to}, {from: req.body.to, to: req.body.from}]})
         .sort({timestamp: -1})
         .skip(0)
-        .limit(10)
+        .limit(25)
         .then((select) => {
             for(let i = 0; i < select.length; i++){
                 last10messages.push(select[i])                        

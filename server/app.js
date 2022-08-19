@@ -233,7 +233,6 @@ ios.on('connection', (socket) => {
     }
     // If the enemy still hasn't confirmed his positioning, the current user will be added to the confirmedpositionings list
     if(!isalreadyin){
-      console.log(positioning)
       confirmedpositonings.push(positioning)
     }
   })

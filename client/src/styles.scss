@@ -26,6 +26,9 @@ h5 {
   &:hover {
     opacity: .8;
   }
+  &_alt {
+    @apply bg-white text-navy;
+  }
 }
 form label {
   @apply block pb-1;

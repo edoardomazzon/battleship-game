@@ -23,7 +23,6 @@ export class GameComponent implements OnInit {
   public youlost: Boolean
   public enemyleft: Boolean
   public enemywantsrematch: Boolean
-  private isarematch: Boolean
 
   constructor(private _chatMessageService: ChatmessageService, private _gameService: GameService, private _matchMakingService: MatchmakingService) {
     this.resetPlacement()
@@ -36,7 +35,6 @@ export class GameComponent implements OnInit {
     this.youlost = false
     this.enemyleft = false
     this.enemywantsrematch = false
-    this.isarematch = false
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     var matchinfo = localStorage.getItem('matchinfo')
     if(matchinfo){
@@ -144,7 +142,6 @@ export class GameComponent implements OnInit {
 
   // This function uses all of the above to randomly place ships on the field
   randomPlaceShips(){
-    console.log('placing ships randomly')
     this.resetPlacement() // Deleting all ships from the field
     this.initMyShips()
     for (let i = 0; i < this.myships.length; i++){
@@ -228,7 +225,6 @@ export class GameComponent implements OnInit {
                         // other cells on the enemy field while the enemy is still calculating the response.
     this._gameService.fire(this.current_user.username, this.enemy, x, y)
   }
-
   // Function used to check if at the given coordinates and with given orientation the ship that's been hit is also sunk
   isSunk(x: any, y: any, length: any, orientation: any){
     if(orientation == 'h'){
@@ -291,7 +287,6 @@ export class GameComponent implements OnInit {
       this._gameService.leaveMatch({winner: this.enemy, message_type: reason}) // Notifying the other user that we left the match
     }
     localStorage.removeItem('matchinfo')
-    this.isarematch = false
     this.myturn = false
     this.isplaying = false
     this.gamestarted = false
@@ -306,7 +301,6 @@ export class GameComponent implements OnInit {
 
   // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
-    console.log("WE WIN")
     var matchinfo = localStorage.getItem('matchinfo')
     var timestamp = ''
     if(matchinfo){
@@ -359,7 +353,6 @@ export class GameComponent implements OnInit {
   // When the two players agree on a rematch, the game is taken to its initial state
   prepareForRematch(){
     // Returning to the initial phase, which is the ship positioning phase
-    this.isarematch = true
     this.myturn = false
     this.gamestarted = false
     this.isplaying = false
@@ -471,7 +464,6 @@ export class GameComponent implements OnInit {
       }
       // If the enemy accepted our rematch request after the game is finished
       else if(message.message_type == 'acceptrematch'){
-        console.log('enemy accepted our rematch request')
         // Updating the localstorage "matchinfo" item with the new starttime timestamp
         localStorage.removeItem('matchinfo')
         localStorage.setItem('matchinfo', JSON.stringify({enemy: this.enemy, isplaying: true, starttime: message.newtimestamp}))

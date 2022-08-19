@@ -9,6 +9,7 @@ MIGLIORIE:
 
 
 PROBLEMI:
+- se un player lascia durante il posiizonamento l'altro non lo sente
 - Mettere in localstorage i dati sulla partita così se ricarichiamo o se cambiamo pagina e poi torniamo nella pagina di gioco, non
   perdiamo le informazioni e la partita può continuare
 - Se un giocatore si mette in attesa (ready up) ma poi va nel suo profilo e poi ritorna alla home, nel frattempo era rimasto comunque 

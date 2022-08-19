@@ -67,21 +67,9 @@ export class ChatmessageService {
 
     this._httpClient.put(this.baseURL+'chatmessage', json).subscribe((response) => {
       var returned_list = JSON.parse(JSON.stringify((response))) //La repsonse ha l'array (già invertito dal lato server) degli ultimi 10 messaggi
-      if(returned_list.length > 0){
-        for(let i = 0; i < returned_list.length; i++){
-          messages_list.push(returned_list[i])//Riempiamo la message list che ritorniamo a chat component
-        }
+      for(let i = 0; i < returned_list.length; i++){
+        messages_list.push(returned_list[i])//Riempiamo la message list che ritorniamo a chat component
       }
-      else{
-        var blankmessage = new ChatMessage()
-        blankmessage.from = ''
-        blankmessage.to = ''
-        blankmessage.text_content = ''
-        for(let i = 0; i < 10; i++){
-          messages_list.push(blankmessage)//Riempiamo la message list che ritorniamo a chat component
-        }
-      }
-
     })
     return messages_list
   }
@@ -90,7 +78,6 @@ export class ChatmessageService {
     this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
     this.socket.emit('newmessage', newmessage)
   }
-
 
   startChat(players: any){
     this.socket.emit('chatstarted', players)

@@ -1,6 +1,28 @@
-<div class="md:flex mt-6">
-  <div *ngIf="enemyleft == false && youwon == false && youlost == false" class="game md:flex w-3/4"> <!-- WHILE WE'RE IN GAME -->
-      <div class="bg-gray-700 h-80 w-1/2 mr-5"> <!-- MYFIELD-->
+<div class="mt-5">
+  <!-- Game container -->
+  <div *ngIf="enemyleft == false && youwon == false && youlost == false" class="game md:flex md:gap-x-5"> <!-- WHILE WE'RE IN GAME -->
+      <!-- NAVI NOSTRE (o nemiche nella seconda fase)-->
+      <div class="bg-gray-700 h-[480px]">
+        <!-- Rappresentazioni navi disponibili nella fase di posizionamento (ogni nave scompare da questa lista quando è posizionata) -->
+        <div></div>
+
+        <!-- Rappresentazioni navi nostre durante partita (quindi dopo che entrambi hanno confermato il posizionamento)
+             Navi verdi se sono vive, rosse se sono affondate -->
+        <div class="navi-nostre"></div>
+
+        <!-- Rappresentazioni navi nemici durante partita -->
+        <div></div>
+
+        <!-- Buttons only prematch -->
+        <div *ngIf="!hasconfirmedpositioning" class="flex flex-col items-center justify-center gap-y-2 p-5">
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48 whitespace-nowrap" (click)="randomPlaceShips()">Random placement</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48" (click)="resetPlacement()">Reset</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn !bg-success text-xxs w-48" (click)="confirmShipPlacement()">Confirm</button>
+        </div>
+      </div>
+
+
+      <div class="bg-gray-700 w-[480px] h-[480px]"> <!-- MYFIELD-->
         <p>{{ current_user.username }}</p>
         <div *ngFor="let row of myfield">
           <tbody>
@@ -14,7 +36,7 @@
           </tbody>
         </div>
       </div>
-      <div class="bg-gray-700 h-80 w-1/2"> <!-- ENEMYFIELD-->
+      <div class="bg-gray-700 w-[480px] h-[480px]"> <!-- ENEMYFIELD-->
         <p>{{ enemy}}</p>
         <div *ngFor="let row of enemyfield; index as i">
           <tbody>
@@ -34,8 +56,8 @@
           </tbody>
         </div>
       </div>
-      <div class="chat-live w-1/4 ml-8 h-full"> <!-- CHAT COMPONENT-->
-        <div class="bg-gray-300 h-80">
+      <div class="chat-live ml-8 right-0"> <!-- CHAT COMPONENT-->
+        <div class="bg-gray-300 h-[480px]">
           <div *ngIf="gamestarted == true">
             <app-chat></app-chat>
           </div>
@@ -44,31 +66,33 @@
       </div>
   </div>
 
+
+  <!-- Final Buttons -->
   <div *ngIf="youlost && enemyleft" class="game md:flex w-3/4"> <!-- IF WE LOSE AND THE ENEMY  LEFT WE CAN'T ASK FOR A REMATCH -->
-    <h1> YOU LOST - Enemy has left</h1>
+    <p>YOU LOST - Enemy has left</p>
   </div>
 
   <div *ngIf="youlost && !enemyleft" class="game md:flex w-3/4"> <!-- IF WE LOSE AND THE ENEMY STILL HASN'T LEFT WE CAN STILL ASK FOR A REMATCH -->
-    <h1> YOU LOST</h1>
+    <p> YOU LOST</p>
     <button *ngIf="!this.enemywantsrematch" class="btn" (click)="askForRematch()">Ask for rematch</button>
     <button *ngIf="this.enemywantsrematch" class="btn" (click)="acceptRematch()">Accept rematch</button>
     <button class="btn" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
   </div>
 
   <div *ngIf="enemyleft && youwon" class="game md:flex w-3/4"> <!-- IF WE WON BECAUSE THE ENEMY LEFT -->
-    <h1> YOU WON - Your enemy left the match</h1>
+    <p> YOU WON - Your enemy left the match</p>
   </div>
 
   <div *ngIf="!enemyleft && youwon" class="game md:flex w-3/4"> <!-- IF WE WON AND THE ENEMY DIDN'T LEAVE THE MATCH -->
-    <h1> YOU WON</h1>
+    <p> YOU WON</p>
     <button *ngIf="!this.enemywantsrematch" class="btn" (click)="askForRematch()">Ask for rematch</button>
     <button *ngIf="this.enemywantsrematch" class="btn" (click)="acceptRematch()">Accept rematch</button>
     <button class="btn" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
   </div>
+
+  <!-- Game buttons -->
+  <div>
+    <button *ngIf="!gamestarted && !hasconfirmedpositioning && !youwon && !youlost && !enemyleft" class="btn" (click)="leaveMatch('enemyleftwhilepositioning')">Leave Match</button>
+    <button *ngIf="gamestarted && !youwon && !enemyleft && !youlost" class="btn" (click)="leaveMatch('enemyleftwhileplaying')">Leave Match</button>
+  </div>
 </div>
-<button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn" (click)="randomPlaceShips()">Place ships randomly</button>
-<button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn-success" (click)="confirmShipPlacement()">Confirm Ship Placement</button>
-<button *ngIf="!gamestarted && !hasconfirmedpositioning && !youwon && !youlost && !enemyleft" class="btn" (click)="leaveMatch('enemyleftwhilepositioning')">Leave Match</button>
-<button *ngIf="gamestarted && !youwon && !enemyleft && !youlost" class="btn" (click)="leaveMatch('enemyleftwhileplaying')">Leave Match</button>
-
-

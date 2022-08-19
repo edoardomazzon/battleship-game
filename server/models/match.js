@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const MatchSchema = new mongoose.Schema({
-    identifier: {    // Should be named "player1player2#45" if i.e. it's the 45th game between these two players.
+    identifier: { 
         type: String // Player1 is the username that alphabetically comes first bewteen the two.
     },
     player1: {

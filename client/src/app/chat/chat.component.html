@@ -1,7 +1,10 @@
-<div *ngIf="this.chatopened == true">
-  <ul>CHAT <button class="btn mr-5" (click)="closeChat()">Close chat</button>
+<div *ngIf="this.chatopened == true" class="p-5">
+  <ul>
+    <div (click)="closeChat()" class="cursor-pointer absolute right-0 ">
+      <span class="w-7 h-0.5 bg-black block relative -rotate-45"></span>
+      <span class="w-7 h-0.5 bg-black block relative rotate-45 -mb-4"></span>
+    </div>
     <li *ngFor=" let message of this.messages">
-
       <a *ngIf="message.text_content != '' " style="font-weight: bold; font-size:small">{{ message.from + ':' }}</a><a style="font-size:small">{{ message.text_content }}</a>
       <a *ngIf="message.text_content == '' " style="font-weight: bold; font-size:small"> ></a>
     </li>
@@ -9,7 +12,7 @@
   <div>
     <form>
       <input type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
-      <button class="btn mr-5" (click)="sendMessage()"  class="btn w-full">Invia</button>
+      <button class="btn mr-5" (click)="sendMessage()"  class="btn_alt w-full">Invia</button>
     </form>
   </div>
 </div>

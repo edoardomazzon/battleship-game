@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit {
       else if (message.message_type == 'yousentmessage' || message.message_type == 'youreceivedmessage'){
         console.log('Ho inviato o ricevuto un messaggio:', message)
         this.messages.push(message) //Inserisco il messaggio inviato nella lista messages senza dover fare la query
-        this.messages.shift() //Shifto l'array di una posizione per eliminare il messaggio più vecchio
+        //this.messages.shift() //Shifto l'array di una posizione per eliminare il messaggio più vecchio
       }
     })
   }
