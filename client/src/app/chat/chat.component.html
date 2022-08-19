@@ -1,18 +1,19 @@
-<div *ngIf="this.chatopened == true" class="p-5">
-  <ul>
-    <div (click)="closeChat()" class="cursor-pointer absolute right-0 ">
-      <span class="w-7 h-0.5 bg-black block relative -rotate-45"></span>
-      <span class="w-7 h-0.5 bg-black block relative rotate-45 -mb-4"></span>
-    </div>
+<div *ngIf="this.chatopened == true" class="pb-5 pt-6 pl-3 relative">
+  <div (click)="closeChat()" class="cursor-pointer absolute left-0 top-0">
+    <span class="w-7 h-0.5 bg-black block relative -rotate-45"></span>
+    <span class="w-7 h-0.5 bg-black block relative rotate-45 -mb-4"></span>
+  </div>
+  <ul class="overflow-y-scroll overflow-x-hidden max-h-[380px]">
     <li *ngFor=" let message of this.messages">
-      <a *ngIf="message.text_content != '' " style="font-weight: bold; font-size:small">{{ message.from + ':' }}</a><a style="font-size:small">{{ message.text_content }}</a>
-      <a *ngIf="message.text_content == '' " style="font-weight: bold; font-size:small"> ></a>
+      <a *ngIf="message.text_content != '' " class="font-bold text-xxs">{{ message.from + ':' }}</a>
+      <a class="text-xxs">{{ message.text_content }}</a>
+      <a *ngIf="message.text_content == '' " class="font-bold text-xxs"> ></a>
     </li>
   </ul>
-  <div>
-    <form>
-      <input type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
-      <button class="btn mr-5" (click)="sendMessage()"  class="btn_alt w-full">Invia</button>
+  <div class="mt-5">
+    <form class="relative flex items-center mr-3">
+      <input class="chat" type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
+      <button class="btn_alt absolute bottom-0 right-1 !bg-navy !text-white h-full px-2 py-1" (click)="sendMessage()">-></button>
     </form>
   </div>
 </div>

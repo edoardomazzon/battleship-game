@@ -35,4 +35,7 @@ form label {
 }
 form input {
   @apply w-full block relative py-3 px-2 border-2 border-navy rounded-lg text-black text-base focus:outline-navy;
+  &.chat {
+    @apply py-1.5 border text-micro;
+  }
 }

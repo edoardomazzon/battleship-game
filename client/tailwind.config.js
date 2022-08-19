@@ -12,7 +12,7 @@ module.exports = {
     },
     fontSize: {
       micro: ['0.5rem', '1'],
-      xxs: ['0.875rem', '1.3'],
+      xxs: ['0.75rem', '1.15'],
       xs: ['1rem', '1.25'],
       base: ['1.15rem', '1.3'],
       s: ['1.65rem', '1.3'],
@@ -40,6 +40,12 @@ module.exports = {
         },
         success: {
           DEFAULT: '#1a912c'
+        },
+        lightblue: {
+          DEFAULT: '#bdf5ff'
+        },
+        red: {
+          DEFAULT: '#ff1100'
         }
       },
       // height: {

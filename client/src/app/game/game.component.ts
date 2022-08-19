@@ -442,7 +442,7 @@ export class GameComponent implements OnInit {
         }, 4000)
       }
       // If the nemy leaves during the positioning phase
-      else if(message.message_type == 'enemyleftwhilepositining'){
+      else if(message.message_type == 'enemyleftwhilepositioning'){
         console.log('ENEMY LEFT WHILE POSITIONING HIS SHIPS')
         this.winGame()
         this.enemyleft = true

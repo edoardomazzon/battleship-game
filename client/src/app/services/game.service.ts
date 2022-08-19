@@ -91,6 +91,4 @@ export class GameService {
     this.socket.emit('acceptrematch', request)
   }
 
-
-
 }
