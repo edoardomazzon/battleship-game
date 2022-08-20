@@ -5,8 +5,85 @@
       <div class="bg-gray-700 h-[480px]">
         <!-- Rappresentazioni navi disponibili nella fase di posizionamento (ogni nave scompare da questa lista quando è posizionata) -->
         <div class="mt-2 ml-2">
-          <ul *ngFor="let placedship of this.placedShips">
-            <li *ngIf="!placedship.isplaced">{{ placedship.shiplength }}</li>
+          <ul *ngFor="let placedship of this.placedShips; index as i">
+            <li *ngIf="!placedship.isplaced">
+              <div *ngIf="placedship.shiplength == 5 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(5)"><!-- 5 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="120" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="160" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 5 && placedship.isselected"><!-- 5 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="120" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="160" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 4 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(4)"><!-- 4 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="120" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 4 && placedship.isselected"><!-- 4 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="120" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 3 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(3)"><!-- 3 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 3 && placedship.isselected"><!-- 3 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 2 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(2)"><!-- 2 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 2 && placedship.isselected"><!-- 2 cells long ship-->
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+            </li>
           </ul>
         </div>
 
@@ -33,7 +110,11 @@
         <div *ngFor="let row of myfield; index as y" class="grid grid-cols-10 bg-white">
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
             <div *ngIf="cell.value < 0" class="border border-black w-full h-full">O</div>
-            <div *ngIf="cell.value == 0" class="border border-black w-full h-full"></div>
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'none'" class="border border-black w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black !bg-error w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black !bg-success w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasconfirmedpositioning && selectedShip == 'none'" class="border border-black w-full h-full"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && hasplacedallships && hasconfirmedpositioning" class="border border-black w-full h-full"></div>
             <div *ngIf="cell.value != 0 && !cell.hit && !hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)"></div>
             <div *ngIf="cell.value != 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>
             <div *ngIf="cell.value != 0 && cell.hit" class="border border-red text-red text-bold w-full h-full text-center justify-center">

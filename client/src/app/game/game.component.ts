@@ -14,11 +14,12 @@ export class GameComponent implements OnInit {
   public myfield: any // Matrix containing the user's ships' positions
   public enemyfield: any // Matrix containing enemy's ships' positions
   private sunkship: Array<any> = new Array() // Array containing the coordinates of the ship our enemy has sunk
-  public myships: Array<any> = new Array()
-  public placedShips: Array<any> = new Array()
+  public myships: Array<any> = new Array() // Array that keeps track of our sunken ships and their orientation and length
+  public placedShips: Array<any> = new Array() // Array containing the ships to be placed
   public isplaying: Boolean
   public gamestarted: Boolean
   public myturn: Boolean
+  public selectedShip: any
   public hasconfirmedpositioning: Boolean
   public hasplacedallships: Boolean
   public youwon: Boolean
@@ -32,6 +33,7 @@ export class GameComponent implements OnInit {
     this.isplaying = false
     this.gamestarted = false
     this.myturn = false
+    this.selectedShip = 'none'
     this.hasplacedallships = false
     this.hasconfirmedpositioning = false
     this.youwon = false
@@ -56,7 +58,7 @@ export class GameComponent implements OnInit {
 
                       /* ------------------ PHASE 1: SHIP POSITIONING PHASE ------------------ */
 
-  // Used to initialized our array of ships with length values and a boolean "sunk" value; if each of these ships is sunk, it means we lost
+  // Used to initialize our array of ships with length values and a boolean "sunk" value; if each of these ships is sunk, it means we lost
   initMyShips(){
     this.myships = new Array()
     var myships = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2]
@@ -65,18 +67,50 @@ export class GameComponent implements OnInit {
     for(let i = 0; i < myships.length; i++){
       this.myships.push({
         shiplength: myships[i],
+        orientation: '',
         sunk: false
       })
       this.placedShips.push({
         shiplength: myships[i],
-        isplaced: false
+        isselected: false,
+        isplaced: false,
+        orientation: ''
       })
     }
   }
 
+  // Once a user clicks on a ship of the positionable ships list, we update some internal fields (like the currently selected ship's length and orientation)
+  selectShip(length: Number){
+    for(let ship of this.placedShips){ ship.isselected = false }
+    for(let ship of this.placedShips){
+      if(ship.shiplength == length && !ship.isplaced){
+        ship.isselected = true
+        ship.orientation = 'h'
+        this.selectedShip = {length: length, orientation: ship.orientation}
+        break
+      }
+    }
+
+  }
+
+  // Rotates the selected ship from horizontal to vertical and vice versa (WHILE PLACING: doesn't work on already placed ships)
+  rotateSelectedShip(x: any, y: any, length: any, orientation: String){
+    if(this.selectedShip.orientation == 'h'){ this.selectedShip.orientation = 'v'}
+    else if(this.selectedShip.orientation == 'v'){ this.selectedShip.orientation = 'h'}
+
+    this.previewShip(x, y, length, this.selectedShip.orientation, (this.isPlaceable(x, y, length, (this.selectedShip.orientatoin)).toString()))
+  }
+
+  // When a user selects the ship he wants to place and then hovers on a cell of his field, this gets updated accordingly with green or red cells
+  checkPlaceableOnHover(x: any, y: any, length: any, orientation: any){
+    if(this.isPlaceable(x, y, length, orientation)){
+      this.previewShip(x, y, length, orientation, 'true')
+    }
+    else{ this.previewShip(x, y, length, orientation, 'false')}
+  }
+
   // This function returns true if a ship of a certain length can be placed in the given coordinates.
-  // By default this function works on horizontal placements, whereas for placing ships vertically it will be
-  // invoked after transposing
+  // By default this function works on horizontal placements, whereas for placing ships vertically it will be invoked after transposing the field
   isPlaceableAux(x: any, y: any, length: any){
     var bool1 = true, bool2 = true, bool3 = true
 
@@ -133,8 +167,33 @@ export class GameComponent implements OnInit {
     }
   }
 
+  // This function shows a preview ship placement; it will be shown red if not placeable, green otherwise
+  previewShip(x: any, y: any, length: any, orientation: any, success: String){
+    for(let row of this.myfield){
+      for(let element of row){
+        element.preview_success = 'none'
+      }
+    }
+    if(orientation == "h"){
+      for(let i = 0; i < length && x+i < 10; i++){
+        this.myfield[y][x+i].preview_success = success
+      }
+    }
+    else{
+      for(let i = 0; i < length && y+i < 10; i++){
+        this.myfield[y+i][x].preview_success = success
+      }
+    }
+  }
+
   // This function places a ship on the given coordinates, orientation and with the given length
   placeShip(x: any, y: any, length: any, orientation: any){
+    this.selectedShip = 'none'
+    for(let row of this.myfield){
+      for(let element of row){
+        element.preview_success = 'none'
+      }
+    }
     if(orientation == "h"){
       for(let i = 0; i < length; i++){
         this.myfield[y][x+i].value = length
@@ -154,16 +213,19 @@ export class GameComponent implements OnInit {
         this.placedShips[i].isplaced = true
       }
     }
+    console.log('after the placement:', this.placedShips)
     // Checking if all the ships have been placed; in that case, this.hasplacedallships is set to TRUE
     var hasplacedallships = true
     for(let ship of this.placedShips){
       if(!ship.isplaced){
-        this.hasplacedallships = false
+        console.log('false!')
+        hasplacedallships = false
       }
     }
+    console.log(hasplacedallships)
     this.hasplacedallships = hasplacedallships
   }
-  //[4][4][4][4][][][][][][]  x4 y0 l4 "h"
+
   // This function un-does a ship placement; activated when a user right clicks on one of his positioned ships.
   // Basically does the same thing that placeShip() does, but this time it sets all values to 0 and all orientations to ''
   removeShip(x: any, y: any, length: any, orientation: any){
@@ -256,6 +318,7 @@ export class GameComponent implements OnInit {
   // Used to reset the placement of the ships on our field
   resetPlacement(){
     this.hasplacedallships = false
+    this.selectedShip = 'none'
     this.initMyShips()
     this.myfield = new Array()
     for(let i = 0; i < 10; i++){
@@ -264,7 +327,8 @@ export class GameComponent implements OnInit {
         this.myfield[i][j] = {
           value: 0,
           orientation: '',
-          hit: false
+          hit: false,
+          preview_success: 'none'
         }
       }
     }
