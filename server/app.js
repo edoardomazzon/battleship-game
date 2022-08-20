@@ -75,7 +75,7 @@ app.use('/rejectfriendrequest', rejectFriendRequestRoute);
 var ready_players_list = new Array() // This list is updated with a new user when he clicks "ready up", sending a "readytoplay" emit
                                      // containing the user's data, along with the timestamp at which he clicked "ready up"
 
-// Every 10 seconds, all the users in "ready" state are sorted based on their skill level and on the amount of time they've been
+// Every 5 seconds, all the users in "ready" state are sorted based on their skill level and on the amount of time they've been
 // waiting in queue to find a match. If the number of these users is odd, one gets put bat in the waiting list; all the other
 // users are matched in pairs and are notified through Socket.io that their match is starting, so they can start loading their
 // front-end resources.
@@ -130,7 +130,7 @@ var confirmedpositonings = new Array()
 
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
-  console.log("Socekt.io client connected with ID: ", socket.id)
+  //console.log("Socekt.io client connected with ID: ", socket.id)
   
   socket.on('chatstarted', (players) => {
     socket.emit('openchat', players)
@@ -264,7 +264,7 @@ ios.on('connection', (socket) => {
   })
   
   socket.on('disconnect', () => {
-    console.log("Client " + socket.id + " disconnected from Socket.io")
+    //console.log("Client " + socket.id + " disconnected from Socket.io")
   })
 })
 

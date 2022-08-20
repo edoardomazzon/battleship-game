@@ -5,10 +5,9 @@
       <div class="bg-gray-700 h-[480px]">
         <!-- Rappresentazioni navi disponibili nella fase di posizionamento (ogni nave scompare da questa lista quando è posizionata) -->
         <div class="mt-2 ml-2">
-          <p>[][][][][]</p>
-          <p>[][][][]</p><p>[][][][]</p>
-          <p>[][][]</p><p>[][][]</p>
-          <p>[][]</p><p>[][]</p><p>[][]</p><p>[][]</p><p>[][]</p><p>[][]</p>
+          <ul *ngFor="let placedship of this.placedShips">
+            <li *ngIf="!placedship.isplaced">{{ placedship.shiplength }}</li>
+          </ul>
         </div>
 
         <!-- Rappresentazioni navi nostre durante partita (quindi dopo che entrambi hanno confermato il posizionamento)
@@ -33,6 +32,7 @@
 
         <div *ngFor="let row of myfield; index as y" class="grid grid-cols-10 bg-white">
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
+            <div *ngIf="cell.value < 0" class="border border-black w-full h-full">O</div>
             <div *ngIf="cell.value == 0" class="border border-black w-full h-full"></div>
             <div *ngIf="cell.value != 0 && !cell.hit && !hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)"></div>
             <div *ngIf="cell.value != 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>

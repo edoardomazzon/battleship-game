@@ -25,9 +25,7 @@ router.post('/', async(req, res) => {
                     shots_fired: total_shots_fired,
                     shots_hit: total_shots_hit
                 }
-            }).then(() => {
-                console.log('update fatta')
-            })
+            }).then()
         })
         res.json('Accuracy updated')
     }catch(err){

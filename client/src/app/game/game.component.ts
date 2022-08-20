@@ -15,7 +15,7 @@ export class GameComponent implements OnInit {
   public enemyfield: any // Matrix containing enemy's ships' positions
   private sunkship: Array<any> = new Array() // Array containing the coordinates of the ship our enemy has sunk
   public myships: Array<any> = new Array()
-  private placedShips: Array<any> = new Array()
+  public placedShips: Array<any> = new Array()
   public isplaying: Boolean
   public gamestarted: Boolean
   public myturn: Boolean
@@ -60,6 +60,8 @@ export class GameComponent implements OnInit {
   initMyShips(){
     this.myships = new Array()
     var myships = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2]
+    this.myships = new Array()
+    this.placedShips = new Array()
     for(let i = 0; i < myships.length; i++){
       this.myships.push({
         shiplength: myships[i],
@@ -161,21 +163,22 @@ export class GameComponent implements OnInit {
     }
     this.hasplacedallships = hasplacedallships
   }
-
+  //[4][4][4][4][][][][][][]  x4 y0 l4 "h"
   // This function un-does a ship placement; activated when a user right clicks on one of his positioned ships.
   // Basically does the same thing that placeShip() does, but this time it sets all values to 0 and all orientations to ''
   removeShip(x: any, y: any, length: any, orientation: any){
+    console.log('removing ship of length', length, 'at coordinates X:'+x+ ' Y:'+y)
     if(orientation == "h"){
       // Scanning left and right
       for(let i = 0; i < length && i < 10; i++){
-        if(this.myfield[y][x+i].value == length){
+        if(x+i < 10 && this.myfield[y][x+i].value == length){
           this.myfield[y][x+i].value = 0
           this.myfield[y][x+i].orientation = ''
         }
         else{ break }
       }
-      for(let i = 1; i < length && i < 10; i++){
-        if(this.myfield[y][x-i].value == length){
+      for(let i = 1; i < length && i >= 0; i++){
+        if(x-i >= 0 && this.myfield[y][x-i].value == length){
           this.myfield[y][x-i].value = 0
           this.myfield[y][x-i].orientation = ''
         }
@@ -185,14 +188,14 @@ export class GameComponent implements OnInit {
     else{
       // Scanning up and down
       for(let i = 0; i < length && i < 10; i++){
-        if(this.myfield[y+i][x].value == length){
+        if(y+i < 10 && this.myfield[y+i][x].value == length){
           this.myfield[y+i][x].value = 0
           this.myfield[y+i][x].orientation = ''
         }
         else{ break }
       }
-      for(let i = 1; i < length && i < 10; i++){
-        if(this.myfield[y-i][x].value == length){
+      for(let i = 1; i < length && i >= 0; i++){
+        if(y-i >= 0 && this.myfield[y-i][x].value == length){
           this.myfield[y-i][x].value = 0
           this.myfield[y-i][x].orientation = ''
         }
@@ -213,7 +216,6 @@ export class GameComponent implements OnInit {
   randomPlaceShips(){
     this.hasplacedallships = false
     this.resetPlacement() // Deleting all ships from the field
-    this.initMyShips()
     for (let i = 0; i < this.myships.length; i++){
       var isplaced = false
       while(!isplaced){
@@ -254,7 +256,7 @@ export class GameComponent implements OnInit {
   // Used to reset the placement of the ships on our field
   resetPlacement(){
     this.hasplacedallships = false
-    this.placedShips = new Array()
+    this.initMyShips()
     this.myfield = new Array()
     for(let i = 0; i < 10; i++){
       this.myfield[i] = new Array()
@@ -297,27 +299,40 @@ export class GameComponent implements OnInit {
                         // other cells on the enemy field while the enemy is still calculating the response.
     this._gameService.fire(this.current_user.username, this.enemy, x, y)
   }
-  // Function used to check if at the given coordinates and with given orientation the ship that's been hit is also sunk
-  isSunk(x: any, y: any, length: any, orientation: any){
+   // Function used to check if at the given coordinates and with given orientation the ship that's been hit is also sunk
+   isSunk(x: any, y: any, length: any, orientation: any){
     if(orientation == 'h'){
       var row = this.myfield[x]
       var counter = 0
-      for(let i = -(length-1); i < length; i++){
+      for(let i = 0; i < length; i++){
         if(y+i >= 0 && y+i < 10 && row[y+i].value == length && row[y+i].hit){
           this.sunkship.push({x: x, y: y+i})
           counter++
-        }
+        }else{ break }
+      }
+      for(let i = 1; i < length; i++){
+        if(y-i >= 0 && y-i < 10 && row[y-i].value == length && row[y-i].hit){
+          this.sunkship.push({x: x, y: y-i})
+          counter++
+        }else{ break }
       }
     }
-    else{
+    else{ // If orientation is "v" for vertical
       this.transpose(this.myfield)
       var row = this.myfield[y]
       var counter = 0
-      for(let i = -(length-1); i < length; i++){
+      for(let i = 0; i < length; i++){
         if(x+i >= 0 && x+i < 10 && row[x+i].value == length && row[x+i].hit){
           this.sunkship.push({x: x+i, y: y})
           counter++
-        }
+        }else{ break }
+
+      }
+      for(let i = 1; i < length; i++){
+        if(x-i >= 0 && x-i < 10 && row[x-i].value == length && row[x-i].hit){
+          this.sunkship.push({x: x-i, y: y})
+          counter++
+        }else{ break }
       }
       this.transpose(this.myfield)
     }
@@ -336,6 +351,18 @@ export class GameComponent implements OnInit {
       }
     }
   }
+
+  // Marks the cells around the given coordinates as "water" if those coordinates have been hit and are part of a sunken ship,
+  // as there can be no other ship sticking to the sunken one
+  autoFillWater(x: any, y: any){
+    if(this.enemyfield[x][y]== 'sunk'){
+      if(this.enemyfield[x+1] && this.enemyfield[x+1][y] && this.enemyfield[x+1][y] != 'sunk'){this.enemyfield[x+1][y] = 'water'}
+      if(this.enemyfield[x][y+1] && this.enemyfield[x][y+1] != 'sunk'){this.enemyfield[x][y+1] = 'water'}
+      if(this.enemyfield[x-1] && this.enemyfield[x-1][y] && this.enemyfield[x-1][y] != 'sunk'){this.enemyfield[x-1][y] = 'water'}
+      if(this.enemyfield[x][y-1] && this.enemyfield[x][y-1] != 'sunk'){this.enemyfield[x][y-1] = 'water'}
+    }
+  }
+
 
   // Returns true if all our ships have been sunk, false otherwise
   youLost(): Boolean{
@@ -480,7 +507,7 @@ export class GameComponent implements OnInit {
             if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
           }
         }
-        else{this.myturn = true} // If the enemy misses then it's our turn
+        else{this.myfield[message.x][message.y].value = -1; this.myturn = true} // If the enemy misses then it's our turn
         this._gameService.sendShotResult(shotresult)
 
       }
@@ -492,6 +519,7 @@ export class GameComponent implements OnInit {
           if(message.sunk){
             for(let coord of message.sunkship){
               this.enemyfield[coord.x][coord.y] = 'sunk'
+              this.autoFillWater(coord.x, coord.y)
             }
             if(message.youwon){
               this.winGame()
