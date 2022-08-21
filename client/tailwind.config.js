@@ -41,9 +41,6 @@ module.exports = {
         success: {
           DEFAULT: '#1a912c'
         },
-        lightblue: {
-          DEFAULT: '#bdf5ff'
-        },
         red: {
           DEFAULT: '#ff1100'
         }

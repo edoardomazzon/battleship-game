@@ -258,6 +258,10 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('enemyacceptedrematch'+request.receiver, request)
   })
 
+  socket.on('enemytimedout', (timeoutinfo) => {
+    socket.broadcast.emit('youtimedout'+timeoutinfo.enemy, timeoutinfo)
+  })
+
   // When a player1 leaves the match, player2 gets notified and wins the game
   socket.on('matchleft', (leavenotification) => {
     socket.broadcast.emit('enemyleft'+leavenotification.winner, leavenotification)

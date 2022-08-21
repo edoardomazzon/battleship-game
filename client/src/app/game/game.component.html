@@ -1,13 +1,15 @@
 <div class="mt-5">
   <!-- Game container -->
   <div *ngIf="enemyleft == false && youwon == false && youlost == false" class="game md:flex md:gap-x-5"> <!-- WHILE WE'RE IN GAME -->
-      <!-- NAVI NOSTRE (o nemiche nella seconda fase)-->
+      <!-- Our ships in positioning phase (or both our and enemy's ships during game phase)-->
       <div class="bg-gray-700 h-[480px]">
-        <!-- Rappresentazioni navi disponibili nella fase di posizionamento (ogni nave scompare da questa lista quando è posizionata) -->
-        <div class="mt-2 ml-2">
+        <!-- Available ships during positioning phase-->
+        <div *ngIf="!gamestarted" class="mt-2 ml-2">
           <ul *ngFor="let placedship of this.placedShips; index as i">
             <li *ngIf="!placedship.isplaced">
-              <div *ngIf="placedship.shiplength == 5 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(5)"><!-- 5 cells long ship-->
+
+              <div *ngIf="placedship.shiplength == 5 && placedship.remaining > 0 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(5)"><!-- 5 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
@@ -18,7 +20,8 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 5 && placedship.isselected"><!-- 5 cells long ship-->
+              <div *ngIf="placedship.shiplength == 5 && placedship.remaining > 0 && placedship.isselected" class="cursor-pointer" (click)="deselectShip()"><!-- 5 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
@@ -29,7 +32,20 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 4 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(4)"><!-- 4 cells long ship-->
+              <div *ngIf="placedship.shiplength == 5 && placedship.remaining <= 0" style="opacity: 0.35"><!-- 5 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="120" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="160" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 4 && placedship.remaining > 0 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(4)"><!-- 4 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
@@ -39,7 +55,8 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 4 && placedship.isselected"><!-- 4 cells long ship-->
+              <div *ngIf="placedship.shiplength == 4 && placedship.remaining > 0 && placedship.isselected" class="cursor-pointer" (click)="deselectShip()"><!-- 4 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
@@ -49,7 +66,19 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 3 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(3)"><!-- 3 cells long ship-->
+              <div *ngIf="placedship.shiplength == 4 && placedship.remaining <= 0" style="opacity: 0.35"><!-- 5 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="120" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 3 && placedship.remaining > 0 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(3)"><!-- 3 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
@@ -58,7 +87,8 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 3 && placedship.isselected"><!-- 3 cells long ship-->
+              <div *ngIf="placedship.shiplength == 3 && placedship.remaining > 0 && placedship.isselected" class="cursor-pointer" (click)="deselectShip()"><!-- 3 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
@@ -67,7 +97,18 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 2 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(2)"><!-- 2 cells long ship-->
+              <div *ngIf="placedship.shiplength == 3 && placedship.remaining <= 0" style="opacity: 0.35"><!-- 5 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="80" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 2 && placedship.remaining > 0 && !placedship.isselected" class="cursor-pointer" (click)="selectShip(2)"><!-- 2 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
@@ -75,13 +116,209 @@
                   </g>
                 </svg>
               </div>
-              <div *ngIf="placedship.shiplength == 2 && placedship.isselected"><!-- 2 cells long ship-->
+              <div *ngIf="placedship.shiplength == 2 && placedship.remaining > 0 && placedship.isselected" class="cursor-pointer" (click)="deselectShip()"><!-- 2 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
                 <svg width="202px" height="42px">
                   <g >
                     <rect x="0" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
                     <rect x="40" y="0" width="40" height="40" fill="green" stroke="rgb(0, 0, 0)"/>
                   </g>
                 </svg>
+              </div>
+              <div *ngIf="placedship.shiplength == 2 && placedship.remaining <= 0" style="opacity: 0.35"><!-- 5 cells long ship-->
+                <span class="text-white">x{{ placedship.remaining}} remaining</span>
+                <svg width="202px" height="42px">
+                  <g >
+                    <rect x="0" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="40" y="0" width="40" height="40" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Representing our remaining ships during playing phase -->
+        <div *ngIf="gamestarted" class="mt-2 ml-2">
+          <span class="text-white"> Your remaining ships</span>
+          <ul *ngFor="let placedship of this.placedShips; index as i">
+            <li >
+              <div *ngIf="placedship.shiplength == 5 && placedship.remaining > 0" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="127px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="100" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 5 && placedship.remaining <= 0" style="opacity: 0.35"  class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="127px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="100" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 4 && placedship.remaining > 0" class="flex items-center"><!-- 4 cells long ship-->
+                <svg width="102px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 4 && placedship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="102px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 3 && placedship.remaining > 0" class="flex items-center"><!-- 3 cells long ship-->
+                <svg width="77px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 3 && placedship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="77px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 2 && placedship.remaining > 0" class="flex items-center"><!-- 2 cells long ship-->
+                <svg width="52px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+              <div *ngIf="placedship.shiplength == 2 && placedship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="502px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ placedship.remaining}}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Representing enemy's remaining ships -->
+        <div *ngIf="gamestarted" class="mt-5 ml-2">
+          <span class="text-white"> {{enemy}}'s remaining ships</span>
+          <ul *ngFor="let enemyship of this.enemyShips; index as i">
+            <li >
+              <div *ngIf="enemyship.shiplength == 5 && enemyship.remaining > 0" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="127px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="100" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 5 && enemyship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="127px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="100" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 4 && enemyship.remaining > 0" class="flex items-center" class="flex items-center"><!-- 4 cells long ship-->
+                <svg width="102px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 4 && enemyship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="102px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="75" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 3 && enemyship.remaining > 0" class="flex items-center" class="flex items-center"><!-- 3 cells long ship-->
+                <svg width="77px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 3 && enemyship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="77px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="50" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 2 && enemyship.remaining > 0" class="flex items-center" class="flex items-center"><!-- 2 cells long ship-->
+                <svg width="52px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#eae0c9" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
+              </div>
+              <div *ngIf="enemyship.shiplength == 2 && enemyship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+                <svg width="502px" height="27px">
+                  <g >
+                    <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                    <rect x="25" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
+                  </g>
+                </svg>
+                <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
               </div>
             </li>
           </ul>
@@ -95,7 +332,7 @@
         <div></div>
 
         <!-- Buttons only prematch -->
-        <div *ngIf="!hasconfirmedpositioning" class="flex flex-col items-center justify-center gap-y-2 p-5">
+        <div *ngIf="!hasconfirmedpositioning" class="flex flex-col items-center justify-center gap-y-2 p-5 mt-6">
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48 whitespace-nowrap" (click)="randomPlaceShips()">Random placement</button>
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48" (click)="resetPlacement()">Reset</button>
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && hasplacedallships" class="btn !bg-success text-xxs w-48" (click)="confirmShipPlacement()">Confirm</button>
@@ -109,14 +346,14 @@
 
         <div *ngFor="let row of myfield; index as y" class="grid grid-cols-10 bg-white">
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
-            <div *ngIf="cell.value < 0" class="border border-black w-full h-full">O</div>
+            <div *ngIf="cell.value == -1" class="border border-black w-full h-full">O</div>
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'none'" class="border border-black w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black !bg-error w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black !bg-success w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasconfirmedpositioning && selectedShip == 'none'" class="border border-black w-full h-full"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && hasplacedallships && hasconfirmedpositioning" class="border border-black w-full h-full"></div>
-            <div *ngIf="cell.value != 0 && !cell.hit && !hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)"></div>
-            <div *ngIf="cell.value != 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>
+            <div *ngIf="cell.value > 0 && !cell.hit && !hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div>
+            <div *ngIf="cell.value > 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>
             <div *ngIf="cell.value != 0 && cell.hit" class="border border-red text-red text-bold w-full h-full text-center justify-center">
               <span class="text-bold text-base text-red">X</span>
             </div>
@@ -125,7 +362,7 @@
       </div>
 
       <!-- ENEMYFIELD-->
-      <div class="w-[480px] h-[480px] p-3">
+      <div class="w-[480px] h-[480px] p-3" :[ngClass]="{opaque: !myturn}">
         <p class="text-white mb-4">{{ enemy}}</p>
 
         <div *ngFor="let row of enemyfield; index as i" class="grid grid-cols-10 bg-white">
@@ -145,7 +382,8 @@
           </div>
         </div>
       </div>
-      <div class="chat-live ml-8"> <!-- CHAT COMPONENT-->
+      <!-- CHAT COMPONENT-->
+      <div class="chat-live ml-8">
         <div class="bg-gray-300 h-[480px] w-[300px]">
           <div *ngIf="gamestarted == true">
             <app-chat></app-chat>

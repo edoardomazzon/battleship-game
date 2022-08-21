@@ -47,6 +47,15 @@ export class GameService {
       this.socket.on('enemyacceptedrematch'+current_user, (request) => {
         observer.next(request)
       })
+
+      this.socket.on('youtimedout'+current_user, (message) => {
+        observer.next(message)
+      })
+
+      this.socket.on('disconnected', () => {
+        console.log('disconnected from game')
+        this.socket.emit('matchleft', {winner: enemy, message_type: 'enemyleftwhileplaying'})
+      })
     })
   }
 
@@ -77,6 +86,13 @@ export class GameService {
       enemy: enemy,
       timestamp: timestamp
     }).subscribe()
+  }
+
+  notifyEnemyTimeout(enemy: String){
+    this.socket.emit('enemytimedout', {
+      message_type: 'youtimedout',
+      enemy: enemy
+    })
   }
 
   loseGameDB(current_user: String){

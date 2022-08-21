@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChatmessageService } from '../services/chatmessage.service';
 import { GameService } from '../services/game.service';
 import { MatchmakingService } from '../services/matchmaking.service';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-game',
@@ -16,9 +17,13 @@ export class GameComponent implements OnInit {
   private sunkship: Array<any> = new Array() // Array containing the coordinates of the ship our enemy has sunk
   public myships: Array<any> = new Array() // Array that keeps track of our sunken ships and their orientation and length
   public placedShips: Array<any> = new Array() // Array containing the ships to be placed
+  public enemyShips: Array<any> = new Array() // Array containint the enemy remaining ships
   public isplaying: Boolean
   public gamestarted: Boolean
   public myturn: Boolean
+  public detectedenemyactivity: Boolean
+  public timeout: any
+  public enemytimedout: Boolean
   public selectedShip: any
   public hasconfirmedpositioning: Boolean
   public hasplacedallships: Boolean
@@ -33,18 +38,25 @@ export class GameComponent implements OnInit {
     this.isplaying = false
     this.gamestarted = false
     this.myturn = false
+    this.detectedenemyactivity = false
     this.selectedShip = 'none'
     this.hasplacedallships = false
     this.hasconfirmedpositioning = false
     this.youwon = false
     this.youlost = false
     this.enemyleft = false
+    this.enemytimedout = false
     this.enemywantsrematch = false
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     var matchinfo = localStorage.getItem('matchinfo')
     if(matchinfo){
       this.enemy = JSON.parse(matchinfo).enemy
     }
+  }
+  // If the user quits the game component, he loses the game
+  @HostListener('window: beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    this.leaveMatch('enemyleftwhileplaying')
   }
 
   ngOnInit(): void {
@@ -56,6 +68,11 @@ export class GameComponent implements OnInit {
     this.startGame()
   }
 
+  // If the user quits the game component, he loses the game
+  ngOnDestroy(){
+    this.leaveMatch('enemyleftwhileplaying')
+  }
+
                       /* ------------------ PHASE 1: SHIP POSITIONING PHASE ------------------ */
 
   // Used to initialize our array of ships with length values and a boolean "sunk" value; if each of these ships is sunk, it means we lost
@@ -63,42 +80,52 @@ export class GameComponent implements OnInit {
     this.myships = new Array()
     var myships = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2]
     this.myships = new Array()
-    this.placedShips = new Array()
+
     for(let i = 0; i < myships.length; i++){
       this.myships.push({
         shiplength: myships[i],
         orientation: '',
         sunk: false
       })
-      this.placedShips.push({
-        shiplength: myships[i],
-        isselected: false,
-        isplaced: false,
-        orientation: ''
-      })
+
     }
+    this.placedShips = new Array()
+    this.placedShips.push({ shiplength: 5, isselected: false, remaining: 1, orientation: ''})
+    this.placedShips.push({ shiplength: 4, isselected: false, remaining: 2, orientation: ''})
+    this.placedShips.push({ shiplength: 3, isselected: false, remaining: 3, orientation: ''})
+    this.placedShips.push({ shiplength: 2, isselected: false, remaining: 5, orientation: ''})
+    this.enemyShips = new Array()
+    this.enemyShips.push({ shiplength: 5, remaining: 1})
+    this.enemyShips.push({ shiplength: 4, remaining: 2})
+    this.enemyShips.push({ shiplength: 3, remaining: 3})
+    this.enemyShips.push({ shiplength: 2, remaining: 5})
   }
 
   // Once a user clicks on a ship of the positionable ships list, we update some internal fields (like the currently selected ship's length and orientation)
   selectShip(length: Number){
     for(let ship of this.placedShips){ ship.isselected = false }
     for(let ship of this.placedShips){
-      if(ship.shiplength == length && !ship.isplaced){
+      if(ship.shiplength == length){
         ship.isselected = true
         ship.orientation = 'h'
         this.selectedShip = {length: length, orientation: ship.orientation}
         break
       }
     }
+  }
 
+  // Once a user clicks on a ship of the positionable ships list that is already selected, the ship gets deselected
+  deselectShip(){
+    for(let ship of this.placedShips){ ship.isselected = false }
+    this.selectedShip = 'none'
   }
 
   // Rotates the selected ship from horizontal to vertical and vice versa (WHILE PLACING: doesn't work on already placed ships)
   rotateSelectedShip(x: any, y: any, length: any, orientation: String){
     if(this.selectedShip.orientation == 'h'){ this.selectedShip.orientation = 'v'}
     else if(this.selectedShip.orientation == 'v'){ this.selectedShip.orientation = 'h'}
-
-    this.previewShip(x, y, length, this.selectedShip.orientation, (this.isPlaceable(x, y, length, (this.selectedShip.orientatoin)).toString()))
+    this.checkPlaceableOnHover(x, y, length, this.selectedShip.orientation)
+    //this.previewShip(x, y, length, this.selectedShip.orientation, (this.isPlaceable(x, y, length, (this.selectedShip.orientatoin)).toString()))
   }
 
   // When a user selects the ship he wants to place and then hovers on a cell of his field, this gets updated accordingly with green or red cells
@@ -188,6 +215,7 @@ export class GameComponent implements OnInit {
 
   // This function places a ship on the given coordinates, orientation and with the given length
   placeShip(x: any, y: any, length: any, orientation: any){
+    for(let ship of this.placedShips){ ship.isselected = false }
     this.selectedShip = 'none'
     for(let row of this.myfield){
       for(let element of row){
@@ -208,18 +236,18 @@ export class GameComponent implements OnInit {
     }
     // Updating the placedShips array
     for(let i = 0, counter = 0; i < this.placedShips.length && counter == 0; i++){
-      if(this.placedShips[i].shiplength == length && this.placedShips[i].isplaced == false){
+      if(this.placedShips[i].shiplength == length){
         counter++
-        this.placedShips[i].isplaced = true
+        this.placedShips[i].remaining -= 1
       }
     }
     console.log('after the placement:', this.placedShips)
     // Checking if all the ships have been placed; in that case, this.hasplacedallships is set to TRUE
     var hasplacedallships = true
     for(let ship of this.placedShips){
-      if(!ship.isplaced){
-        console.log('false!')
+      if(ship.remaining != 0){
         hasplacedallships = false
+        break
       }
     }
     console.log(hasplacedallships)
@@ -229,7 +257,7 @@ export class GameComponent implements OnInit {
   // This function un-does a ship placement; activated when a user right clicks on one of his positioned ships.
   // Basically does the same thing that placeShip() does, but this time it sets all values to 0 and all orientations to ''
   removeShip(x: any, y: any, length: any, orientation: any){
-    console.log('removing ship of length', length, 'at coordinates X:'+x+ ' Y:'+y)
+    for(let ship of this.placedShips){ ship.isselected = false }
     if(orientation == "h"){
       // Scanning left and right
       for(let i = 0; i < length && i < 10; i++){
@@ -266,9 +294,9 @@ export class GameComponent implements OnInit {
     }
     // Updating the placedShips array
     for(let i = 0, counter = 0; i < this.placedShips.length && counter == 0; i++){
-      if(this.placedShips[i].shiplength == length && this.placedShips[i].isplaced == true){
+      if(this.placedShips[i].shiplength == length){
         counter++
-        this.placedShips[i].isplaced = false
+        this.placedShips[i].remaining += 1
       }
     }
     this.hasplacedallships = false
@@ -358,10 +386,12 @@ export class GameComponent implements OnInit {
 
   // Used to fire a shot at the enemy in the given coordinates (activated when a user clicks on those coordinates)
   fire(x: any, y: any){
-    this.myturn = false // Immediately prevent the user from shooting again for safety; since the hit confirmation arrives after
+    // this.myturn = false // Immediately prevent the user from shooting again for safety; since the hit confirmation arrives after
                         // the enemy sent it to us, it's better to keep the "myturn" variable to false in case this user spam-clicks
                         // other cells on the enemy field while the enemy is still calculating the response.
     this._gameService.fire(this.current_user.username, this.enemy, x, y)
+    this.waitForEnemyActivity()
+    this.detectedenemyactivity = false
   }
    // Function used to check if at the given coordinates and with given orientation the ship that's been hit is also sunk
    isSunk(x: any, y: any, length: any, orientation: any){
@@ -414,6 +444,7 @@ export class GameComponent implements OnInit {
         this.myships[i].sunk = true
       }
     }
+    for(let ship of this.placedShips){ if(ship.shiplength == shiplength){ship.remaining -= 1 }}
   }
 
   // Marks the cells around the given coordinates as "water" if those coordinates have been hit and are part of a sunken ship,
@@ -426,7 +457,6 @@ export class GameComponent implements OnInit {
       if(this.enemyfield[x][y-1] && this.enemyfield[x][y-1] != 'sunk'){this.enemyfield[x][y-1] = 'water'}
     }
   }
-
 
   // Returns true if all our ships have been sunk, false otherwise
   youLost(): Boolean{
@@ -443,6 +473,7 @@ export class GameComponent implements OnInit {
      the user left after winning and not wanting a rematch, it could be that he left after losing, it could be that he left while
     starting the actual match or even during the positioning */
   leaveMatch(reason: String){
+    console.log('STO USCENDO')
     if(reason == 'enemyleftwhileplaying' || reason == 'enemyleftwhilepositioning'){
       this.loseGame()
     }
@@ -456,6 +487,7 @@ export class GameComponent implements OnInit {
     this.hasconfirmedpositioning = false
     this.enemy = null
     this.enemyleft = false
+    this.enemytimedout = false
     this.initEnemyField()
     this.initMyShips()
     this.resetPlacement()
@@ -479,6 +511,22 @@ export class GameComponent implements OnInit {
     this._gameService.loseGameDB(this.current_user.username)
   }
 
+  waitForEnemyActivity(){
+    this.timeout = setTimeout(() => {
+      if(!this.detectedenemyactivity){
+        this.enemytimedout = true
+        console.log('Prova intattività nemico')
+        this._gameService.notifyEnemyTimeout(this.enemy)
+        this._gameService.loseGameDB(this.enemy)
+        this.winGame()
+        setTimeout(() => {
+          this.leaveMatch('other')
+        }, 4000)
+      }
+    }, 10000)
+
+  }
+
                     /* ------------------ PHASE 3: AFTER MATCH PHASE ------------------ */
 
   // Notifies the other player that we want a rematch
@@ -494,6 +542,10 @@ export class GameComponent implements OnInit {
   acceptRematch(){
     // Creates a new match at DB level (only the user that accepts the rematch will do this, otherwise it will be created twice)
     var newgametimestamp = new Date()
+    var player1
+    var player2
+    if(this.current_user.username.localeCompare(this.enemy) < 0){ player1 = this.current_user.username; player2 = this.enemy }
+    else{ player1 = this.enemy; player2 = this.current_user.username }
     this._matchMakingService.createMatch({
       player1: this.current_user.username,
       player2: this.enemy,
@@ -537,8 +589,14 @@ export class GameComponent implements OnInit {
       // If the enemy confirms his ship positioning, we can start playing
       if(message.message_type == 'enemyconfirmed'){
         this.gamestarted = true
+        this.placedShips = new Array()
+        this.placedShips.push({ shiplength: 5, isselected: false, remaining: 1, orientation: ''})
+        this.placedShips.push({ shiplength: 4, isselected: false, remaining: 2, orientation: ''})
+        this.placedShips.push({ shiplength: 3, isselected: false, remaining: 3, orientation: ''})
+        this.placedShips.push({ shiplength: 2, isselected: false, remaining: 5, orientation: ''})
         this.initEnemyField()
         this.myturn = (message.firstturn == this.current_user.username)
+        if(!this.myturn){ this.waitForEnemyActivity()}
         // Once the game starts the two players can also start chatting
         this._chatMessageService.startChat({
           current_user: this.current_user.username,
@@ -547,12 +605,15 @@ export class GameComponent implements OnInit {
       }
       // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
       else if(message.message_type == 'yougotshot'){
+        clearTimeout(this.timeout)
+        this.detectedenemyactivity = true
         var shotresult = {
           message_type: 'shotresult',
           firing_user: this.enemy,
           fired_user: this.current_user.username,
           x: message.x,
           y: message.y,
+          length: this.myfield[message.x][message.y].value,
           hit: false,
           sunk: false,
           sunkship: new Array(),
@@ -571,16 +632,20 @@ export class GameComponent implements OnInit {
             if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
           }
         }
-        else{this.myfield[message.x][message.y].value = -1; this.myturn = true} // If the enemy misses then it's our turn
+        else{this.myfield[message.x][message.y].value = -1; this.myturn = true; clearTimeout(this.timeout)} // If the enemy misses then it's our turn
         this._gameService.sendShotResult(shotresult)
+        if(shotresult.hit){ this.waitForEnemyActivity(); this.detectedenemyactivity = false }
 
       }
       // If we shot and receive the result from the enemy we update our enemyfield with the appropriate symbols
       else if(message.message_type == 'shotresult'){
+        clearTimeout(this.timeout)
+        this.detectedenemyactivity = true
         if(message.hit){
           this.myturn = true
           this.enemyfield[message.x][message.y] = 'hit'
           if(message.sunk){
+            for(let ship of this.enemyShips){ if(ship.shiplength == message.length){ ship.remaining -= 1 }}
             for(let coord of message.sunkship){
               this.enemyfield[coord.x][coord.y] = 'sunk'
               this.autoFillWater(coord.x, coord.y)
@@ -591,6 +656,9 @@ export class GameComponent implements OnInit {
           }
         }
         else if(!message.hit){
+          this.waitForEnemyActivity();
+          this.detectedenemyactivity = false
+          this.myturn = false
           this.enemyfield[message.x][message.y] = 'water'
         }
         // After every shot we update the user's accuracy
@@ -632,6 +700,13 @@ export class GameComponent implements OnInit {
         localStorage.removeItem('matchinfo')
         localStorage.setItem('matchinfo', JSON.stringify({enemy: this.enemy, isplaying: true, starttime: message.newtimestamp}))
         this.prepareForRematch()
+      }
+      // If we didn't make a move in time
+      else if(message.message_type == 'youtimedout'){
+        this.loseGame()
+        setTimeout(() => {
+          this.leaveMatch('other')
+        }, 4000)
       }
     })
   }
