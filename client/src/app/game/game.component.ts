@@ -3,6 +3,7 @@ import { ChatmessageService } from '../services/chatmessage.service';
 import { GameService } from '../services/game.service';
 import { MatchmakingService } from '../services/matchmaking.service';
 import { HostListener } from '@angular/core';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-game',
@@ -23,6 +24,8 @@ export class GameComponent implements OnInit {
   public myturn: Boolean
   public detectedenemyactivity: Boolean
   public timeout: any
+  public timer: any // can be a number or null
+  public interval: any
   public enemytimedout: Boolean
   public selectedShip: any
   public hasconfirmedpositioning: Boolean
@@ -45,6 +48,7 @@ export class GameComponent implements OnInit {
     this.youwon = false
     this.youlost = false
     this.enemyleft = false
+    this.timer = null
     this.enemytimedout = false
     this.enemywantsrematch = false
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
@@ -473,6 +477,9 @@ export class GameComponent implements OnInit {
      the user left after winning and not wanting a rematch, it could be that he left after losing, it could be that he left while
     starting the actual match or even during the positioning */
   leaveMatch(reason: String){
+    this.detectedenemyactivity = true
+    clearTimeout(this.timeout)
+    this.stopTimer()
     console.log('STO USCENDO')
     if(reason == 'enemyleftwhileplaying' || reason == 'enemyleftwhilepositioning'){
       this.loseGame()
@@ -480,22 +487,15 @@ export class GameComponent implements OnInit {
     if(reason != 'other'){
       this._gameService.leaveMatch({winner: this.enemy, message_type: reason}) // Notifying the other user that we left the match
     }
+
     localStorage.removeItem('matchinfo')
-    this.myturn = false
-    this.isplaying = false
-    this.gamestarted = false
-    this.hasconfirmedpositioning = false
-    this.enemy = null
-    this.enemyleft = false
-    this.enemytimedout = false
-    this.initEnemyField()
-    this.initMyShips()
-    this.resetPlacement()
     location.reload()
   }
 
   // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
+    clearTimeout(this.timeout)
+    console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
     var matchinfo = localStorage.getItem('matchinfo')
     var timestamp = ''
     if(matchinfo){
@@ -507,21 +507,35 @@ export class GameComponent implements OnInit {
 
   // Used when the user loses a game
   loseGame(){
+    this.detectedenemyactivity = true
+    clearTimeout(this.timeout)
+    console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
     this.youlost = true
     this._gameService.loseGameDB(this.current_user.username)
   }
 
+  startTimer(){
+    this.timer = 10
+    this.interval = setInterval(() => {
+      if(this.timer <= 0){
+        this.stopTimer()
+      } else {this.timer -= 1}
+    }, 1000)
+  }
+
+  stopTimer(){
+    this.timer = null
+    clearInterval(this.interval)
+  }
+
   waitForEnemyActivity(){
+    console.log('waiting for enemy activity')
     this.timeout = setTimeout(() => {
       if(!this.detectedenemyactivity){
         this.enemytimedout = true
-        console.log('Prova intattività nemico')
         this._gameService.notifyEnemyTimeout(this.enemy)
         this._gameService.loseGameDB(this.enemy)
         this.winGame()
-        setTimeout(() => {
-          this.leaveMatch('other')
-        }, 4000)
       }
     }, 10000)
 
@@ -568,6 +582,8 @@ export class GameComponent implements OnInit {
   // When the two players agree on a rematch, the game is taken to its initial state
   prepareForRematch(){
     // Returning to the initial phase, which is the ship positioning phase
+    clearTimeout(this.timeout)
+    console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
     this.myturn = false
     this.gamestarted = false
     this.isplaying = false
@@ -577,6 +593,7 @@ export class GameComponent implements OnInit {
     this.enemyleft = false
     this.enemywantsrematch = false
     this.enemyfield = new Array()
+    this.stopTimer()
     this.initMyShips()
     this.resetPlacement()
   }
@@ -596,7 +613,8 @@ export class GameComponent implements OnInit {
         this.placedShips.push({ shiplength: 2, isselected: false, remaining: 5, orientation: ''})
         this.initEnemyField()
         this.myturn = (message.firstturn == this.current_user.username)
-        if(!this.myturn){ this.waitForEnemyActivity()}
+        this.startTimer()
+        if(!this.myturn){ this.waitForEnemyActivity() }
         // Once the game starts the two players can also start chatting
         this._chatMessageService.startChat({
           current_user: this.current_user.username,
@@ -605,8 +623,11 @@ export class GameComponent implements OnInit {
       }
       // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
       else if(message.message_type == 'yougotshot'){
-        clearTimeout(this.timeout)
+        this.stopTimer()
         this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
+        console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
         var shotresult = {
           message_type: 'shotresult',
           firing_user: this.enemy,
@@ -632,15 +653,17 @@ export class GameComponent implements OnInit {
             if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
           }
         }
-        else{this.myfield[message.x][message.y].value = -1; this.myturn = true; clearTimeout(this.timeout)} // If the enemy misses then it's our turn
+        else{this.myfield[message.x][message.y].value = -1; this.myturn = true;} // If the enemy misses then it's our turn
         this._gameService.sendShotResult(shotresult)
-        if(shotresult.hit){ this.waitForEnemyActivity(); this.detectedenemyactivity = false }
-
+        if(shotresult.hit && !this.youlost){this.waitForEnemyActivity(); this.detectedenemyactivity = false }
+        this.startTimer()
       }
       // If we shot and receive the result from the enemy we update our enemyfield with the appropriate symbols
       else if(message.message_type == 'shotresult'){
-        clearTimeout(this.timeout)
+        this.stopTimer()
         this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
+        console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
         if(message.hit){
           this.myturn = true
           this.enemyfield[message.x][message.y] = 'hit'
@@ -661,12 +684,15 @@ export class GameComponent implements OnInit {
           this.myturn = false
           this.enemyfield[message.x][message.y] = 'water'
         }
+        this.startTimer()
         // After every shot we update the user's accuracy
         this._gameService.updateAccuracy(this.current_user.username, message.hit)
       }
       // If the nemy leaves while we're in the playing phase
       else if(message.message_type == 'enemyleftwhileplaying'){
-        console.log('ENEMY LEFT WHILE PLAYING SO YOU WIN')
+        this.stopTimer()
+        this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
         this.winGame()
         this.enemyleft = true
         setTimeout(()=>{
@@ -675,7 +701,9 @@ export class GameComponent implements OnInit {
       }
       // If the nemy leaves during the positioning phase
       else if(message.message_type == 'enemyleftwhilepositioning'){
-        console.log('ENEMY LEFT WHILE POSITIONING HIS SHIPS')
+        this.stopTimer()
+        this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
         this.winGame()
         this.enemyleft = true
         setTimeout(()=>{
@@ -684,7 +712,9 @@ export class GameComponent implements OnInit {
       }
       // If the enemy leaves after he won and we were waiting to see if he wanted a rematch
       else if(message.message_type == 'enemyleftaftermatchended'){
-        console.log('ENEMY LEFT SO YOU CAN\'T GET A REMATCH')
+        this.stopTimer()
+        this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
         this.enemyleft = true
         setTimeout(()=>{
           this.leaveMatch("other")
@@ -692,10 +722,14 @@ export class GameComponent implements OnInit {
       }
       // If the enemy wants a rematch after the game is finished
       else if(message.message_type == 'requestrematch'){
+        this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
         this.enemywantsrematch = true // This will make the "accept rematch" button visible
       }
       // If the enemy accepted our rematch request after the game is finished
       else if(message.message_type == 'acceptrematch'){
+        this.detectedenemyactivity = true
+        clearTimeout(this.timeout)
         // Updating the localstorage "matchinfo" item with the new starttime timestamp
         localStorage.removeItem('matchinfo')
         localStorage.setItem('matchinfo', JSON.stringify({enemy: this.enemy, isplaying: true, starttime: message.newtimestamp}))
@@ -703,10 +737,11 @@ export class GameComponent implements OnInit {
       }
       // If we didn't make a move in time
       else if(message.message_type == 'youtimedout'){
+        this.detectedenemyactivity = true
+        this.stopTimer()
+        clearTimeout(this.timeout)
+        console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
         this.loseGame()
-        setTimeout(() => {
-          this.leaveMatch('other')
-        }, 4000)
       }
     })
   }

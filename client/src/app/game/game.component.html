@@ -324,12 +324,11 @@
           </ul>
         </div>
 
-        <!-- Rappresentazioni navi nostre durante partita (quindi dopo che entrambi hanno confermato il posizionamento)
-             Navi verdi se sono vive, rosse se sono affondate -->
-        <div class="navi-nostre"></div>
-
-        <!-- Rappresentazioni navi nemici durante partita -->
-        <div></div>
+        <!-- Timer partita -->
+        <div *ngIf="gamestarted" class="mt-5 ml-2">
+          <span *ngIf="timer != null && !myturn" class="text-white text-xs opaque">Enemy has {{timer}} seconds left</span>
+          <span *ngIf="timer != null && myturn" class="text-white text-xs" :[ngClass]="{warntimerunningout: timer <=4 }">You have {{timer}} seconds left</span>
+        </div>
 
         <!-- Buttons only prematch -->
         <div *ngIf="!hasconfirmedpositioning" class="flex flex-col items-center justify-center gap-y-2 p-5 mt-6">

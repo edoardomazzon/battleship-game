@@ -2,6 +2,8 @@ In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli pro
 
 
 PROBLEMI:
+- Cercare di azzerare i ricaricamenti di pagina; ad esempio quando facciamo leaveMatch() la pagina viene ricaricata, mentre sarebbe meglio
+  fare una emit alla home component dicendo che il game component è da chiudere (basta mettere isplaying = false nella home component)
 - [sistemabile mettendo profile e home nella stess pagina]Se un giocatore si mette in attesa (ready up) ma poi va nel suo profilo e poi ritorna alla home, nel frattempo era rimasto comunque 
   in coda e adesso si può riaggiungere un'altra volta.
     1. O facciamo in modo che non si possa andare da nessuna parte finché sei in stato di ready
@@ -14,6 +16,7 @@ PROBLEMI:
 - renew session
 
 IMPLEMENTAZIONI:
+
   1. Spostare myprofile nella stessa pagina della home: a sinsitra mostiramo i match in corso e a destra il nostro profilo (questo ci 
      semplifica molto la vita)
   2. Rappresentare il timer del turno
