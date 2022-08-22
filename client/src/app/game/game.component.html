@@ -1,8 +1,8 @@
-<div class="mt-5">
+<div class="mt-5 relative">
   <!-- Game container -->
-  <div *ngIf="enemyleft == false && youwon == false && youlost == false" class="game md:flex md:gap-x-5"> <!-- WHILE WE'RE IN GAME -->
+  <div  class="game md:flex md:gap-x-5"  :[ngClass]="{ 'opacity-30 blur-sm' : youwon || youlost}"> <!-- WHILE WE'RE IN GAME -->
       <!-- Our ships in positioning phase (or both our and enemy's ships during game phase)-->
-      <div class="bg-gray-700 h-[480px]">
+      <div class="bg-gray-700 h-[480px] min-w-[266px]">
         <!-- Available ships during positioning phase-->
         <div *ngIf="!gamestarted" class="mt-2 ml-2">
           <ul *ngFor="let placedship of this.placedShips; index as i">
@@ -235,7 +235,7 @@
         <div *ngIf="gamestarted" class="mt-5 ml-2">
           <span class="text-white"> {{enemy}}'s remaining ships</span>
           <ul *ngFor="let enemyship of this.enemyShips; index as i">
-            <li >
+            <li>
               <div *ngIf="enemyship.shiplength == 5 && enemyship.remaining > 0" class="flex items-center"><!-- 5 cells long ship-->
                 <svg width="127px" height="27px">
                   <g >
@@ -248,7 +248,7 @@
                 </svg>
                 <span class="text-white text-xxs">x{{ enemyship.remaining}}</span>
               </div>
-              <div *ngIf="enemyship.shiplength == 5 && enemyship.remaining <= 0" style="opacity: 0.35" class="flex items-center"><!-- 5 cells long ship-->
+              <div *ngIf="enemyship.shiplength == 5 && enemyship.remaining <= 0" class="flex items-center opacity-30"><!-- 5 cells long ship-->
                 <svg width="127px" height="27px">
                   <g >
                     <rect x="0" y="0" width="25" height="25" fill="#a61212" stroke="rgb(0, 0, 0)"/>
@@ -326,8 +326,8 @@
 
         <!-- Timer partita -->
         <div *ngIf="gamestarted" class="mt-5 ml-2">
-          <span *ngIf="timer != null && !myturn" class="text-white text-xs opaque">Enemy has {{timer}} seconds left</span>
-          <span *ngIf="timer != null && myturn" class="text-white text-xs" :[ngClass]="{warntimerunningout: timer <=4 }">You have {{timer}} seconds left</span>
+          <span *ngIf="timer != null && !myturn" class="text-white text-xs opacity-30">Enemy has {{timer}} seconds left</span>
+          <span *ngIf="timer != null && myturn" class="text-white text-xs" :[ngClass]="{'text-red': timer <=4 }">You have {{timer}} seconds left</span>
         </div>
 
         <!-- Buttons only prematch -->
@@ -335,7 +335,7 @@
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48 whitespace-nowrap" (click)="randomPlaceShips()">Random placement</button>
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48" (click)="resetPlacement()">Reset</button>
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && hasplacedallships" class="btn !bg-success text-xxs w-48" (click)="confirmShipPlacement()">Confirm</button>
-          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && !hasplacedallships" class="btn !bg-error text-xxs w-48" disabled>Confirm</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && !hasplacedallships" class="btn !bg-red-error text-xxs w-48" disabled>Confirm</button>
         </div>
       </div>
 
@@ -353,15 +353,15 @@
             <div *ngIf="cell.value == 0 && hasplacedallships && hasconfirmedpositioning" class="border border-black w-full h-full"></div>
             <div *ngIf="cell.value > 0 && !cell.hit && !hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div>
             <div *ngIf="cell.value > 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>
-            <div *ngIf="cell.value != 0 && cell.hit" class="border border-red text-red text-bold w-full h-full text-center justify-center">
-              <span class="text-bold text-base text-red">X</span>
+            <div *ngIf="cell.value != 0 && cell.hit" class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center">
+              <span class="text-bold text-base text-red-error">X</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- ENEMYFIELD-->
-      <div class="w-[480px] h-[480px] p-3" :[ngClass]="{opaque: !myturn}">
+      <div class="w-[480px] h-[480px] p-3" :[ngClass]="{'opacity-30': !myturn}">
         <p class="text-white mb-4">{{ enemy}}</p>
 
         <div *ngFor="let row of enemyfield; index as i" class="grid grid-cols-10 bg-white">
@@ -393,26 +393,32 @@
 
 
   <!-- Final Buttons -->
-  <div *ngIf="youlost && enemyleft" class="game md:flex w-3/4"> <!-- IF WE LOSE AND THE ENEMY  LEFT WE CAN'T ASK FOR A REMATCH -->
-    <p>YOU LOST - Enemy has left</p>
+  <div *ngIf="youlost && enemyleft" class="game absolute top-5 left-[37%] p-10 rounded-lg"> <!-- IF WE LOSE AND THE ENEMY  LEFT WE CAN'T ASK FOR A REMATCH -->
+    <p class="text-xl font-bold text-white">You lost</p>
+    <p class="text-m text-white">Enemy has left</p>
   </div>
 
-  <div *ngIf="youlost && !enemyleft" class="game md:flex w-3/4"> <!-- IF WE LOSE AND THE ENEMY STILL HASN'T LEFT WE CAN STILL ASK FOR A REMATCH -->
-    <p> YOU LOST</p>
-    <button *ngIf="!this.enemywantsrematch" class="btn" (click)="askForRematch()">Ask for rematch</button>
-    <button *ngIf="this.enemywantsrematch" class="btn" (click)="acceptRematch()">Accept rematch</button>
-    <button class="btn" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
+  <div *ngIf="youlost && !enemyleft" class="game absolute top-5 left-[37%] p-10 rounded-lg"> <!-- IF WE LOSE AND THE ENEMY STILL HASN'T LEFT WE CAN STILL ASK FOR A REMATCH -->
+    <p class="text-xl font-bold text-white mb-4">You lost</p>
+    <div class="flex items-center justify-between gap-x-5">
+      <button *ngIf="!this.enemywantsrematch" class="btn !bg-success" (click)="askForRematch()">Ask for rematch</button>
+      <button *ngIf="this.enemywantsrematch" class="btn !bg-success" (click)="acceptRematch()">Accept rematch</button>
+      <button class="btn !bg-red-error" (click)="leaveMatch('enemyleftaftermatchended')">Leave</button>
+    </div>
   </div>
 
-  <div *ngIf="enemyleft && youwon" class="game md:flex w-3/4"> <!-- IF WE WON BECAUSE THE ENEMY LEFT -->
-    <p> YOU WON - Your enemy left the match</p>
+  <div *ngIf="enemyleft && youwon" class="game absolute top-5 left-[37%] p-10 rounded-lg"> <!-- IF WE WON BECAUSE THE ENEMY LEFT -->
+    <p class="text-xl font-bold text-white">You won
+    <p class="text-m text-white">Your enemy left the match</p>
   </div>
 
-  <div *ngIf="!enemyleft && youwon" class="game md:flex w-3/4"> <!-- IF WE WON AND THE ENEMY DIDN'T LEAVE THE MATCH -->
-    <p> YOU WON</p>
-    <button *ngIf="!this.enemywantsrematch" class="btn" (click)="askForRematch()">Ask for rematch</button>
-    <button *ngIf="this.enemywantsrematch" class="btn" (click)="acceptRematch()">Accept rematch</button>
-    <button class="btn" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
+  <div *ngIf="!enemyleft && youwon" class="game absolute top-5 left-[37%] p-10 rounded-lg"> <!-- IF WE WON AND THE ENEMY DIDN'T LEAVE THE MATCH -->
+    <p class="text-xl font-bold text-white mb-4">You won</p>
+    <div class="flex items-center justify-between gap-x-5">
+      <button *ngIf="!this.enemywantsrematch" class="btn !bg-success" (click)="askForRematch()">Ask for rematch</button>
+      <button *ngIf="this.enemywantsrematch" class="btn !bg-success" (click)="acceptRematch()">Accept rematch</button>
+      <button class="btn !bg-red-error" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
+    </div>
   </div>
 
   <!-- Game buttons -->

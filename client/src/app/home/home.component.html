@@ -3,7 +3,7 @@
   <div class="game-container h-screen w-50 bg-navy">
     <h1 class="text-center pt-5">Battleship game</h1>
 
-    <div *ngIf="this.isplaying == true">
+    <div *ngIf="isplaying">
       <app-game></app-game>
     </div>
 
@@ -11,6 +11,11 @@
     <button *ngIf="this.isready == false" class="btn" (click)="readyUp()"> Ready up</button>
     <button *ngIf="this.isready == true" class="btn" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
   </div>
+
+  <div *ngIf="!isplaying">
+    <app-my-profile></app-my-profile>
+  </div>
+
 
   </div>
   <!-- Commentare fino a qui-->
