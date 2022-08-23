@@ -80,7 +80,6 @@ var ready_players_list = new Array() // This list is updated with a new user whe
 // users are matched in pairs and are notified through Socket.io that their match is starting, so they can start loading their
 // front-end resources.
 setInterval(() => {
-    console.log(ready_players_list)
     const data = new Date() // Getting the current time
     timereadyusers = new Array() // Creating the array in which an even number of ready users will be paired up to play
   
@@ -124,6 +123,23 @@ setInterval(() => {
     }  
 }, 5000);
 
+// List of matches that are currently been played; once a match is created, it gets added to this list. When it ends, it gets removed.
+// This prevents the clients to constantly query up ongoing matches, which would overload the database with requests. Every 10 seconds,
+// this list is sent to every client through an emit. When notified by both the winner and loser, the server removes the match from this list.
+// If for some reason the two playing clients are unable to notify the server that the game is over, the match will be removed automatically if
+// it's sarted more than 2.5 minutes before (estimated average time for a battleshipmatch is 2 minutes)
+ongoing_matches = new Array() // {player1: String, player2: String, starttime: Date} with player1 and 2 not necessarily in alphabetical order
+setInterval(() => {
+  const current_time = new Date()
+  // Deleting from the list all the matches that started more than 150 seconds ago
+  for(let i = 0; i < ongoing_matches.length; i++){
+    if(ongoing_matches[i].timestamp <= current_time.getTime() - 150000){
+      ongoing_matches.splice(i, 1)
+    }
+  }
+  // Sending to all the clients the new ongoing_matches list
+  ios.emit('newongoingmatches', ongoing_matches)
+}, 10000)
 
 // Setting up ship positioning confirmation
 var confirmedpositonings = new Array()
@@ -209,6 +225,24 @@ ios.on('connection', (socket) => {
     }    
     if(ready_players_list.length != 0){
       ready_players_list.length = ready_players_list.length -1
+    }
+  })
+
+  // When a match is created, we add it to the ongoing_matches list for other users to spectate it
+  socket.on('matchcreated', (matchinfo) => {
+    matchinfo.timestamp = new Date()
+    ongoing_matches.push(matchinfo)
+  })
+
+  // When a match ends, we remove it to the ongoing_matches list so other users won't join in to spectate.
+  // An ongoing match is identified by the names of the two players; since the usernames are unique, it's impossible
+  // for two games between the two same players to exist and be played at the same time.
+  socket.on('matchended', (matchinfo) => {
+    for(let i = 0; i < ongoing_matches.length; i++){
+      if((ongoing_matches[i].player1 == matchinfo.player1 && ongoing_matches[i].player2 == matchinfo.player2) || (ongoing_matches[i].player1 == matchinfo.player2 && ongoing_matches[i].player2 == matchinfo.player1)){
+        ongoing_matches.splice(index, 1)
+        break
+      }
     }
   })
 

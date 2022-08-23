@@ -19,11 +19,9 @@ IMPLEMENTAZIONI:
 
   1. Spostare myprofile nella stessa pagina della home: a sinsitra mostiramo i match in corso e a destra il nostro profilo (questo ci 
      semplifica molto la vita)
-  2. Rappresentare il timer del turno
   5. Inviti a giocare (a questo punto facciamo la sezione notifiche nella barra in alto di cui vi spiegherò come vorrei farla)
   6. Chat non chiudibile durante la partita
   7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)
 
-  8. Mostrare la lista delle partite in corso nella home con tasto "spectate"; per partita in corso intendiamo le partite iniziate meno di un
-     minuto fa e senza winner (ogni 5 secondi aggiorniamo questa lista)
+  8. Mostrare la lista degli ongoing_matches nell'home component
   9. Fare gli spettatori

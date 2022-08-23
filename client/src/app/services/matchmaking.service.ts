@@ -24,6 +24,7 @@ export class MatchmakingService {
 
   createMatch(match_info: any){
     this._httpClient.post(this.baseURL+'creatematch', match_info).subscribe()
+    this.socket.emit('matchcreated', match_info)
   }
 
   listenToMatchmaking(current_user: any): Observable <any>{

@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
     this.isready = true
   }
 
-
+  // Cancels matchmaking and pulls the user out of the waiting queue
   cancelMatchMaking(){
     this._matchMakingService.cancelMatchMaking(this.current_user)
     this.isready = false

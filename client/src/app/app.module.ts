@@ -18,12 +18,12 @@ import { FooterComponent } from './footer/footer.component';
 import { ChatComponent } from './chat/chat.component';
 import { GameComponent } from './game/game.component';
 import { FriendsComponent } from './friends/friends.component';
+import { SpectateComponent } from './spectate/spectate.component';
 
 
 const routes: Routes = [
   {path: 'register', component: RegisterComponent, canActivate : [IsNotAuthenticatedService]},
   {path: 'login', component: LoginComponent, canActivate : [IsNotAuthenticatedService]},
-  {path: 'myprofile', component: MyProfileComponent, canActivate: [IsAuthenticatedService]},
   {path: 'admindashboard', component: AdminDashboardComponent, canActivate: [IsAdminService]},
   {path: '', component: HomeComponent, canActivate: [IsAuthenticatedService]},
   {path: '**', redirectTo: '/'}
@@ -41,7 +41,8 @@ const routes: Routes = [
     FooterComponent,
     ChatComponent,
     GameComponent,
-    FriendsComponent
+    FriendsComponent,
+    SpectateComponent
   ],
   imports: [
     BrowserModule,

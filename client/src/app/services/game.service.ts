@@ -86,6 +86,7 @@ export class GameService {
       enemy: enemy,
       timestamp: timestamp
     }).subscribe()
+    this.socket.emit('matchended', {player1: current_user, player2: enemy})
   }
 
   notifyEnemyTimeout(enemy: String){

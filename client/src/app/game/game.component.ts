@@ -490,11 +490,11 @@ export class GameComponent implements OnInit {
     clearTimeout(this.timeout)
 
     var matchinfo = localStorage.getItem('matchinfo')
-    var timestamp = ''
+    var starttime = new Date()
     if(matchinfo){
-      timestamp = JSON.parse(matchinfo).starttime
+      starttime = JSON.parse(matchinfo).starttime
     }
-    this._gameService.winGameDB(this.current_user.username, this.enemy, timestamp)
+    this._gameService.winGameDB(this.current_user.username, this.enemy, starttime)
     this.youwon = true
   }
 
