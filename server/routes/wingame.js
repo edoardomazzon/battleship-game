@@ -9,9 +9,6 @@ router.post('/', async(req, res) => {
     const username = req.body.username
     var player1
     var player2
-    //2022-08-18T15:32:35.800Z
-    //2022-08-18T15:32:35.800+00:00
-    var adapted_timestamp = (req.body.timestamp.split('Z'))[0] + '+00:00'
 
     if(req.body.username.localeCompare(req.body.enemy) < 0){
         player1 = req.body.username
@@ -32,7 +29,7 @@ router.post('/', async(req, res) => {
             if(current_winstreak > current_max){
                 const update2 = User.updateOne({username: username}, { $inc:{max_winstreak: 1}}).then()
             }
-            const updatematch = Match.updateOne({player1: player1, player2: player2, timestamp: adapted_timestamp}, {winner: req.body.username}).then()
+            const updatematch = Match.updateOne({player1: player1, player2: player2, timestamp: req.body.timestamp}, {winner: req.body.username}).then()
             res.json('Updated games_won')
         })
     }catch(err){

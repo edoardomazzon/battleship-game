@@ -60,7 +60,7 @@ export class GameComponent implements OnInit {
   // If the user quits the game component, he loses the game
   @HostListener('window: beforeunload', ['$event'])
   unloadHandler(event: Event) {
-    this.leaveMatch('enemyleftwhileplaying')
+    if(!this.youwon){this.leaveMatch('enemyleftwhileplaying')}
   }
 
   ngOnInit(): void {
@@ -74,7 +74,7 @@ export class GameComponent implements OnInit {
 
   // If the user quits the game component, he loses the game
   ngOnDestroy(){
-    this.leaveMatch('enemyleftwhileplaying')
+    if(!this.youwon){this.leaveMatch('enemyleftwhileplaying')}
   }
 
                       /* ------------------ PHASE 1: SHIP POSITIONING PHASE ------------------ */
@@ -245,7 +245,6 @@ export class GameComponent implements OnInit {
         this.placedShips[i].remaining -= 1
       }
     }
-    console.log('after the placement:', this.placedShips)
     // Checking if all the ships have been placed; in that case, this.hasplacedallships is set to TRUE
     var hasplacedallships = true
     for(let ship of this.placedShips){
@@ -254,7 +253,6 @@ export class GameComponent implements OnInit {
         break
       }
     }
-    console.log(hasplacedallships)
     this.hasplacedallships = hasplacedallships
   }
 
@@ -480,22 +478,17 @@ export class GameComponent implements OnInit {
     this.detectedenemyactivity = true
     clearTimeout(this.timeout)
     this.stopTimer()
-    console.log('STO USCENDO')
     if(reason == 'enemyleftwhileplaying' || reason == 'enemyleftwhilepositioning'){
       this.loseGame()
     }
-    if(reason != 'other'){
-      this._gameService.leaveMatch({winner: this.enemy, message_type: reason}) // Notifying the other user that we left the match
-    }
-
+    this._gameService.leaveMatch({current_user: this.current_user.username, enemy: this.enemy, message_type: reason}) // Notifying the other user that we left the match
     localStorage.removeItem('matchinfo')
-    location.reload()
   }
 
   // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
     clearTimeout(this.timeout)
-    console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
     var matchinfo = localStorage.getItem('matchinfo')
     var timestamp = ''
     if(matchinfo){
@@ -509,7 +502,7 @@ export class GameComponent implements OnInit {
   loseGame(){
     this.detectedenemyactivity = true
     clearTimeout(this.timeout)
-    console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
     this.youlost = true
     this._gameService.loseGameDB(this.current_user.username)
   }
@@ -583,7 +576,7 @@ export class GameComponent implements OnInit {
   prepareForRematch(){
     // Returning to the initial phase, which is the ship positioning phase
     clearTimeout(this.timeout)
-    console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
     this.myturn = false
     this.gamestarted = false
     this.isplaying = false
@@ -626,7 +619,7 @@ export class GameComponent implements OnInit {
         this.stopTimer()
         this.detectedenemyactivity = true
         clearTimeout(this.timeout)
-        console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
 
         var shotresult = {
           message_type: 'shotresult',
@@ -663,7 +656,7 @@ export class GameComponent implements OnInit {
         this.stopTimer()
         this.detectedenemyactivity = true
         clearTimeout(this.timeout)
-        console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
         if(message.hit){
           this.myturn = true
           this.enemyfield[message.x][message.y] = 'hit'
@@ -740,7 +733,7 @@ export class GameComponent implements OnInit {
         this.detectedenemyactivity = true
         this.stopTimer()
         clearTimeout(this.timeout)
-        console.log('stopped waiting: timeout cleared; enemyactivityvalue:', this.detectedenemyactivity)
+
         this.loseGame()
       }
     })

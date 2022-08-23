@@ -80,6 +80,7 @@ var ready_players_list = new Array() // This list is updated with a new user whe
 // users are matched in pairs and are notified through Socket.io that their match is starting, so they can start loading their
 // front-end resources.
 setInterval(() => {
+    console.log(ready_players_list)
     const data = new Date() // Getting the current time
     timereadyusers = new Array() // Creating the array in which an even number of ready users will be paired up to play
   
@@ -180,11 +181,21 @@ ios.on('connection', (socket) => {
 
   // When a user is ready to play, we add him to the ready_players_list, which is the waiting queue
   socket.on('readytoplay', (player) => {
-    ready_players_list.push(player) 
+    var readyguard = true
+    for(let readyplayer of ready_players_list){
+      if(readyplayer.username == player.username){
+        readyguard = false
+        console.log('l\'utente è già in queue')
+      }
+    }
+    if(readyguard){
+      ready_players_list.push(player) 
+    } 
   })
 
   // In case a user canceled the matchmaking, we remove it from the "ready_players_list"
   socket.on('cancelmatchmaking', (player) => {
+    console.log('canceled matchmaking')
     var playerindex = 0
     for(let j = 0; j < ready_players_list.length; j++){
       if(ready_players_list[j] == player){
@@ -264,7 +275,8 @@ ios.on('connection', (socket) => {
 
   // When a player1 leaves the match, player2 gets notified and wins the game
   socket.on('matchleft', (leavenotification) => {
-    socket.broadcast.emit('enemyleft'+leavenotification.winner, leavenotification)
+    socket.broadcast.emit('enemyleft'+leavenotification.enemy, leavenotification)
+    socket.broadcast.emit('matchended'+leavenotification.current_user, {message_type: 'matchended'})    
   })
   
   socket.on('disconnect', () => {

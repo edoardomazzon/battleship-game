@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatchmakingService } from '../services/matchmaking.service';
@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cancelMatchMaking()
     var matchinfo: any = localStorage.getItem('matchinfo')
     if(matchinfo != null){
       matchinfo = JSON.parse(matchinfo)
@@ -34,6 +35,7 @@ export class HomeComponent implements OnInit {
       if(observer.message_type == 'yougotmatched'){
         this.isready = false
         this.isplaying = true
+        console.log(observer.starttime)
         localStorage.setItem('matchinfo', JSON.stringify({
           isplaying: JSON.stringify(true),
           enemy: observer.enemy,
@@ -57,8 +59,27 @@ export class HomeComponent implements OnInit {
           })
         }
       }
+      else if(observer.message_type == 'matchended'){
+        localStorage.removeItem('matchinfo')
+        this.isplaying = false
+      }
     })
    }
+
+  // If the user quits, matchmaking is canceled; if these emits don't go off (sometimes the beforeunload event is not caught),
+  // the server already has some guarding logic that prevents the user to queue up twice. Once the user logs back in, the client
+  // invokes (for further safety) this.cancelMatchmaking() . If the user logs off or exits the page and for some reason the
+  // beforeunload event isn't caught, then the user will ste be in queue and may be matched up with another user, but will end up
+  // losing for inactivity.
+  @HostListener('window: beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    this._matchMakingService.cancelMatchMaking(this.current_user)
+    this.isready = false
+  }
+  ngOnDestroy(){
+    this._matchMakingService.cancelMatchMaking(this.current_user)
+    this.isready = false
+  }
 
   /*
    A user's skill level for matchmaking is calculated as follows:
@@ -78,6 +99,7 @@ export class HomeComponent implements OnInit {
     this._matchMakingService.readyUp(this.current_user)
     this.isready = true
   }
+
 
   cancelMatchMaking(){
     this._matchMakingService.cancelMatchMaking(this.current_user)
