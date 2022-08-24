@@ -7,14 +7,18 @@
       <app-game></app-game>
     </div>
 
-  <div *ngIf="this.isplaying == false">
-    <button *ngIf="this.isready == false" class="btn" (click)="readyUp()"> Ready up</button>
-    <button *ngIf="this.isready == true" class="btn" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
+  <div *ngIf="!isplaying">
+    <button *ngIf="!isready" class="btn !bg-success" (click)="readyUp()"> Ready up</button>
+    <button *ngIf="isready"  class="btn !bg-error" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
+    <app-my-profile></app-my-profile>
+    <ul *ngFor="let match of ongoing_matches">
+      <li>
+        {{ match.player1 }} vs {{ match.player2 }}
+        <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
+      </li>
+    </ul>
   </div>
 
-  <div *ngIf="!isplaying">
-    <app-my-profile></app-my-profile>
-  </div>
 
 
   </div>

@@ -13,15 +13,19 @@ export class HomeComponent implements OnInit {
   private baseURL = 'http://localhost:3000/'
   private readyUpURL = 'http://localhost:3000/readyup'
   public isready = false
-  public isplaying
+  public isplaying: Boolean
+  public isspectating: Boolean
   private current_user: any
+  public ongoing_matches: any
 
   constructor(private _router: Router, private _httpClient: HttpClient, private _matchMakingService: MatchmakingService) {
     this.isplaying = false
+    this.isspectating = false
   }
 
   ngOnInit(): void {
     this.cancelMatchMaking()
+    this.isready = false
     var matchinfo: any = localStorage.getItem('matchinfo')
     if(matchinfo != null){
       matchinfo = JSON.parse(matchinfo)
@@ -31,6 +35,25 @@ export class HomeComponent implements OnInit {
       }
     }
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    this.listenToMatchmaking()
+   }
+
+  // If the user quits, matchmaking is canceled; if these emits don't go off (sometimes the beforeunload event is not caught),
+  // the server already has some guarding logic that prevents the user to queue up twice. Once the user logs back in, the client
+  // invokes (for further safety) this.cancelMatchmaking() . If the user logs off or exits the page and for some reason the
+  // beforeunload event isn't caught, then the user will ste be in queue and may be matched up with another user, but will end up
+  // losing for inactivity.
+  @HostListener('window: beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    this._matchMakingService.cancelMatchMaking(this.current_user)
+    this.isready = false
+  }
+  ngOnDestroy(){
+    this._matchMakingService.cancelMatchMaking(this.current_user)
+    this.isready = false
+  }
+
+  listenToMatchmaking(){
     this._matchMakingService.listenToMatchmaking(this.current_user).subscribe((observer) => {
       if(observer.message_type == 'yougotmatched'){
         this.isready = false
@@ -63,23 +86,22 @@ export class HomeComponent implements OnInit {
         localStorage.removeItem('matchinfo')
         this.isplaying = false
       }
-    })
-   }
+      else if(observer.message_type == 'newongoingmatches'){
+        this.ongoing_matches = new Array()
+        for(let i = 0; i < observer.ongoing_matches.length; i++){
 
-  // If the user quits, matchmaking is canceled; if these emits don't go off (sometimes the beforeunload event is not caught),
-  // the server already has some guarding logic that prevents the user to queue up twice. Once the user logs back in, the client
-  // invokes (for further safety) this.cancelMatchmaking() . If the user logs off or exits the page and for some reason the
-  // beforeunload event isn't caught, then the user will ste be in queue and may be matched up with another user, but will end up
-  // losing for inactivity.
-  @HostListener('window: beforeunload', ['$event'])
-  unloadHandler(event: Event) {
-    this._matchMakingService.cancelMatchMaking(this.current_user)
-    this.isready = false
+        }
+        this.ongoing_matches = observer.ongoing_matches
+      }
+    })
   }
-  ngOnDestroy(){
-    this._matchMakingService.cancelMatchMaking(this.current_user)
-    this.isready = false
+
+  startSpectating(player1: String, player2: String){
+    this.isspectating = true
+    localStorage.setItem('spectateinfo', JSON.stringify({player1: player1, player2: player2}))
   }
+
+
 
   /*
    A user's skill level for matchmaking is calculated as follows:

@@ -36,6 +36,10 @@ export class MatchmakingService {
       this.socket.on('matchended'+current_user.username, (message) => {
         observer.next(message)
       })
+
+      this.socket.on('newongoingmatches', (message) => {
+        observer.next(message)
+      })
     })
   }
 }

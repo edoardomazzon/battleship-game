@@ -138,7 +138,7 @@ setInterval(() => {
     }
   }
   // Sending to all the clients the new ongoing_matches list
-  ios.emit('newongoingmatches', ongoing_matches)
+  ios.emit('newongoingmatches', {message_type: 'newongoingmatches', ongoing_matches: ongoing_matches})
 }, 10000)
 
 // Setting up ship positioning confirmation
