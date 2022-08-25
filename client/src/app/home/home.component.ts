@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cancelMatchMaking()
     this.isready = false
     var matchinfo: any = localStorage.getItem('matchinfo')
     if(matchinfo != null){

@@ -1,1 +1,35 @@
-<p>spectate works!</p>
+<div class="mt-5 relative">
+  <!-- Game container -->
+  <div  class="game md:flex md:gap-x-5"  :[ngClass]="{ 'opacity-30 blur-sm' : turnplayer2}"> <!-- WHILE WE'RE IN GAME -->
+
+      <!-- PLAYER 1 FIELD -->
+      <div class="w-[480px] h-[480px] p-3">
+        <p class="text-white mb-4">{{ player1 }}</p>
+
+        <div *ngFor="let row of player1field; index as y" class="grid grid-cols-10 bg-white">
+          <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
+            <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
+            <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full" ></div>
+            <div *ngIf="cell == 'hit' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error"></span></div>
+            <div *ngIf="cell == 'sunk' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error">X</span></div>
+            <div *ngIf="cell == 'water' " class="w-full h-full bg-gray-300 flex items-center justify-center text-white"><span>.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAYER 2 FIELD -->
+      <div class="w-[480px] h-[480px] p-3">
+        <p class="text-white mb-4">{{ player2 }}</p>
+
+        <div *ngFor="let row of player2field; index as y" class="grid grid-cols-10 bg-white">
+          <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
+            <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
+            <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full" ></div>
+            <div *ngIf="cell == 'hit' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error"></span></div>
+            <div *ngIf="cell == 'sunk' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error">X</span></div>
+            <div *ngIf="cell == 'water' " class="w-full h-full bg-gray-300 flex items-center justify-center text-white"><span>.</span></div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

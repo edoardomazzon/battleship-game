@@ -201,7 +201,7 @@ ios.on('connection', (socket) => {
     for(let readyplayer of ready_players_list){
       if(readyplayer.username == player.username){
         readyguard = false
-        console.log('l\'utente è già in queue')
+        console.log('l\'utente è già in queue', player.username)
       }
     }
     if(readyguard){
@@ -211,20 +211,11 @@ ios.on('connection', (socket) => {
 
   // In case a user canceled the matchmaking, we remove it from the "ready_players_list"
   socket.on('cancelmatchmaking', (player) => {
-    console.log('canceled matchmaking')
-    var playerindex = 0
+    console.log('canceled matchmakin from', player)
     for(let j = 0; j < ready_players_list.length; j++){
       if(ready_players_list[j] == player){
-        playerindex = j
-        break
+        ready_players_list.splice(j, 1)
       }
-    }
-    delete ready_players_list[playerindex]
-    for(let i = playerindex; i < ready_players_list.length; i++){
-      ready_players_list[i] = ready_players_list[i+1]
-    }    
-    if(ready_players_list.length != 0){
-      ready_players_list.length = ready_players_list.length -1
     }
   })
 
@@ -240,7 +231,7 @@ ios.on('connection', (socket) => {
   socket.on('matchended', (matchinfo) => {
     for(let i = 0; i < ongoing_matches.length; i++){
       if((ongoing_matches[i].player1 == matchinfo.player1 && ongoing_matches[i].player2 == matchinfo.player2) || (ongoing_matches[i].player1 == matchinfo.player2 && ongoing_matches[i].player2 == matchinfo.player1)){
-        ongoing_matches.splice(index, 1)
+        ongoing_matches.splice(i, 1)
         break
       }
     }
@@ -311,6 +302,17 @@ ios.on('connection', (socket) => {
   socket.on('matchleft', (leavenotification) => {
     socket.broadcast.emit('enemyleft'+leavenotification.enemy, leavenotification)
     socket.broadcast.emit('matchended'+leavenotification.current_user, {message_type: 'matchended'})    
+  })
+
+  // When a playertakes a shot, the spectators are notified with the new enemy field to show.
+  // I.e. if player1 shoots at player2, then player2's field is updated with a miss or a hit and is sent to the spectators.
+  socket.on('newenemyfieldshot', (message) => {
+    console.log('new shot to', message.enemy)
+    socket.broadcast.emit('newenemyfieldshot'+message.player1+message.player2, message)
+  })
+
+  socket.on('newfieldpositioning', (message) => {
+    socket.broadcast.emit('newfieldpositioning'+message.player, message)
   })
   
   socket.on('disconnect', () => {

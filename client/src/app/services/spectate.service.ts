@@ -15,12 +15,19 @@ export class SpectateService {
     this.socket = io(this.baseURL)
   }
 
-  spectate(){
-    return new Observable((observer) => {
-      this.socket.on('userplacedship', (message) => {
+  spectate(player1: String, player2: String){
+    console.log('Spectating player1: ', player1, ' and player2: ', player2)
+    return new Observable<any>((observer) => {
+      this.socket.on('newenemyfieldshot'+player1+player2, (newfield) => {
+        observer.next(newfield)
+      })
+      this.socket.on('newenemyfieldshot'+player2+player1, (newfield) => {
+        observer.next(newfield)
+      })
+      this.socket.on('newfieldpositioning'+player1, (message) => {
         observer.next(message)
       })
-      this.socket.on('updateplayerfield', (message) => {
+      this.socket.on('newfieldpositioning'+player2, (message) => {
         observer.next(message)
       })
     })

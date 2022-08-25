@@ -8,15 +8,22 @@
     </div>
 
   <div *ngIf="!isplaying">
-    <button *ngIf="!isready" class="btn !bg-success" (click)="readyUp()"> Ready up</button>
-    <button *ngIf="isready"  class="btn !bg-error" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
-    <app-my-profile></app-my-profile>
-    <ul *ngFor="let match of ongoing_matches">
-      <li>
-        {{ match.player1 }} vs {{ match.player2 }}
-        <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
-      </li>
-    </ul>
+    <div *ngIf="!isspectating">
+      <button *ngIf="!isready" class="btn !bg-success" (click)="readyUp()"> Ready up</button>
+      <button *ngIf="isready"  class="btn !bg-error" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
+      <app-my-profile></app-my-profile>
+      <ul *ngFor="let match of ongoing_matches">
+        <li>
+          {{ match.player1 }} vs {{ match.player2 }}
+          <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="isspectating">
+      <app-spectate></app-spectate>
+    </div>
+
   </div>
 
 

@@ -72,6 +72,14 @@ export class GameService {
     this.socket.emit('shotresult', shotresult)
   }
 
+  notifyShotToSpectators(message: any){
+    this.socket.emit('newenemyfieldshot', message)
+  }
+
+  notifyPositioningToSpectators(message: any){
+    this.socket.emit('newfieldpositioning', message)
+  }
+
   updateAccuracy(username: String, hit: Boolean){
     this._httpClient.post(this.baseURL+'updateaccuracy', {username: username, hit: hit}).subscribe()
   }

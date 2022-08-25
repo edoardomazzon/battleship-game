@@ -77,6 +77,66 @@ export class GameComponent implements OnInit {
     if(!this.youwon){this.leaveMatch('enemyleftwhileplaying')}
   }
 
+  // Used whenever a player shoots/misses/sinks a ship to notify all the spectators in order for them to update their field views.
+  // More precisely, the player notifies the spectators with the new enemy field, as the enemy will do the opposite.
+  // This way, everytime a player shoots and gets the result from the enemy, the spectators are sent the new enemy field.
+  notifyShotToSpectators(){
+    var newenemyfield = new Array()
+    for(let i = 0; i < 10; i++){
+      newenemyfield[i] = new Array()
+      for(let j = 0; j < 10; j++){
+        newenemyfield[i][j] = 'empty'
+      }
+    }
+    // Translating the enemy field into a field format that can be interpreted by the spectator component; the spectator component's field
+    // cells are just storing a string value such as 'empty', 'hit', 'sunk' or 'water'.
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){
+        if(this.enemyfield[i][j] == '?')    { newenemyfield[i][j] = 'empty' }
+        if(this.enemyfield[i][j] == 'hit')  { newenemyfield[i][j] = 'hit' }
+        if(this.enemyfield[i][j] == 'sunk') { newenemyfield[i][j] = 'sunk' }
+        if(this.enemyfield[i][j] == 'water'){ newenemyfield[i][j] = 'water' }
+      }
+    }
+    // Preparing the message
+    const message = {
+      player1: this.current_user.username,
+      player2: this.enemy,
+      enemy: this.enemy,
+      newenemyfield: newenemyfield,
+      message_type: 'newenemyfieldshot'
+    }
+    this._gameService.notifyShotToSpectators(message)
+  }
+
+  // Used whenever a player places/removes a ship to notify all the spectators in order for them to update their field views.
+  // More precisely, the player notifies the spectators with the its new field.
+  // This way, everytime a player places or removes a ship in the positioning phase, the spectators are sent the new field.
+  notifyPlacementToSpectators(){
+    var newfieldpositioning = new Array()
+    for(let i = 0; i < 10; i++){
+      newfieldpositioning[i] = new Array()
+      for(let j = 0; j < 10; j++){
+        newfieldpositioning[i][j] = 'empty'
+      }
+    }
+    // Translating the player's field into a field format that can be interpreted by the spectator component; the spectator component's field
+    // cells are just storing a string value such as 'empty' or 'placed'.
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){
+        if(this.myfield[i][j].value == 0) { newfieldpositioning[i][j] = 'empty' }
+        if(this.myfield[i][j].value > 0)  { newfieldpositioning[i][j] = 'placed' }
+      }
+    }
+    // Preparing the message
+    const message = {
+      player: this.current_user.username,
+      newfieldpositioning: newfieldpositioning,
+      message_type: 'newfieldpositioning'
+    }
+    this._gameService.notifyPositioningToSpectators(message)
+  }
+
                       /* ------------------ PHASE 1: SHIP POSITIONING PHASE ------------------ */
 
   // Used to initialize our array of ships with length values and a boolean "sunk" value; if each of these ships is sunk, it means we lost
@@ -238,6 +298,7 @@ export class GameComponent implements OnInit {
         this.myfield[y+i][x].orientation = 'v'
       }
     }
+
     // Updating the placedShips array
     for(let i = 0, counter = 0; i < this.placedShips.length && counter == 0; i++){
       if(this.placedShips[i].shiplength == length){
@@ -254,6 +315,7 @@ export class GameComponent implements OnInit {
       }
     }
     this.hasplacedallships = hasplacedallships
+    this.notifyPlacementToSpectators()
   }
 
   // This function un-does a ship placement; activated when a user right clicks on one of his positioned ships.
@@ -302,6 +364,7 @@ export class GameComponent implements OnInit {
       }
     }
     this.hasplacedallships = false
+    this.notifyPlacementToSpectators()
   }
 
   // This function uses all of the above to randomly place ships on the field
@@ -392,8 +455,8 @@ export class GameComponent implements OnInit {
                         // the enemy sent it to us, it's better to keep the "myturn" variable to false in case this user spam-clicks
                         // other cells on the enemy field while the enemy is still calculating the response.
     this._gameService.fire(this.current_user.username, this.enemy, x, y)
-    this.waitForEnemyActivity()
     this.detectedenemyactivity = false
+    this.waitForEnemyActivity()
   }
    // Function used to check if at the given coordinates and with given orientation the ship that's been hit is also sunk
    isSunk(x: any, y: any, length: any, orientation: any){
@@ -677,6 +740,7 @@ export class GameComponent implements OnInit {
           this.myturn = false
           this.enemyfield[message.x][message.y] = 'water'
         }
+        this.notifyShotToSpectators()
         this.startTimer()
         // After every shot we update the user's accuracy
         this._gameService.updateAccuracy(this.current_user.username, message.hit)
