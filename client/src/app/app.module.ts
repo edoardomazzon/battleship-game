@@ -19,6 +19,7 @@ import { ChatComponent } from './chat/chat.component';
 import { GameComponent } from './game/game.component';
 import { FriendsComponent } from './friends/friends.component';
 import { SpectateComponent } from './spectate/spectate.component';
+import { SpectatorchatComponent } from './spectatorchat/spectatorchat.component';
 
 
 const routes: Routes = [
@@ -42,7 +43,8 @@ const routes: Routes = [
     ChatComponent,
     GameComponent,
     FriendsComponent,
-    SpectateComponent
+    SpectateComponent,
+    SpectatorchatComponent
   ],
   imports: [
     BrowserModule,

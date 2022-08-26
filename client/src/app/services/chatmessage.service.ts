@@ -74,9 +74,12 @@ export class ChatmessageService {
     return messages_list
   }
 
-  sendMessage(newmessage: any){
+  sendMessage(chattype: String, newmessage: any){
     this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
     this.socket.emit('newmessage', newmessage)
+    if(chattype == 'match'){
+      this.socket.emit('newplayermessage', newmessage)
+    }
   }
 
   startChat(players: any){

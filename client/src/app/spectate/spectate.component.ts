@@ -21,10 +21,8 @@ export class SpectateComponent implements OnInit {
 
   ngOnInit(): void {
     var spectateinfo = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('spectateinfo'))))
-    if(spectateinfo != null){
-      this.player1 = spectateinfo.player1
-      this.player2 = spectateinfo.player2
-    }
+    this.player1 = spectateinfo.player1
+    this.player2 = spectateinfo.player2
     this.initFields()
     this.spectate()
   }
@@ -36,7 +34,6 @@ export class SpectateComponent implements OnInit {
       // If a player notifies us that he shot the enemy, he also sends us a new enemyfield that we have to substitute to the current
       // player1 or player2 is, depending on who the enemy is. The field in the message is already in the same format as "player1field"
       // and "player2field".
-      console.log(message)
       if(message.message_type == 'newenemyfieldshot'){
         if(message.enemy == this.player1){
           this.player1field = message.newenemyfield

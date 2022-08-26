@@ -10,7 +10,7 @@
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
             <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
             <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full" ></div>
-            <div *ngIf="cell == 'hit' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error"></span></div>
+            <div *ngIf="cell == 'hit' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error">X</span></div>
             <div *ngIf="cell == 'sunk' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error">X</span></div>
             <div *ngIf="cell == 'water' " class="w-full h-full bg-gray-300 flex items-center justify-center text-white"><span>.</span></div>
           </div>
@@ -25,10 +25,16 @@
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
             <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
             <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full" ></div>
-            <div *ngIf="cell == 'hit' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error"></span></div>
+            <div *ngIf="cell == 'hit' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error">X</span></div>
             <div *ngIf="cell == 'sunk' " class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center"><span class="text-bold text-base text-red-error">X</span></div>
             <div *ngIf="cell == 'water' " class="w-full h-full bg-gray-300 flex items-center justify-center text-white"><span>.</span></div>
           </div>
+        </div>
+      </div>
+
+      <div class="chat-live ml-8">
+        <div class="bg-gray-300 h-[480px] w-[300px]">
+          <app-spectatorchat></app-spectatorchat>
         </div>
       </div>
   </div>

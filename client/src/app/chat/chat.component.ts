@@ -13,9 +13,11 @@ export class ChatComponent implements OnInit {
   private player2: any;
   public messages: any = [];
   public newmessage: String =''
+  chattype: String
 
   constructor(private _chatmessageservice: ChatmessageService) {
     this.chatopened = false
+    this.chattype = 'match' // Can be 'match' or 'private'
   }
 
   ngOnInit(): void {
@@ -28,7 +30,6 @@ export class ChatComponent implements OnInit {
         this.chatopened = true
       }
       else if (message.message_type == 'yousentmessage' || message.message_type == 'youreceivedmessage'){
-        console.log('Ho inviato o ricevuto un messaggio:', message)
         this.messages.push(message) //Inserisco il messaggio inviato nella lista messages senza dover fare la query
         //this.messages.shift() //Shifto l'array di una posizione per eliminare il messaggio più vecchio
       }
@@ -42,10 +43,9 @@ export class ChatComponent implements OnInit {
   //Invia un messaggio quando l'utente preme sul bottone "invia"
   public sendMessage(){
     if(this.newmessage != ''){
-      const sent_message = this.newmessage
-      this.newmessage = ''
-      this._chatmessageservice.sendMessage({from: this.player1, to: this.player2, text_content: sent_message})
+      this._chatmessageservice.sendMessage(this.chattype,{from: this.player1, to: this.player2, text_content: this.newmessage})
     }
+    this.newmessage = ''
   }
 
   public closeChat(){

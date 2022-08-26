@@ -24,10 +24,16 @@ export class SpectateService {
       this.socket.on('newenemyfieldshot'+player2+player1, (newfield) => {
         observer.next(newfield)
       })
-      this.socket.on('newfieldpositioning'+player1, (message) => {
+      this.socket.on('newfieldpositioning'+player1, (newfield) => {
+        observer.next(newfield)
+      })
+      this.socket.on('newfieldpositioning'+player2, (newfield) => {
+        observer.next(newfield)
+      })
+      this.socket.on('newplayermessage'+player1, (message) => {
         observer.next(message)
       })
-      this.socket.on('newfieldpositioning'+player2, (message) => {
+      this.socket.on('newplayermessage'+player2, (message) => {
         observer.next(message)
       })
     })

@@ -307,14 +307,26 @@ ios.on('connection', (socket) => {
   // When a playertakes a shot, the spectators are notified with the new enemy field to show.
   // I.e. if player1 shoots at player2, then player2's field is updated with a miss or a hit and is sent to the spectators.
   socket.on('newenemyfieldshot', (message) => {
-    console.log('new shot to', message.enemy)
     socket.broadcast.emit('newenemyfieldshot'+message.player1+message.player2, message)
   })
 
+  // When a player places or removes a ship during the positioning phase, the spectators are notified with the new field
+  // and update their field views accordingly.
   socket.on('newfieldpositioning', (message) => {
     socket.broadcast.emit('newfieldpositioning'+message.player, message)
   })
+
+  // When a player texts the other player in a match, the spectators are notified with that message (doesn't happen in private chats between friends)
+  socket.on('newplayermessage', (message) => {
+    socket.broadcast.emit('newplayermessage'+message.from, message)
+  })
+
+    // When a spectator sends a message, the other spectators are notified with that message
+    socket.on('newspectatormessage', (message) => {
+      socket.broadcast.emit('newspectatormessage'+message.player1+message.player2, message)
+    })
   
+
   socket.on('disconnect', () => {
     //console.log("Client " + socket.id + " disconnected from Socket.io")
   })
