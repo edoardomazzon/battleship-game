@@ -16,7 +16,9 @@ export class SpectateService {
   }
 
   spectate(player1: String, player2: String){
-    console.log('Spectating player1: ', player1, ' and player2: ', player2)
+
+    this.socket.emit('imspectatingyou', {player1: player1, player2: player2, message_type: 'imspectatingyou'})
+
     return new Observable<any>((observer) => {
       this.socket.on('newenemyfieldshot'+player1+player2, (newfield) => {
         observer.next(newfield)
@@ -30,12 +32,23 @@ export class SpectateService {
       this.socket.on('newfieldpositioning'+player2, (newfield) => {
         observer.next(newfield)
       })
-      this.socket.on('newplayermessage'+player1, (message) => {
+      this.socket.on('matchended'+player1+player2, (matchinfo) => {
+        matchinfo.message_type = 'matchended'
+        observer.next(matchinfo)
+      })
+      this.socket.on('matchended'+player2+player1, (matchinfo) => {
+        matchinfo.message_type = 'matchended'
+        observer.next(matchinfo)
+      })
+      this.socket.on('playersrematch'+player1, (message) => {
+        message.message_type = 'playersrematch'
         observer.next(message)
       })
-      this.socket.on('newplayermessage'+player2, (message) => {
+      this.socket.on('playersrematch'+player2, (message) => {
+        message.message_type = 'playersrematch'
         observer.next(message)
       })
     })
   }
+
 }

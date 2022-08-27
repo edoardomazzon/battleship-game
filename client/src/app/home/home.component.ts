@@ -100,6 +100,11 @@ export class HomeComponent implements OnInit {
     localStorage.setItem('spectateinfo', JSON.stringify({player1: player1, player2: player2}))
   }
 
+  stopSpectating(){
+    this.isspectating = false
+    localStorage.removeItem('spectateinfo')
+  }
+
 
 
   /*

@@ -7,16 +7,22 @@ import { SpectateService } from '../services/spectate.service';
   styleUrls: ['./spectate.component.scss']
 })
 export class SpectateComponent implements OnInit {
+  private current_user: any
   public player1field: Array<any> = new Array()
   public player2field: Array<any> = new Array()
   public player1: any
   public player2: any
+  public winner: String
+  public gameended: Boolean
   public turnplayer1: Boolean
   public turnplayer2: Boolean
 
   constructor(private _spectateService: SpectateService) {
+    this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this.turnplayer1 = false
     this.turnplayer2 = false
+    this.gameended = false
+    this.winner = ''
   }
 
   ngOnInit(): void {
@@ -40,10 +46,19 @@ export class SpectateComponent implements OnInit {
         } else { this.player2field = message.newenemyfield }
       }
       // If a player notifies us that he placed or removed a ship, he sends us a new field to be substituted to his current field.
-      if(message.message_type == 'newfieldpositioning'){
+      else if(message.message_type == 'newfieldpositioning'){
         if(message.player == this.player1){
           this.player1field = message.newfieldpositioning
         } else { this.player2field = message.newfieldpositioning }
+      }
+      // If a player notifies us that he won the match
+      else if(message.message_type == 'matchended'){
+        this.gameended = true
+        this.winner = message.player1 // in the game component, "player1" is the current user, so the user who won the game
+      }
+      // If the players agree to a rematch, the component gets reset and the spectators can continue spectating the two players.
+      else if(message.message_type == 'playersrematch'){
+        this.initFields()
       }
     })
   }
@@ -64,5 +79,7 @@ export class SpectateComponent implements OnInit {
         this.player2field[i][j] = 'empty'
       }
     }
+    this.gameended = false
+    this.winner = ''
   }
 }

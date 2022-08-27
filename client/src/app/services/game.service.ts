@@ -52,6 +52,10 @@ export class GameService {
         observer.next(message)
       })
 
+      this.socket.on('imspectatingyou'+current_user, (message) => {
+        observer.next(message)
+      })
+
       this.socket.on('disconnected', () => {
         console.log('disconnected from game')
         this.socket.emit('matchleft', {winner: enemy, message_type: 'enemyleftwhileplaying'})

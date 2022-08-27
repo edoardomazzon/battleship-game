@@ -40,6 +40,7 @@ export class MatchmakingService {
       this.socket.on('newongoingmatches', (message) => {
         observer.next(message)
       })
+
     })
   }
 }

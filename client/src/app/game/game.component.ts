@@ -70,6 +70,7 @@ export class GameComponent implements OnInit {
 
     // Immediately start listening to various game-related events such as "enemyleft", "yougotshot", "enemyconfirmedpositioning", etc.
     this.startGame()
+    this.resetPlacement()
   }
 
   // If the user quits the game component, he loses the game
@@ -136,6 +137,7 @@ export class GameComponent implements OnInit {
     }
     this._gameService.notifyPositioningToSpectators(message)
   }
+
 
                       /* ------------------ PHASE 1: SHIP POSITIONING PHASE ------------------ */
 
@@ -421,10 +423,12 @@ export class GameComponent implements OnInit {
           value: 0,
           orientation: '',
           hit: false,
-          preview_success: 'none'
+          preview_success: 'none',
+          sunk: false
         }
       }
     }
+    this.notifyPlacementToSpectators()
   }
 
   // Used to confirm our ship positioning; once this function is activated, we can no longer change the positionig
@@ -550,7 +554,9 @@ export class GameComponent implements OnInit {
 
   // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
+    this.detectedenemyactivity = true
     clearTimeout(this.timeout)
+    this.stopTimer()
 
     var matchinfo = localStorage.getItem('matchinfo')
     var starttime = new Date()
@@ -565,6 +571,7 @@ export class GameComponent implements OnInit {
   loseGame(){
     this.detectedenemyactivity = true
     clearTimeout(this.timeout)
+    this.stopTimer()
 
     this.youlost = true
     this._gameService.loseGameDB(this.current_user.username)
@@ -683,7 +690,6 @@ export class GameComponent implements OnInit {
         this.detectedenemyactivity = true
         clearTimeout(this.timeout)
 
-
         var shotresult = {
           message_type: 'shotresult',
           firing_user: this.enemy,
@@ -799,6 +805,14 @@ export class GameComponent implements OnInit {
         clearTimeout(this.timeout)
 
         this.loseGame()
+      }
+      // When a new spectator arrives and asks us to send him our field (if we're in the positioning phase) or the enemy's field (if we
+      // are in the playing phase)
+      else if(message.message_type == 'imspectatingyou'){
+        if(this.gamestarted){
+          this.notifyShotToSpectators()
+        }
+        else{ this.notifyPlacementToSpectators() }
       }
     })
   }

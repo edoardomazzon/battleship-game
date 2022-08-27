@@ -225,6 +225,12 @@ ios.on('connection', (socket) => {
     ongoing_matches.push(matchinfo)
   })
 
+  // When a user starts spectating two players, he asks them to send him their fields updated up to that moment
+  socket.on('imspectatingyou', (players) => {
+    socket.broadcast.emit('imspectatingyou'+players.player1, (players))
+    socket.broadcast.emit('imspectatingyou'+players.player2, (players))
+  })
+
   // When a match ends, we remove it to the ongoing_matches list so other users won't join in to spectate.
   // An ongoing match is identified by the names of the two players; since the usernames are unique, it's impossible
   // for two games between the two same players to exist and be played at the same time.
@@ -235,6 +241,7 @@ ios.on('connection', (socket) => {
         break
       }
     }
+    socket.broadcast.emit('matchended'+matchinfo.player1+matchinfo.player2, matchinfo)
   })
 
   // When a user confirms its ship positioning
@@ -292,6 +299,7 @@ ios.on('connection', (socket) => {
   // When a player accepts the rematch request of the enemy after the end of a game
   socket.on('acceptrematch', (request) => {
     socket.broadcast.emit('enemyacceptedrematch'+request.receiver, request)
+    socket.broadcast.emit('playersrematch'+request.sender, (request))
   })
 
   socket.on('enemytimedout', (timeoutinfo) => {
@@ -321,11 +329,15 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('newplayermessage'+message.from, message)
   })
 
-    // When a spectator sends a message, the other spectators are notified with that message
-    socket.on('newspectatormessage', (message) => {
-      socket.broadcast.emit('newspectatormessage'+message.player1+message.player2, message)
-    })
-  
+  // When a spectator sends a message, the other spectators are notified with that message
+  socket.on('newspectatormessage', (message) => {
+    socket.broadcast.emit('newspectatormessage'+message.player1+message.player2, message)
+  })  
+
+  // When a spectator sends a message, the other spectators are notified with that message
+  socket.on('stoppedspectating', (spectator) => {
+    socket.broadcast.emit('stoppedspectating'+spectator.spectator, spectator)
+  })  
 
   socket.on('disconnect', () => {
     //console.log("Client " + socket.id + " disconnected from Socket.io")

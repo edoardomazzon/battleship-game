@@ -16,12 +16,8 @@ PROBLEMI:
 - renew session
 
 IMPLEMENTAZIONI:
-
-  1. Spostare myprofile nella stessa pagina della home: a sinsitra mostiramo i match in corso e a destra il nostro profilo (questo ci 
-     semplifica molto la vita)
+  3. Se fai il logout dopo che hai vinto, comunque perdi
+  4. Quando uno spettatore entra deve vedere subito lo stato della partita senza dover aspettare una emit dei giocatori che mostri la mappa
   5. Inviti a giocare (a questo punto facciamo la sezione notifiche nella barra in alto di cui vi spiegherò come vorrei farla)
   6. Chat non chiudibile durante la partita
   7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)
-
-  8. Mostrare la lista degli ongoing_matches nell'home component
-  9. Fare gli spettatori
