@@ -16,8 +16,22 @@ PROBLEMI:
 - renew session
 
 IMPLEMENTAZIONI:
+  2. Quando comincia un match, la chat del match non deve caricare dal db gli ultimi messaggi tra i due giocatori; se vogliono continuare la conversazione
+      privata lo fanno una volta finita la partita.
   3. Se fai il logout dopo che hai vinto, comunque perdi
-  4. Quando uno spettatore entra deve vedere subito lo stato della partita senza dover aspettare una emit dei giocatori che mostri la mappa
   5. Inviti a giocare (a questo punto facciamo la sezione notifiche nella barra in alto di cui vi spiegherò come vorrei farla)
   6. Chat non chiudibile durante la partita
   7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)
+  8. Migliorare graficamente lo spectator component html
+  9. Aggiungere lista degli utenti bloccati da poter sbloccare
+
+ULTIMI LAVORI IMPORTANTI:
+
+  - Sistemare la chat: capire come distinguere una chat fra amici (quindi privata) e una chat in match (quindi pubblica e i cui messaggi non vanno salvati a DB)
+  - Sistema di notifiche (decidere come fare interagire header component e friends component con le notifiche; per ora l'idea è mostrare nella sezione notifiche
+    con la campanella solo gli inviti a giocare e i messaggi, mentre per le richeiste di amicizia mostriamo il badge sul simbolo del friend component)
+  - Pannello amministratore: bloccare utente; bannare utente; promuovere utente ad admin; vedere statistiche; resettare statistiche; inviare avvisi a tutti gli utenti
+    (sotto forma di notifica); viste da db con diversi ordinamenti (in base al punteggio o altre statistiche). Pensavamo di salvarci nel client tutti gli utenti
+    e ordinarli direttamente da lì senza fare query complicate ogni volta; per ordinarli basta cliccare sul nome della colonna che contiene il valore del quale
+    ci interessa l'ordinamento.
+  - Se clicchi su un utente vedi in un pop up le sue statistiche
