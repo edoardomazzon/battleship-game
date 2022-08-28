@@ -50,7 +50,6 @@ export class GameComponent implements OnInit {
     this.enemytimedout = false
     this.enemywantsrematch = false
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
-    console.log(this.current_user)
     var matchinfo = localStorage.getItem('matchinfo')
     if(matchinfo){
       this.enemy = JSON.parse(matchinfo).enemy

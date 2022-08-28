@@ -20,6 +20,7 @@ import { GameComponent } from './game/game.component';
 import { FriendsComponent } from './friends/friends.component';
 import { SpectateComponent } from './spectate/spectate.component';
 import { SpectatorchatComponent } from './spectatorchat/spectatorchat.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 const routes: Routes = [
@@ -44,7 +45,8 @@ const routes: Routes = [
     GameComponent,
     FriendsComponent,
     SpectateComponent,
-    SpectatorchatComponent
+    SpectatorchatComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

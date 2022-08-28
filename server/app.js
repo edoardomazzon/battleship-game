@@ -51,8 +51,11 @@ const removeFriendRoute = require('./routes/removefriend')
 const friendRequestRoute = require('./routes/friendrequest');
 const blacklistUserRoute = require('./routes/blacklistuser');
 const updateAccuracyRoute = require('./routes/updateaccuracy');
+const createNotificationRoute = require('./routes/createnotification');
+const deleteNotificationRoute = require('./routes/deletenotification');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
+const retrieveNotificationsRoute = require('./routes/retrievenotifications')
 
 // Telling the app which route (declared above) to use in correspondance to a given localhost URL path
 app.use('/', indexRoute);
@@ -68,8 +71,11 @@ app.use('/removefriend', removeFriendRoute);
 app.use('/friendrequest', friendRequestRoute);
 app.use('/blacklistuser', blacklistUserRoute);
 app.use('/updateaccuracy', updateAccuracyRoute);
+app.use('/createnotification', createNotificationRoute);
+app.use('/deletenotification', deleteNotificationRoute);
 app.use('/acceptfriendrequest', acceptFriendRequestRoute);
 app.use('/rejectfriendrequest', rejectFriendRequestRoute);
+app.use('/retrievenotifications', retrieveNotificationsRoute);
 
 // Setting up MatchMaking logic
 var ready_players_list = new Array() // This list is updated with a new user when he clicks "ready up", sending a "readytoplay" emit
@@ -201,7 +207,6 @@ ios.on('connection', (socket) => {
     for(let readyplayer of ready_players_list){
       if(readyplayer.username == player.username){
         readyguard = false
-        console.log('l\'utente è già in queue', player.username)
       }
     }
     if(readyguard){
@@ -211,7 +216,6 @@ ios.on('connection', (socket) => {
 
   // In case a user canceled the matchmaking, we remove it from the "ready_players_list"
   socket.on('cancelmatchmaking', (player) => {
-    console.log('canceled matchmakin from', player)
     for(let j = 0; j < ready_players_list.length; j++){
       if(ready_players_list[j] == player){
         ready_players_list.splice(j, 1)
@@ -337,7 +341,27 @@ ios.on('connection', (socket) => {
   // When a spectator sends a message, the other spectators are notified with that message
   socket.on('stoppedspectating', (spectator) => {
     socket.broadcast.emit('stoppedspectating'+spectator.spectator, spectator)
-  })  
+  })
+
+  // When a user sends a message to another user who is currently offline (or doesn't have the chat open) or sends an invite to play,
+  // a notification is sent
+  socket.on('newnotification', (notification) => {
+    socket.broadcast.emit('newnotification'+notification.user, notification)
+  })
+
+  // When a user accepts a friend's invite to play a match
+  socket.on('acceptmatch', (inviteinfo) => {
+    socket.broadcast.emit('matchinviteaccepted'+inviteinfo.accepted_user, inviteinfo)
+  })
+
+  // Alternative
+  socket.on('availableformatch', (matchinfo) => {
+    ios.emit('matchstarted'+matchinfo.user, { 
+      message_type: 'yougotmatched',
+      enemy: matchinfo.from,
+      starttime: matchinfo.starttime
+    })
+  })
 
   socket.on('disconnect', () => {
     //console.log("Client " + socket.id + " disconnected from Socket.io")

@@ -14,7 +14,21 @@
     <span class="text-xxs uppercase font-bold">Game</span>
   </a>
 
+
+
   <div class="flex" *ngIf="this._authservice.isAuthenticated()">
+
+    <div class="btn mr-5 cursor-pointer" (click)="openNotifications()">
+      <svg class="w-8 h-8" viewBox="0 0 475.851 475.851">
+
+      </svg>
+    </div>
+
+    <!-- Notifications menu -->
+    <div *ngIf="notificationsTab" class="tendina absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10">
+      <app-notifications></app-notifications>
+    </div>
+
     <div class="btn mr-5 cursor-pointer" (click)="openFriendsMenu()">
       <svg class="w-8 h-8" viewBox="0 0 475.851 475.851">
         <g>
@@ -30,13 +44,10 @@
       </svg>
     </div>
 
-    <!-- tendina con dentro due sezioni (amici e richieste) -->
-    <div
-      *ngIf="this.friendsTab"
-      class="tendina absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10"
-    >
-      <app-friends></app-friends>
-    </div>
+      <!-- tendina con dentro due sezioni (amici e richieste) -->
+      <div *ngIf="friendsTab" class="tendina absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10">
+        <app-friends></app-friends>
+      </div>
 
     <div class="btn cursor-pointer" (click)="openProfileMenu()">
       <svg class="w-8 h-8" style="vertical-align: middle;fill:#fff;overflow:hidden;" viewBox="0 0 1024 1024">
@@ -46,7 +57,7 @@
 
     <!-- tendina con dentro due voci (vai al profilo e logout) -->
     <div
-      *ngIf="this.profileTab"
+      *ngIf="profileTab"
       class="tendina absolute top-full right-8 bg-gray-300 text-black p-5 flex flex-col items-center z-10"
     >
       <button (click)="gotoprofile()" class="w-max mb-2 pb-2 border-b border-white">Go to profile</button>

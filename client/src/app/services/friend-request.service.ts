@@ -108,6 +108,17 @@ export class FriendRequestService {
     })
   }
 
+  inviteToPlay(current_user: String, friend: String){
+    var notification = {
+      user: friend,
+      from: current_user,
+      notification_type: 'matchinvite',
+      timestamp: new Date()
+    }
+    this.socket.emit('newnotification', notification )
+    this._httpClient.post(this.baseURL+'createnotification', notification).subscribe()
+  }
+
 
   listenToAnsweredRequests(current_username: String): Observable <any>{
     return new Observable((observer) => {

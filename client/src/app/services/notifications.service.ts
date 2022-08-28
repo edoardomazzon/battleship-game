@@ -1,0 +1,29 @@
+import { Injectable } from '@angular/core';
+import {io, Socket} from 'socket.io-client';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class NotificationsService {
+  private socket: Socket;
+  private baseURL = 'http://localhost:3000/'
+
+  constructor(private _httpClient: HttpClient) {
+    this.socket = io(this.baseURL)
+  }
+
+  listenToNotifications(current_user: String): Observable <any>{
+    return new Observable<any>((observer) => {
+      this.socket.on('newnotification'+current_user, (notification) => {
+        observer.next(notification)
+      })
+    })
+  }
+
+  acceptMatch(matchinfo: any){
+    this.socket.emit('acceptmatch', matchinfo)
+  }
+
+}

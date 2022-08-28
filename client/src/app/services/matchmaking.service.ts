@@ -27,6 +27,13 @@ export class MatchmakingService {
     this.socket.emit('matchcreated', match_info)
   }
 
+  availableForMatch(current_user: String, accepting_user: String, starttime: Date){
+    this.socket.emit('availableformatch', {
+      user: accepting_user,
+      from: current_user,
+      starttime: starttime})
+  }
+
   listenToMatchmaking(current_user: any): Observable <any>{
     return new Observable((observer) => {
       this.socket.on('matchstarted'+current_user.username, (matchinfo) => {
@@ -41,6 +48,9 @@ export class MatchmakingService {
         observer.next(message)
       })
 
+      this.socket.on('matchinviteaccepted'+current_user.username, (message) => {
+        observer.next(message)
+      })
     })
   }
 }

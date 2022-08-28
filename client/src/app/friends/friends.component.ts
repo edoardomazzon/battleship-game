@@ -241,4 +241,9 @@ export class FriendsComponent implements OnInit {
       chat_type: 'private'
     })
   }
+
+  // Invites a friend to play a match
+  inviteToPlay(friend: String){
+    this._friendRequestService.inviteToPlay(this.current_user.username, friend)
+  }
 }

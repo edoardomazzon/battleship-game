@@ -1,0 +1,12 @@
+<div class="min-w-[480px]">
+
+  <!-- In this section we show our friend requests with the possibility of looking up users to send them a friend request or block them -->
+  <ul *ngFor="let notification of notifications">
+    <li *ngIf="notification != undefined && notification != null && notification.notification_type == 'matchinvite'">
+      {{ notification.from }} invited you to a game
+      <button class="btn !bg-success" (click)="acceptMatch(notification.from); markNotificationAsRead(notification)">Accept match</button>
+    </li>
+  </ul>
+
+</div>
+

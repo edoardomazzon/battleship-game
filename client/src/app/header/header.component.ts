@@ -11,10 +11,12 @@ export class HeaderComponent implements OnInit {
 
   public profileTab: Boolean
   public friendsTab: Boolean
+  public notificationsTab: Boolean
 
   constructor(private _router: Router, public _authservice: AuthService) {
     this.friendsTab = false
     this.profileTab = false
+    this.notificationsTab = false
   }
 
   ngOnInit() {
@@ -43,9 +45,16 @@ export class HeaderComponent implements OnInit {
   openProfileMenu(){
     this.profileTab = !this.profileTab
     this.friendsTab = false
+    this.notificationsTab = false
   }
   openFriendsMenu(){
     this.friendsTab = !this.friendsTab
+    this.profileTab = false
+    this.notificationsTab = false
+  }
+  openNotifications(){
+    this.notificationsTab = !this.notificationsTab
+    this.friendsTab = false
     this.profileTab = false
   }
 }

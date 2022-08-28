@@ -57,7 +57,6 @@ export class HomeComponent implements OnInit {
       if(observer.message_type == 'yougotmatched'){
         this.isready = false
         this.isplaying = true
-        console.log(observer.starttime)
         localStorage.setItem('matchinfo', JSON.stringify({
           isplaying: JSON.stringify(true),
           enemy: observer.enemy,
@@ -92,6 +91,41 @@ export class HomeComponent implements OnInit {
         }
         this.ongoing_matches = observer.ongoing_matches
       }
+      // If a user accepted our invite to play
+      if(observer.message_type == 'matchinviteaccepted'){
+        // If we're not playing or waiting to play, we can start the match and notify the other user that he can start loading its match itnerface
+        if(!this.isplaying && !this.isready){
+          const starttime = new Date()
+
+          localStorage.setItem('matchinfo', JSON.stringify({
+            isplaying: JSON.stringify(true),
+            enemy: observer.accepting_user,
+            starttime: starttime
+          }))
+
+          var player1
+          var player2
+          if(this.current_user.username.localeCompare(observer.accepting_user) < 0){ player1 = this.current_user.username; player2 = observer.accepting_user }
+          else{ player1 = observer.accepting_user; player2 = this.current_user.username }
+
+          this._matchMakingService.createMatch({
+            player1: player1,
+            player2: player2,
+            winner: '',
+            timestamp: starttime
+          })
+
+          this.availableForMatch(this.current_user.username, observer.accepting_user, starttime)
+
+          this.isready = false
+          this.isplaying = true
+
+        }
+        // If we're already in a match, we ignore the fact that the user accepted our invite and notify him that we are not available atm
+        else{
+
+        }
+      }
     })
   }
 
@@ -105,6 +139,9 @@ export class HomeComponent implements OnInit {
     localStorage.removeItem('spectateinfo')
   }
 
+  availableForMatch(current_user: String, accepting_user: String, starttime: Date){
+    this._matchMakingService.availableForMatch(current_user, accepting_user, starttime)
+  }
 
 
   /*
