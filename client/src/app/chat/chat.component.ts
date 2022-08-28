@@ -13,7 +13,7 @@ export class ChatComponent implements OnInit {
   private player2: any;
   public messages: any = [];
   public newmessage: String =''
-  chattype: String
+  public chattype: String
 
   constructor(private _chatmessageservice: ChatmessageService) {
     this.chatopened = false
@@ -21,13 +21,21 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getMessages()
     this._chatmessageservice.receiveMessages().subscribe((message) => {
+      // When another component tells us to open a chat between us and another user (let it be a friend or an opponent during a random match)
       if(message.message_type == 'openchat'){
         this.player1 = message.current_user
         this.player2 = message.other_user
-        this.getMessages()
+        if(message.chat_type == 'private'){
+          this.chattype = 'private'
+          this.getMessages()
+        }
+        if(message.chat_type == 'match'){
+          // Mettere una variabile a false in modo che non compaia il bottone "close chat" perché durante il match
+          // La chat non può essere chiusa
+        }
         this.chatopened = true
+        console.log(this.chattype)
       }
       else if (message.message_type == 'yousentmessage' || message.message_type == 'youreceivedmessage'){
         this.messages.push(message) //Inserisco il messaggio inviato nella lista messages senza dover fare la query
@@ -36,6 +44,7 @@ export class ChatComponent implements OnInit {
     })
   }
 
+  // Queries the last messages between the two users if the chat is opened in private cirsumstance (meaning not during a match)
   public getMessages(){
     this.messages = this._chatmessageservice.getMessagesFromDb(this.player1, this.player2)
   }

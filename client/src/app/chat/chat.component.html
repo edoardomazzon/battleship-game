@@ -1,5 +1,10 @@
+<!--
+  Se la chat è di tipo "private" (o qualsiasi cosa che non sia "match"), di default deve comparire un simbolo in "absolute" in cima a tutto
+  che si espande quando premiamo "open chat" dalla friends list (quindi NON si espande quando ci clicchiamo sopra, ha solo scopo grafico)
+-->
+
 <div *ngIf="this.chatopened == true" class="pb-5 pt-6 pl-3 relative">
-  <div (click)="closeChat()" class="cursor-pointer absolute left-0 top-0">
+  <div *ngIf="chattype != 'match'" (click)="closeChat()" class="cursor-pointer absolute left-0 top-0"> <!-- if we're in a match we can't close the chat-->
     <span class="w-7 h-0.5 bg-black block relative -rotate-45"></span>
     <span class="w-7 h-0.5 bg-black block relative rotate-45 -mb-4"></span>
   </div>

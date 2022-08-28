@@ -13,7 +13,7 @@
       <button *ngIf="isready"  class="btn !bg-error" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
       <app-my-profile></app-my-profile>
       <ul *ngFor="let match of ongoing_matches">
-        <li>
+        <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
           {{ match.player1 }} vs {{ match.player2 }}
           <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
         </li>
@@ -24,6 +24,8 @@
       <app-spectate></app-spectate>
       <button class="btn !bg-error" (click)="stopSpectating()">Stop spectating</button>
     </div>
+
+    <app-chat></app-chat>
 
   </div>
 

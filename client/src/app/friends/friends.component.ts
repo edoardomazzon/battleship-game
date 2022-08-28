@@ -235,8 +235,10 @@ export class FriendsComponent implements OnInit {
   openChat(friend: String){
     this.friendsSection1 = false
     this._chatMessageService.startChat({
+      message_type: 'openchat',
       current_user: this.current_user.username,
-      other_user: friend
+      other_user: friend,
+      chat_type: 'private'
     })
   }
 }

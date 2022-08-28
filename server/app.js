@@ -149,7 +149,7 @@ var confirmedpositonings = new Array()
 ios.on('connection', (socket) => {
   //console.log("Socekt.io client connected with ID: ", socket.id)
   
-  socket.on('chatstarted', (players) => {
+  socket.on('startchat', (players) => {
     socket.emit('openchat', players)
   })
 

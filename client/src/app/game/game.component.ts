@@ -3,7 +3,6 @@ import { ChatmessageService } from '../services/chatmessage.service';
 import { GameService } from '../services/game.service';
 import { MatchmakingService } from '../services/matchmaking.service';
 import { HostListener } from '@angular/core';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-game',
@@ -36,7 +35,6 @@ export class GameComponent implements OnInit {
   public enemywantsrematch: Boolean
 
   constructor(private _chatMessageService: ChatmessageService, private _gameService: GameService, private _matchMakingService: MatchmakingService) {
-    this.resetPlacement()
     this.initMyShips()
     this.isplaying = false
     this.gamestarted = false
@@ -52,10 +50,12 @@ export class GameComponent implements OnInit {
     this.enemytimedout = false
     this.enemywantsrematch = false
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    console.log(this.current_user)
     var matchinfo = localStorage.getItem('matchinfo')
     if(matchinfo){
       this.enemy = JSON.parse(matchinfo).enemy
     }
+    this.resetPlacement()
   }
   // If the user quits the game component, he loses the game
   @HostListener('window: beforeunload', ['$event'])
@@ -64,13 +64,9 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if we came back to this game while we're still in a match; in that case we need to reload all the info
-    // (who's turn it was, our ship placement, enemy's ship placement, our sunken ships, etc.)
-    //*****//
-
     // Immediately start listening to various game-related events such as "enemyleft", "yougotshot", "enemyconfirmedpositioning", etc.
     this.startGame()
-    this.resetPlacement()
+    //this.resetPlacement()
   }
 
   // If the user quits the game component, he loses the game
@@ -270,11 +266,13 @@ export class GameComponent implements OnInit {
     if(orientation == "h"){
       for(let i = 0; i < length && x+i < 10; i++){
         this.myfield[y][x+i].preview_success = success
+        console.log('La cella in pos ',x+i,' '+y+' è a '+this.myfield[y][x+i].preview_success)
       }
     }
     else{
       for(let i = 0; i < length && y+i < 10; i++){
         this.myfield[y+i][x].preview_success = success
+        console.log('La cella in pos '+x+' ', y+i,' è a '+this.myfield[y+i][x].preview_success)
       }
     }
   }
@@ -423,8 +421,7 @@ export class GameComponent implements OnInit {
           value: 0,
           orientation: '',
           hit: false,
-          preview_success: 'none',
-          sunk: false
+          preview_success: 'none'
         }
       }
     }
@@ -455,11 +452,10 @@ export class GameComponent implements OnInit {
 
   // Used to fire a shot at the enemy in the given coordinates (activated when a user clicks on those coordinates)
   fire(x: any, y: any){
-    // this.myturn = false // Immediately prevent the user from shooting again for safety; since the hit confirmation arrives after
+    //this.myturn = false // Immediately prevent the user from shooting again for safety; since the hit confirmation arrives after
                         // the enemy sent it to us, it's better to keep the "myturn" variable to false in case this user spam-clicks
                         // other cells on the enemy field while the enemy is still calculating the response.
     this._gameService.fire(this.current_user.username, this.enemy, x, y)
-    this.detectedenemyactivity = false
     this.waitForEnemyActivity()
   }
    // Function used to check if at the given coordinates and with given orientation the ship that's been hit is also sunk
@@ -593,6 +589,7 @@ export class GameComponent implements OnInit {
 
   waitForEnemyActivity(){
     console.log('waiting for enemy activity')
+    this.detectedenemyactivity = false
     this.timeout = setTimeout(() => {
       if(!this.detectedenemyactivity){
         this.enemytimedout = true
@@ -664,7 +661,7 @@ export class GameComponent implements OnInit {
   // Function invoked once both players have confirmed the ship positioning; once the game starts, the enemy field is initialized
   // With '?' values (meaning we don't know what is in that position) and the chat between the two users can start.
   startGame(){
-    // Now we start listening to shots fired at us or to results of shots we fired at the enemy
+    // Start listening to all game-related events
     this._gameService.startGame(this.current_user.username, this.enemy).subscribe((message: any) => {
       // If the enemy confirms his ship positioning, we can start playing
       if(message.message_type == 'enemyconfirmed'){
@@ -680,8 +677,10 @@ export class GameComponent implements OnInit {
         if(!this.myturn){ this.waitForEnemyActivity() }
         // Once the game starts the two players can also start chatting
         this._chatMessageService.startChat({
+          message_type: 'openchat',
           current_user: this.current_user.username,
-          other_user: this.enemy
+          other_user: this.enemy,
+          chat_type: 'match'
         })
       }
       // If the enemy fires a shot in our field, we prepare the result that is to be given back to him with the shot results
@@ -690,34 +689,30 @@ export class GameComponent implements OnInit {
         this.detectedenemyactivity = true
         clearTimeout(this.timeout)
 
-        var shotresult = {
-          message_type: 'shotresult',
-          firing_user: this.enemy,
-          fired_user: this.current_user.username,
-          x: message.x,
-          y: message.y,
-          length: this.myfield[message.x][message.y].value,
-          hit: false,
-          sunk: false,
-          sunkship: new Array(),
-          youwon: false
-        }
-        if(this.myfield[message.x][message.y].value != 0){ // If there's a ship in the coordinates the enemy has shot
+        var shotresult = { message_type: 'shotresult', firing_user: this.enemy, fired_user: this.current_user.username,
+          x: message.x, y: message.y, length: this.myfield[message.x][message.y].value, hit: false, sunk: false, sunkship: new Array(), youwon: false}
+
+        // If there's a ship in the coordinates the enemy has shot
+        if(this.myfield[message.x][message.y].value != 0){
           this.myfield[message.x][message.y].hit = true
           shotresult.hit = true
           // If the ship the enemy hit has also been sunk
           if(this.isSunk(message.x, message.y, this.myfield[message.x][message.y].value, this.myfield[message.x][message.y].orientation)){
             shotresult.sunk = true
-            this.sinkShip(this.myfield[message.x][message.y].value)
+            this.sinkShip(this.myfield[message.x][message.y].value) // Decrementing the number of remaining ships
             for(let sunk of this.sunkship){
               shotresult.sunkship.push(sunk)
             }
             if(this.youLost()){ shotresult.youwon = true; this.loseGame()}
           }
         }
-        else{this.myfield[message.x][message.y].value = -1; this.myturn = true;} // If the enemy misses then it's our turn
+        // Else if there isn't any ship in the coordinates the enemy has shot
+        else{
+          this.myfield[message.x][message.y].value = -1
+          this.myturn = true
+        }
         this._gameService.sendShotResult(shotresult)
-        if(shotresult.hit && !this.youlost){this.waitForEnemyActivity(); this.detectedenemyactivity = false }
+        if(shotresult.hit && !this.youlost){this.waitForEnemyActivity(); this.myturn = false }
         this.startTimer()
       }
       // If we shot and receive the result from the enemy we update our enemyfield with the appropriate symbols
@@ -742,7 +737,6 @@ export class GameComponent implements OnInit {
         }
         else if(!message.hit){
           this.waitForEnemyActivity();
-          this.detectedenemyactivity = false
           this.myturn = false
           this.enemyfield[message.x][message.y] = 'water'
         }
@@ -806,8 +800,7 @@ export class GameComponent implements OnInit {
 
         this.loseGame()
       }
-      // When a new spectator arrives and asks us to send him our field (if we're in the positioning phase) or the enemy's field (if we
-      // are in the playing phase)
+      // When a new spectator joins the match, the players must send him their field (if in the positioning phase) or the enemy's field (if in the playing phase)
       else if(message.message_type == 'imspectatingyou'){
         if(this.gamestarted){
           this.notifyShotToSpectators()

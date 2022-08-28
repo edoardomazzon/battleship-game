@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   public isready = false
   public isplaying: Boolean
   public isspectating: Boolean
-  private current_user: any
+  public current_user: any
   public ongoing_matches: any
 
   constructor(private _router: Router, private _httpClient: HttpClient, private _matchMakingService: MatchmakingService) {
