@@ -266,13 +266,11 @@ export class GameComponent implements OnInit {
     if(orientation == "h"){
       for(let i = 0; i < length && x+i < 10; i++){
         this.myfield[y][x+i].preview_success = success
-        console.log('La cella in pos ',x+i,' '+y+' è a '+this.myfield[y][x+i].preview_success)
       }
     }
     else{
       for(let i = 0; i < length && y+i < 10; i++){
         this.myfield[y+i][x].preview_success = success
-        console.log('La cella in pos '+x+' ', y+i,' è a '+this.myfield[y+i][x].preview_success)
       }
     }
   }
