@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
   public selectedShip: any
   public hasconfirmedpositioning: Boolean
   public hasplacedallships: Boolean
+  public warning: any
   public youwon: Boolean
   public youlost: Boolean
   public enemyleft: Boolean
@@ -42,6 +43,7 @@ export class GameComponent implements OnInit {
     this.detectedenemyactivity = false
     this.selectedShip = 'none'
     this.hasplacedallships = false
+    this.warning = null
     this.hasconfirmedpositioning = false
     this.youwon = false
     this.youlost = false
@@ -429,6 +431,14 @@ export class GameComponent implements OnInit {
   confirmShipPlacement(){
     this._gameService.confirmShipPlacement(this.current_user.username, this.enemy)
     this.hasconfirmedpositioning = true
+  }
+
+  // Warns the user that he has to place all the ships before confirming the positioning
+  warnShipPlacement(){
+    this.warning = 'Place all your ships before confirming!'
+    setTimeout(() => {
+      this.warning = null
+    }, 2000)
   }
 
 

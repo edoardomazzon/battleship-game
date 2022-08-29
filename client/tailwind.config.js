@@ -41,6 +41,10 @@ module.exports = {
         red: {
           error: '#a61212',
           DEFAULT: 'red'
+        },
+        yellow: {
+          DEFAULT:'yellow',
+          warning: '#D4AE04'
         }
       },
       // height: {

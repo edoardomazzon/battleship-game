@@ -1,4 +1,4 @@
-<div class="min-w-[480px]">
+<div *ngIf="notifications.length > 0" class="min-w-[480px]" >
 
   <!-- In this section we show our friend requests with the possibility of looking up users to send them a friend request or block them -->
   <ul *ngFor="let notification of notifications">

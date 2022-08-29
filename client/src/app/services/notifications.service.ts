@@ -28,6 +28,7 @@ export class NotificationsService {
 
   acceptMatch(matchinfo: any){
     this.socket.emit('acceptmatch', matchinfo)
+    this.socket.emit('cancelmatchmaking', matchinfo.accepting_user) //If we accept a match we also cancel the matchmaking
   }
 
 }

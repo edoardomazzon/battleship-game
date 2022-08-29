@@ -1,6 +1,6 @@
-<header class="relative flex items-center justify-between bg-sepia px-8 py-3 drop-shadow-lg">
+<header class="relative flex items-center justify-between bg-sepia px-8 py-2 drop-shadow-lg">
   <!--Logo -->
-  <a (click)="gotoHome()" class="flex items-center text-gray-700 cursor-pointer">
+  <a class="flex items-center text-gray-700">
     <span class="text-xxs uppercase font-bold">Battle</span>
     <svg class="w-12 h-12" viewBox="0 0 402 402">
       <g>
@@ -20,12 +20,12 @@
 
     <div class="btn mr-5 cursor-pointer" (click)="openNotifications()">
       <svg class="w-8 h-8" viewBox="0 0 475.851 475.851">
-
       </svg>
+      <span *ngIf="unreadnotifications > 0" class="text-red">{{ unreadnotifications }}</span>
     </div>
 
     <!-- Notifications menu -->
-    <div *ngIf="notificationsTab" class="tendina absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10">
+    <div *ngIf="notificationsTab" class="absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10">
       <app-notifications></app-notifications>
     </div>
 
@@ -45,7 +45,7 @@
     </div>
 
       <!-- tendina con dentro due sezioni (amici e richieste) -->
-      <div *ngIf="friendsTab" class="tendina absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10">
+      <div *ngIf="friendsTab" class="absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10">
         <app-friends></app-friends>
       </div>
 
@@ -56,11 +56,7 @@
     </div>
 
     <!-- tendina con dentro due voci (vai al profilo e logout) -->
-    <div
-      *ngIf="profileTab"
-      class="tendina absolute top-full right-8 bg-gray-300 text-black p-5 flex flex-col items-center z-10"
-    >
-      <button (click)="gotoprofile()" class="w-max mb-2 pb-2 border-b border-white">Go to profile</button>
+    <div *ngIf="profileTab" class="absolute top-full right-8 bg-gray-300 text-black p-5 flex flex-col items-center z-10">
       <button (click)="logoutUser()">Logout</button>
     </div>
   </div>

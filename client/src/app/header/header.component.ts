@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
 import { AuthService} from '../services/auth.service';
+import { NotificationsService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-header',
@@ -12,26 +13,26 @@ export class HeaderComponent implements OnInit {
   public profileTab: Boolean
   public friendsTab: Boolean
   public notificationsTab: Boolean
+  public unreadnotifications: number
+  private current_user: any
 
-  constructor(private _router: Router, public _authservice: AuthService) {
+  constructor(private _router: Router, public _authservice: AuthService, private _notificationsService: NotificationsService) {
+    this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this.friendsTab = false
     this.profileTab = false
     this.notificationsTab = false
+    this.unreadnotifications = 0
   }
 
   ngOnInit() {
-  }
-  gotoprofile() {
-    this.profileTab = false
-    this._router.navigateByUrl('/myprofile')
+    this.countUnreadNotifications()
   }
 
-  gotoHome() {
-    this.profileTab = false
-    this.friendsTab = false
-    this._router.navigateByUrl('/')
+  countUnreadNotifications(){
+    this._notificationsService.listenToNotifications(this.current_user.username).subscribe((notification) => {
+      if(!this.notificationsTab){ this.unreadnotifications += 1 }
+    })
   }
-
 
   logoutUser(){
     this.profileTab = false
@@ -53,8 +54,9 @@ export class HeaderComponent implements OnInit {
     this.notificationsTab = false
   }
   openNotifications(){
-    this.notificationsTab = !this.notificationsTab
     this.friendsTab = false
     this.profileTab = false
+    this.unreadnotifications = 0
+    this.notificationsTab = !this.notificationsTab
   }
 }

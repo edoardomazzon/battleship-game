@@ -1,7 +1,7 @@
 <div>
   <!-- Commentare il div sottostante se si vuole avere i campi di prova subito in alto nella home -->
   <div class="game-container h-screen w-50 bg-navy">
-    <h1 class="text-center pt-5">Battleship game</h1>
+    <h1 class="text-center pt-1 text-white">Battleship game</h1>
 
     <div *ngIf="isplaying">
       <app-game></app-game>
@@ -9,8 +9,11 @@
 
   <div *ngIf="!isplaying">
     <div *ngIf="!isspectating">
-      <button *ngIf="!isready" class="btn !bg-success" (click)="readyUp()"> Ready up</button>
-      <button *ngIf="isready"  class="btn !bg-error" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
+      <div class="text-center pt-4">
+        <button *ngIf="!isready" class="text-center btn !bg-success" (click)="readyUp()"> Ready up</button>
+        <button *ngIf="isready"  class="btn !bg-red-error" (click)="cancelMatchMaking()"> Cancel Matchmaking</button>
+      </div>
+
       <app-my-profile></app-my-profile>
       <ul *ngFor="let match of ongoing_matches">
         <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
@@ -22,7 +25,10 @@
 
     <div *ngIf="isspectating">
       <app-spectate></app-spectate>
-      <button class="btn !bg-error" (click)="stopSpectating()">Stop spectating</button>
+      <div class="text-center pt-4">
+        <button class="btn !bg-red-error" (click)="stopSpectating()">Stop spectating</button>
+      </div>
+
     </div>
 
     <app-chat></app-chat>

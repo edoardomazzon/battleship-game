@@ -77,6 +77,15 @@ export class NotificationsComponent implements OnInit {
       message_type: 'matchinviteaccepted'})
   }
 
+  // If the user refuses to play with a friend, all the "matchinvite" notifications coming from that friend are deleted
+  rejectMatch(inviter: String){
+    for(let i = 0; i < this.notifications.length; i++){
+      if(this.notifications[i].from == inviter && this.notifications[i].notification_type == 'matchinvite'){
+        delete(this.notifications[i])
+      }
+    }
+  }
+
   // Sorts notifications by showing the most recent ones first
   orderLastFirst(){
     this.notifications.sort((a: any, b: any) => (a.timestamp.getTime() > b.timestamp.getTime()) ? 1 : -1 )
