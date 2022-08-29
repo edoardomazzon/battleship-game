@@ -34,6 +34,13 @@ export class MatchmakingService {
       starttime: starttime})
   }
 
+  notAvailableForMatch(current_user: String, accepting_user: String){
+    this.socket.emit('notavailableformatch', {
+      user: accepting_user,
+      from: current_user})
+  }
+
+
   listenToMatchmaking(current_user: any): Observable <any>{
     return new Observable((observer) => {
       this.socket.on('matchstarted'+current_user.username, (matchinfo) => {

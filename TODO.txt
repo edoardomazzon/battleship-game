@@ -2,22 +2,14 @@ In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli pro
 
 
 PROBLEMI:
-- Cercare di azzerare i ricaricamenti di pagina; ad esempio quando facciamo leaveMatch() la pagina viene ricaricata, mentre sarebbe meglio
-  fare una emit alla home component dicendo che il game component è da chiudere (basta mettere isplaying = false nella home component)
-- [sistemabile mettendo profile e home nella stess pagina]Se un giocatore si mette in attesa (ready up) ma poi va nel suo profilo e poi ritorna alla home, nel frattempo era rimasto comunque 
-  in coda e adesso si può riaggiungere un'altra volta.
-    1. O facciamo in modo che non si possa andare da nessuna parte finché sei in stato di ready
-    2. O facciamo che ogni volta che l'utente esce dalla homepage venga cambiato in false lo stato isready
+
 - controllare TUTTE le volte che viene salvato il current user in localstorage e togliergli salt digest e password mettendoli a null
   prima di fare la localStorage.setItem('current user')
-- la onInit() di myprofile non viene chiamata (ora pare di sì ma lascio comunque questo commento che magari torna utile come cosa da ricontrollare)
 - mettere commenti in inglese
 - segnalare con un errore che il login non è andato a buon fine
 - renew session
 
 IMPLEMENTAZIONI:
-
-
   6. Se accettiamo l'invito di un utente che però è già occupato deve comparirci "user is no longer available" al posto della notifica
      e far scomparire la notifica dopo pochi secondi automaticamente
   7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)

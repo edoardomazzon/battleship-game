@@ -6,6 +6,9 @@
       {{ notification.from }} invited you to a game
       <button class="btn !bg-success" (click)="acceptMatch(notification.from); markNotificationAsRead(notification)">Accept match</button>
     </li>
+    <li *ngIf="notification != undefined && notification != null && notification.notification_type == 'friendnotavailable'" class="text-red-error text-xs">
+      {{ notification.from }} is no longer available
+    </li>
   </ul>
 
 </div>

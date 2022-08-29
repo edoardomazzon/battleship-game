@@ -19,6 +19,10 @@ export class NotificationsService {
       this.socket.on('newnotification'+current_user, (notification) => {
         observer.next(notification)
       })
+
+      this.socket.on('friendnotavailable'+current_user, (notification) =>{
+        observer.next(notification)
+      })
     })
   }
 

@@ -25,10 +25,25 @@ export class NotificationsComponent implements OnInit {
   // Waiting for new notifications;
   listenToNotifications(){
     this._notificationsService.listenToNotifications(this.current_user.username).subscribe((notification) => {
+      // If we accepted a friend's invite to play, but that friend is no longer available, we add a notification to the list
+      // saying that he's no longer available, which is going to be deleted automatically after 3 seconds
+      if(notification.notification_type == 'friendnotavailable'){
+        this.notifications.push({notification_type: 'friendnotavailable', from: notification.from, tobedeleted: true})
+        setTimeout(() => {
+          for(let i = 0; i < this.notifications.length; i++){
+            if(this.notifications[i] && this.notifications[i].tobedeleted){
+              delete(this.notifications[i])
+            }
+          }
+        }, 3000)
+      }
       // Whatever the notification type is, we add it in the notifications list. On the html side
       // we will go through each notification type with functions and buttons based on that.
+      else{
       this.notifications.push(notification)
       this.orderLastFirst()
+      }
+
     })
   }
 

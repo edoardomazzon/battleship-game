@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
         }
         // If we're already in a match, we ignore the fact that the user accepted our invite and notify him that we are not available atm
         else{
-
+          this.notAvailableForMatch(this.current_user.username, observer.accepting_user)
         }
       }
     })
@@ -141,6 +141,10 @@ export class HomeComponent implements OnInit {
 
   availableForMatch(current_user: String, accepting_user: String, starttime: Date){
     this._matchMakingService.availableForMatch(current_user, accepting_user, starttime)
+  }
+
+  notAvailableForMatch(current_user: String, accepting_user: String){
+    this._matchMakingService.notAvailableForMatch(current_user, accepting_user)
   }
 
 

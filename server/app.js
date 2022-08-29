@@ -363,6 +363,16 @@ ios.on('connection', (socket) => {
     })
   })
 
+  // Alternative
+  socket.on('notavailableformatch', (notification) => {
+    console.log(notification)
+    socket.broadcast.emit('friendnotavailable'+notification.user, {
+      notification_type: 'friendnotavailable',
+      user: notification.user,
+      from: notification.from
+    })
+  })
+
   socket.on('disconnect', () => {
     //console.log("Client " + socket.id + " disconnected from Socket.io")
   })
