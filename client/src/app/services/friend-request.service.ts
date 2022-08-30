@@ -108,6 +108,10 @@ export class FriendRequestService {
     })
   }
 
+  unblockUser(current_user: String, blocked_user: String){
+    this._httpClient.post(this.baseURL+'unblockuser', {username: current_user, blocked_user: blocked_user}).subscribe()
+  }
+
   inviteToPlay(current_user: String, friend: String){
     var notification = {
       user: friend,

@@ -37,10 +37,9 @@ export class FriendsComponent implements OnInit {
     this.friendsSection2 = false
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     // Immediately update the browser's localstorage with updated user info from db
     this.getUserInfo(this.current_user.username)
-    localStorage.removeItem('response')
     // This function is invoked by the friend-request service, which whill return an observable for Socket.io emits.
     // Once the service listens to an emit from the server, the client's component is notified and is engaged differently
     // depending on the request type notified by the server.
@@ -160,7 +159,7 @@ export class FriendsComponent implements OnInit {
   }
 
   //Function called when a user searches up a username
-  searchUsers(searched_name: String): void{
+  searchUsers(searched_name: String) {
     if(searched_name != null && searched_name != '' && searched_name != undefined){
       this.inputname = null // Resetting the text form's content
       this._httpClient.post('http://localhost:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
@@ -170,7 +169,7 @@ export class FriendsComponent implements OnInit {
   }
 
   //Funzione chiamata quando un utente A preme su "Send friend request" di fianco a un utente B
-  newFriendRequest(receiver: String): void{
+  newFriendRequest(receiver: String) {
     this.foundUsers = new Array()
     var friendrequest = new FriendRequest();
     friendrequest.receiver = receiver
@@ -179,26 +178,26 @@ export class FriendsComponent implements OnInit {
   }
 
   //Il reject receiver è chi riceve la risposta negativa alla richiesta di amicizia (cioè chi per primo ha inviato la richiesta)
-  rejectFriendRequest(reject_receiver: String): void {
+  rejectFriendRequest(reject_receiver: String) {
     var rejected_request = new FriendRequest();
     rejected_request.receiver = reject_receiver
-    rejected_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
+    rejected_request.sender = this.current_user.username
     this._friendRequestService.rejectFriendRequest(rejected_request)
   }
 
   //L'acceptance receiver è chi riceve la risposta positiva della richiesta di amicizia (cioè chi per primo ha inviato la richiesta)
-  acceptFriendRequest(acceptance_receiver: String): void {
+  acceptFriendRequest(acceptance_receiver: String) {
     this.rejectFriendRequest(acceptance_receiver)//È controintuitivo ma questa funzione in verità non fa altro che togliere
     // l'accettato dalla pending list dell'accettante, così ci risparmiamo molta più logica front end dopo. In questo modo
     // togliamo subito l'utente accettato dalle pending list dell'accettante, così dovremo preoccuparci solo di aggiornare la friends list dei due
 
     var accepted_request = new FriendRequest();
     accepted_request.receiver = acceptance_receiver
-    accepted_request.sender = JSON.parse(JSON.parse(JSON.stringify((localStorage.getItem('current_user'))))).username
+    accepted_request.sender = this.current_user.username
     this._friendRequestService.acceptFriendRequest(accepted_request)
   }
 
-  blacklistUser(blacklisted_user: String): void {
+  blacklistUser(blacklisted_user: String) {
     this.foundUsers = new Array()
     /* Here we have two situations:
         1. the user we want to blacklist is in our friend requests list --> we first have to delete him from the pending list and
@@ -217,7 +216,11 @@ export class FriendsComponent implements OnInit {
     this._friendRequestService.blacklistUser(blacklist_request)
   }
 
-  removeFriend(removed_user: String){
+  unblockUser(blocked_user: String) {
+    this._friendRequestService.unblockUser(this.current_user.username, blocked_user)
+  }
+
+  removeFriend(removed_user: String) {
     var remove_request = new FriendRequest()
     remove_request.sender = this.current_user.username
     remove_request.receiver = removed_user
@@ -227,6 +230,7 @@ export class FriendsComponent implements OnInit {
   openFriendSection1(){
     this.friendsSection1 = !this.friendsSection1
     this.friendsSection2 = false
+    this.foundUsers = new Array()
   }
   openFriendSection2(){
     this.friendsSection2 = !this.friendsSection2

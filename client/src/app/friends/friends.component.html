@@ -6,45 +6,57 @@
 
   <!-- In this section we show our friends list with the possibility of inviting to play, messaging, removing or blocking them -->
   <div *ngIf="this.friendsSection1">
-    <ul *ngIf="this.friends.length != undefined && this.friends.length > 0"> FRIENDS LIST
-      <li *ngFor="let friend of this.friends">
+    <div class="text-center pt-3 font-bold"> FRIENDS LIST</div>
+    <ul *ngIf="this.friends.length != undefined && this.friends.length > 0">
+      <li *ngFor="let friend of this.friends" class="font-bold">
         {{ friend }}
-        <button class="btn" (click)="removeFriend(friend)">Remove friend</button>
-        <button class="btn" (click)="openChat(friend)">Open chat</button>
-        <button class="btn" (click)="inviteToPlay(friend)">Invite to play</button>
+        <button class="pl-2" title="Open chat" (click)="openChat(friend)"><svg width="24" height="24" style="fill: rgba(0, 0, 0, 1)"><path d="M16 2H8C4.691 2 2 4.691 2 8v13a1 1 0 0 0 1 1h13c3.309 0 6-2.691 6-6V8c0-3.309-2.691-6-6-6zm4 14c0 2.206-1.794 4-4 4H4V8c0-2.206 1.794-4 4-4h8c2.206 0 4 1.794 4 4v8z"></path><path d="M7 9h10v2H7zm0 4h7v2H7z"></path></svg></button>
+        <button class="pl-2" title="Invite to a match" (click)="inviteToPlay(friend)"><svg width="24" height="24" style="fill: green"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm1 17.931V17h-2v2.931A8.008 8.008 0 0 1 4.069 13H7v-2H4.069A8.008 8.008 0 0 1 11 4.069V7h2V4.069A8.007 8.007 0 0 1 19.931 11H17v2h2.931A8.008 8.008 0 0 1 13 19.931z"></path></svg></button>
+        <button class="pl-2" title="Remove user from you friends list" (click)="removeFriend(friend)"><svg width="24" height="24" style="fill:red"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
       </li>
     </ul>
   </div>
 
   <!-- In this section we show our friend requests with the possibility of looking up users to send them a friend request or block them -->
   <div *ngIf="this.friendsSection2">
-    <div>
+    <div class="pt-3">
+      <div class="text-center font-bold">SEARCH USERS BY USERNAME</div>
       <form>
         <div>
-          <label for="username">Username</label>
           <input type="text" id="username" [(ngModel)]="inputname" name="username"/>
-          <button class="btn" (click)="searchUsers(inputname)">Look up username</button>
+          <button (click)="searchUsers(inputname)"></button>
         </div>
       </form>
     </div>
-    <br>
     <div>
+      <!-- Username lookup section -->
       <ul *ngIf="this.foundUsers.length > 0">
-        FOUND USERS
         <li *ngFor="let user of this.foundUsers">
           <div *ngIf="!this.friends.includes(user.username)">
             <span class="font-bold">{{ user.username }} </span>
-            <button (click)="newFriendRequest(user.username)">Aggiungi agli amici</button>
-            <button (click)="blacklistUser(user.username)">Blocca utente</button>
+            <button title="Send friend request" (click)="newFriendRequest(user.username)"><svg width="24" height="24" style="fill: green"><path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM4 8a3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4 3.91 3.91 0 0 0-4-4 3.91 3.91 0 0 0-4 4zm6 0a1.91 1.91 0 0 1-2 2 1.91 1.91 0 0 1-2-2 1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2zM4 18a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v1h2v-1a5 5 0 0 0-5-5H7a5 5 0 0 0-5 5v1h2z"></path></svg></button>
+            <button class="pl-2" title="Block user" (click)="blacklistUser(user.username)"><svg width="24" height="24" style="fill: red"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"></path></svg></button>
           </div>
         </li>
       </ul>
-      <ul *ngIf="this.friend_requests_list.length > 0"> PENDING FRIEND REQUESTS
+
+      <!-- Friend requests section -->
+      <ul *ngIf="this.friend_requests_list.length > 0">
+        <div class="text-center font-bold">FRIEND REQUESTS</div>
         <li *ngFor="let receiver of this.friend_requests_list">
-          {{ receiver }}
-          <button (click)="acceptFriendRequest(receiver)">Accetta richiesta</button>
-          <button (click)="rejectFriendRequest(receiver)">Rifiuta richiesta</button>
-          <button (click)="blacklistUser(receiver)">Blocca utente</button>
+          <span class="font-bold">{{ receiver }}</span> sent you a friend request
+          <button title="Accept request" (click)="acceptFriendRequest(receiver)"><svg width="24" height="24" style="fill: green"><path d="M20.29 8.29 16 12.58l-1.3-1.29-1.41 1.42 2.7 2.7 5.72-5.7zM4 8a3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4 3.91 3.91 0 0 0-4-4 3.91 3.91 0 0 0-4 4zm6 0a1.91 1.91 0 0 1-2 2 1.91 1.91 0 0 1-2-2 1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2zM4 18a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v1h2v-1a5 5 0 0 0-5-5H7a5 5 0 0 0-5 5v1h2z"></path></svg></button>
+          <button class="pl-2" title="Reject request" (click)="rejectFriendRequest(receiver)"><svg width="24" height="24" style="fill: red"><path d="m15.71 15.71 2.29-2.3 2.29 2.3 1.42-1.42-2.3-2.29 2.3-2.29-1.42-1.42-2.29 2.3-2.29-2.3-1.42 1.42L16.58 12l-2.29 2.29zM12 8a3.91 3.91 0 0 0-4-4 3.91 3.91 0 0 0-4 4 3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4zM6 8a1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2 1.91 1.91 0 0 1-2 2 1.91 1.91 0 0 1-2-2zM4 18a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v1h2v-1a5 5 0 0 0-5-5H7a5 5 0 0 0-5 5v1h2z"></path></svg></button>
+          <button class="pl-2" title="Block user" (click)="blacklistUser(receiver)"><svg width="24" height="24" style="fill: red"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"></path></svg></button>
+        </li>
+      </ul>
+
+      <!-- Blocked users section -->
+      <ul *ngIf="this.blacklisted_users.length > 0">
+        <div class="text-center font-bold">BLACKLISTED USERS</div>
+        <li *ngFor="let user of this.blacklisted_users">
+          <span class="font-bold">{{ user }}</span>
+          <button title="Unblock user" (click)="unblockUser(user)"><svg width="24" height="24" style="fill: #D4AE04"><path d="M17 8V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2H9V7c0-1.654 1.346-3 3-3s3 1.346 3 3v1h2zm1 4 .002 8H6v-8h12z"></path></svg></button>
         </li>
       </ul>
     </div>

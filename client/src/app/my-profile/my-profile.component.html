@@ -1,8 +1,7 @@
 <div class="text-center text-white ">
-  <h2 class="text-center pb-5">My profile</h2>
+  <h2 class="text-center pb-5">{{ this.current_user.username }}</h2>
   <div class="mb-10">
     <ul>
-      <li> Username:     {{ this.current_user.username }}</li>
       <li> E-mail:          {{ this.current_user.email }}</li>
       <li> Games played: {{ this.current_user.games_played }}</li>
       <li> Games won: {{ this.current_user.games_won }}</li>

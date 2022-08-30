@@ -10,8 +10,11 @@ PROBLEMI:
 - renew session
 
 IMPLEMENTAZIONI:
-  6. Se accettiamo l'invito di un utente che però è già occupato deve comparirci "user is no longer available" al posto della notifica
-     e far scomparire la notifica dopo pochi secondi automaticamente
+  6. Sistemare il friend component che fa delle emit inutili; praticamente quando bisogna eliminare una friend request dalla lista, 
+     si fa fare la POST al friend-request-service, poi il server ritorna la nuova blacklist, poi il service sente la response, la carica
+     in localstorage, fa una emit per dire al server di dire al friend component di aggiornare la sua blacklist...
+     Quando basterebbe che dal component, appena si gestisce una request, la si elimini dalla lista direttamente dal component senza fare mille
+     emit per niente
   7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)
   8. Migliorare graficamente lo spectator component html
   9. Aggiungere lista degli utenti bloccati da poter sbloccare

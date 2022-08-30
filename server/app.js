@@ -47,7 +47,8 @@ const myprofileRoute = require('./routes/myprofile');
 const createMatchRoute = require('./routes/creatematch');
 const chatMessageRoute = require('./routes/chatmessage');
 const searchUsersRoute = require('./routes/searchusers');
-const removeFriendRoute = require('./routes/removefriend')
+const unblockUserRoute = require('./routes/unblockuser');
+const removeFriendRoute = require('./routes/removefriend');
 const friendRequestRoute = require('./routes/friendrequest');
 const blacklistUserRoute = require('./routes/blacklistuser');
 const updateAccuracyRoute = require('./routes/updateaccuracy');
@@ -55,7 +56,7 @@ const createNotificationRoute = require('./routes/createnotification');
 const deleteNotificationRoute = require('./routes/deletenotification');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
 const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
-const retrieveNotificationsRoute = require('./routes/retrievenotifications')
+const retrieveNotificationsRoute = require('./routes/retrievenotifications');
 
 // Telling the app which route (declared above) to use in correspondance to a given localhost URL path
 app.use('/', indexRoute);
@@ -66,7 +67,8 @@ app.use('/register', registerRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/creatematch', createMatchRoute);
 app.use('/chatmessage', chatMessageRoute);
-app.use('/searchusers', searchUsersRoute)
+app.use('/searchusers', searchUsersRoute);
+app.use('/unblockuser', unblockUserRoute);
 app.use('/removefriend', removeFriendRoute);
 app.use('/friendrequest', friendRequestRoute);
 app.use('/blacklistuser', blacklistUserRoute);
