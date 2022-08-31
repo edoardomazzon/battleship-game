@@ -1,14 +1,16 @@
-<div class="text-center text-white ">
-  <h2 class="text-center pb-5">{{ this.current_user.username }}</h2>
-  <div class="mb-10">
-    <ul>
-      <li> E-mail:          {{ this.current_user.email }}</li>
-      <li> Games played: {{ this.current_user.games_played }}</li>
-      <li> Games won: {{ this.current_user.games_won }}</li>
-      <li> Accuracy: {{ this.current_user.accuracy }}%</li>
-      <li> Current Winstreak: {{ this.current_user.current_winstreak }}</li>
-      <li> Longest Winstreak: {{ this.current_user.max_winstreak }}</li>
-    </ul>
-  </div>
+<div class="text-white">
+  <h2 class="mb-5">{{ this.current_user.username }}</h2>
+  <ul>
+    <!-- <div class="flex">
+      <div class="bg-green-700 h-auto" [ngClass]="['w-[' + this.winrate + 'px]']"></div> 
+      <div class="bg-red-700 h-5" [ngClass]="['w-[' + this.loserate + 'px]']"></div>
+    </div> -->
+    <li>Games played: {{ this.current_user.games_played }}</li>
+    <li>Games won: {{ this.current_user.games_won }}</li>
+    <li>Win rate: {{ this.winrate }}%</li>
+    <li>Accuracy: {{ this.current_user.accuracy }}%</li>
+    <li>Current Winstreak: {{ this.current_user.current_winstreak }}</li>
+    <li>Longest Winstreak: {{ this.current_user.max_winstreak }}</li>
+  </ul>
 </div>
 

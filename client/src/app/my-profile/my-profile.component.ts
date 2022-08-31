@@ -11,8 +11,13 @@ import { JsonPipe } from '@angular/common';
 })
 export class MyProfileComponent implements OnInit {
   public current_user: any;
+  public winrate: number;
+  public loserate: number;
 
-  constructor(private _profileService: ProfileService) { }
+  constructor(private _profileService: ProfileService) {
+    this.winrate = 0
+    this.loserate = 0
+   }
 
   ngOnInit(): void {
     var u = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
@@ -22,5 +27,8 @@ export class MyProfileComponent implements OnInit {
     }
     u = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this.current_user = u
+
+    this.winrate = Math.floor( 100 * this.current_user.games_won / this.current_user.games_played)
+    this.loserate = 100-this.winrate
   }
 }
