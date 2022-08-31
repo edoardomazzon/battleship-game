@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/User');
+const User = require('../models/user.js');
 const router = express.Router();
 
 // When a user registers, his information is saved in a new inserted db user

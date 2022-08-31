@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const User = require('../models/user.js');
 
 // When a user loses a game, we set his current_winstreak field to 0
 router.post('/', async(req, res) => {

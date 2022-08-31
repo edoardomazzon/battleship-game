@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/User');
+const User = require('../models/user.js');
 const router = express.Router();
 
 // When a user A rejects a user B's friend request, B's username disappears from A's pending friend requests list

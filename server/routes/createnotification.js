@@ -6,7 +6,7 @@
 //   }
 const express = require('express');
 const router = express.Router();
-const Notification = require('../models/Notification');
+const Notification = require('../models/notification.js');
 
 router.post('/', async(req, res) => {
     const newnotif = new Notification(req.body)

@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/User');
+const User = require('../models/user.js');
 const router = express.Router();
 
 // Activated when a user A accepts a user B's friend request

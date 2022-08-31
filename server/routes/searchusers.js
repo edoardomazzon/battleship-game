@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const User = require('../models/user.js');
 
 router.post('/', async(req, res) => {
     const input = req.body.searched_name

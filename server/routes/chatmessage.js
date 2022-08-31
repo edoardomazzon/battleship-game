@@ -1,5 +1,5 @@
 const express = require('express');
-const ChatMessage = require('../models/ChatMessage');
+const ChatMessage = require('../models/chatmessage.js');
 const router = express.Router();
 
 // When a new chat message is sent, the server is notified through a POST request and saves it in the database

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const User = require('../models/user.js');
 
 router.get('/', function (req, res) {
     res.send('MyProfile')

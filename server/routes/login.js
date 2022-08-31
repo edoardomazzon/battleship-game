@@ -4,11 +4,11 @@ const passportHTTP = require('passport-http'); // implements Basic and Digest au
 const jwt_decode = require('jwt-decode'); // Decoding of jwt tokens   
 const jsonwebtoken = require('jsonwebtoken'); // JWT generation
 const { expressjwt: jwt } = require("express-jwt");
-const User = require('../models/User');
+const User = require('../models/user.js');
 const router = express.Router();
 
-
 const result = require("dotenv").config(); 
+
 if (result.error) {
     console.log(
         'Unable to load ".env" file. Please provide one to store the JWT secret key'

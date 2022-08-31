@@ -1,6 +1,6 @@
 const express = require('express');
-const Match = require('../models/Match');
-const User = require('../models/User')
+const Match = require('../models/match.js');
+const User = require('../models/user.js')
 const router = express.Router();
 
 router.post("/", async (req, res) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-const Match = require('../models/Match')
+const User = require('../models/user.js');
+const Match = require('../models/match.js')
 
 // When a user wins a game, we increment his games_won counter as well as his current winstreak. If his current winstreak is 
 // greater than his max winstreak, the current winstreak becomes the max winstreak.
