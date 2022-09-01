@@ -581,7 +581,7 @@ export class GameComponent implements OnInit {
   }
 
   startTimer(){
-    this.timer = 10
+    this.timer = 15
     this.interval = setInterval(() => {
       if(this.timer <= 0){
         this.stopTimer()
@@ -604,7 +604,7 @@ export class GameComponent implements OnInit {
         this._gameService.loseGameDB(this.enemy)
         this.winGame()
       }
-    }, 120000)
+    }, 15000)
 
   }
 

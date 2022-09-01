@@ -10,11 +10,11 @@
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
             <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
             <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full"></div>
-            <div *ngIf="cell == 'water'" class="w-full h-full flex items-center justify-center">
+            <div *ngIf="cell == 'water'" class="border border-black w-full h-full flex items-center justify-center">
               <span class="bg-black w-2 h-2 rounded-full"></span>
             </div>
-            <div *ngIf="cell == 'hit'" class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
-            <div *ngIf="cell == 'sunk'" class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
+            <div *ngIf="cell == 'hit'" class="border border-black w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
+            <div *ngIf="cell == 'sunk'" class="border border-black w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
           </div>
         </div>
       </div>
