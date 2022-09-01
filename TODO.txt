@@ -10,6 +10,7 @@ PROBLEMI:
 - renew session
 
 IMPLEMENTAZIONI:
+  4. Quando blocchi un utente si deve anche eliminare dalla friends list
   5. Quando inizia una partita chiudere tutti i menu a tendina
   6. Sistemare il friend component che fa delle emit inutili; praticamente quando bisogna eliminare una friend request dalla lista, 
      si fa fare la POST al friend-request-service, poi il server ritorna la nuova blacklist, poi il service sente la response, la carica
