@@ -1,12 +1,14 @@
-<div *ngIf="notifications.length > 0" class="absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-full">
+<div *ngIf="notifications.length > 0" class="absolute top-full right-48 bg-gray-300 text-black p-2 flex flex-col items-center z-full">
   <!-- In this section we show our friend requests with the possibility of looking up users to send them a friend request or block them -->
-  <ul *ngFor="let notification of notifications">
-    <li *ngIf="notification != undefined && notification != null && notification.notification_type == 'matchinvite'">
-      {{ notification.from }} invited you to a game
-      <button class="btn !bg-success" (click)="acceptMatch(notification.from); markNotificationAsRead(notification)">Accept match</button>
-    </li>
-    <li *ngIf="notification != undefined && notification != null && notification.notification_type == 'friendnotavailable'" class="text-red-error text-xs">
-      {{ notification.from }} is no longer available
+  <ul>
+    <li *ngFor="let notification of notifications" class="mb-1">
+      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'matchinvite'">
+        <strong>{{ notification.from }}</strong> invited you to a game
+        <button class="btn !py-1 !px-2 !bg-success after:content-['\2713']" (click)="acceptMatch(notification.from); markNotificationAsRead(notification)"></button>
+      </div>
+      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'friendnotavailable'" class="text-red-error text-xs">
+        {{ notification.from }} is no longer available
+      </div>
     </li>
   </ul>
 </div>

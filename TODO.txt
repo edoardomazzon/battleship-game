@@ -10,6 +10,7 @@ PROBLEMI:
 - renew session
 
 IMPLEMENTAZIONI:
+  3. Eliminare bene le notifiche senza lasciare null (quando si accetta un invit0)
   4. Quando blocchi un utente si deve anche eliminare dalla friends list
   5. Quando inizia una partita chiudere tutti i menu a tendina
   6. Sistemare il friend component che fa delle emit inutili; praticamente quando bisogna eliminare una friend request dalla lista, 

@@ -346,7 +346,9 @@
 
         <div *ngFor="let row of myfield; index as y" class="grid grid-cols-10 bg-white">
           <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
-            <div *ngIf="cell.value == -1" class="border border-black w-full h-full">O</div>
+            <div *ngIf="cell.value == -1" class="border border-black w-full h-full flex items-center justify-center">
+              <span class="bg-black w-2 h-2 rounded-full"></span>
+            </div>
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'none'" class="border border-black w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black !bg-red-error w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black !bg-success w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
@@ -355,9 +357,7 @@
             <div *ngIf="cell.value > 0 && !cell.hit && !hasconfirmedpositioning && selectedShip != 'none'" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div>
             <div *ngIf="cell.value > 0 && !cell.hit && !hasconfirmedpositioning && selectedShip == 'none'" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)"  (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div>
             <div *ngIf="cell.value > 0 && !cell.hit && hasconfirmedpositioning" class="border border-black bg-sepia-lighter w-full h-full"></div>
-            <div *ngIf="cell.value != 0 && cell.hit" class="border border-red-error text-red-error text-bold w-full h-full text-center justify-center">
-              <span class="text-bold text-base text-red-error">X</span>
-            </div>
+            <div *ngIf="cell.value != 0 && cell.hit" class="bg-sepia-lighter border border-red-error w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-red-error after:leading-none"></div>
           </div>
         </div>
       </div>
@@ -370,16 +370,16 @@
           <div *ngFor="let cell of row; index as j" class="bg-white w-full h-8 border border-black">
             <!-- <div *ngIf="cell.value != 0 && !cell.hit" class="bg-navy w-full h-full"></div>
             <div *ngIf="cell.value != 0 && cell.hit" class="border border-error text-error w-full h-full">X</div> -->
-            <span *ngIf="cell == '?' && myturn == true" class="w-full h-full">
+            <div *ngIf="cell == '?' && myturn == true" class="w-full h-full">
               <button (click)="fire(i, j)" class="w-full h-full"></button>
-            </span>
-            <span *ngIf="cell == '?' && myturn == false" class="w-full h-full"></span>
-
-            <div *ngIf="cell == 'water'" class="w-full h-full bg-gray-300 flex items-center justify-center text-white"><span>.</span></div>
-            <span *ngIf="cell == 'hit'" class="w-full h-full">/</span>
-            <div *ngIf="cell == 'sunk'" class="border border-success text-success text-bold w-full h-full text-center justify-center">
-              <span class="text-bold text-base text-success">X</span>
             </div>
+            <div *ngIf="cell == '?' && myturn == false" class="w-full h-full"></div>
+
+            <div *ngIf="cell == 'water'" class="w-full h-full flex items-center justify-center">
+              <span class="bg-black w-2 h-2 rounded-full"></span>
+            </div>
+            <div *ngIf="cell == 'hit'" class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
+            <div *ngIf="cell == 'sunk'" class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
           </div>
         </div>
       </div>

@@ -604,7 +604,7 @@ export class GameComponent implements OnInit {
         this._gameService.loseGameDB(this.enemy)
         this.winGame()
       }
-    }, 10000)
+    }, 120000)
 
   }
 
