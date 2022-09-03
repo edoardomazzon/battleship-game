@@ -40,6 +40,20 @@ export class MatchmakingService {
       from: current_user})
   }
 
+  closeMenus(current_user: String){
+    this.socket.emit('closeheadermenus', {
+      user: current_user,
+      notification_type: 'closeheadermenus'
+    })
+  }
+
+  openMenus(current_user: String){
+    this.socket.emit('openheadermenus', {
+      user: current_user,
+      notification_type: 'openheadermenus'
+    })
+  }
+
 
   listenToMatchmaking(current_user: any): Observable <any>{
     return new Observable((observer) => {

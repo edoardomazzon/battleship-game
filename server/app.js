@@ -165,6 +165,10 @@ ios.on('connection', (socket) => {
     socket.emit('yousentmessage'+message.from, message)
     socket.broadcast.emit('youreceivedmessage'+message.to, message)
   })
+
+  socket.on('confirmreception', (sender) => {
+    socket.broadcast.emit('yourmessagereceived'+sender.sender, {message_type: 'yourmessagereceived'})
+  })
   
   socket.on('newfriendrequest', (friendrequest) =>{
     // Notifying the request receiver's client so that it can immediately update its pending requests list without having
@@ -229,6 +233,16 @@ ios.on('connection', (socket) => {
   socket.on('matchcreated', (matchinfo) => {
     matchinfo.timestamp = new Date()
     ongoing_matches.push(matchinfo)
+  })
+
+  // When a client loads up a game, he also needs to close all the menus and not be able to open them until the game ends or they leave the match
+  socket.on('closeheadermenus', (notification) => {
+    socket.broadcast.emit('newnotification'+notification.user, notification)
+  })
+
+  // When a client leves or ends a game, he can open his header menus back
+  socket.on('openheadermenus', (notification) => {
+    socket.broadcast.emit('newnotification'+notification.user, notification)
   })
 
   // When a user starts spectating two players, he asks them to send him their fields updated up to that moment

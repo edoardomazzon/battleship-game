@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NotificationsService } from '../services/notifications.service';
+import { ChatmessageService } from '../services/chatmessage.service';
 
 @Component({
   selector: 'app-notifications',
@@ -12,7 +13,7 @@ export class NotificationsComponent implements OnInit {
   private current_user: any
   public notifications: any
 
-  constructor(private _httpClient: HttpClient, private _notificationsService: NotificationsService) {
+  constructor(private _httpClient: HttpClient, private _notificationsService: NotificationsService, private _chatmessageService: ChatmessageService) {
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this.notifications = new Array()
   }
@@ -39,11 +40,32 @@ export class NotificationsComponent implements OnInit {
       }
       // Whatever the notification type is, we add it in the notifications list. On the html side
       // we will go through each notification type with functions and buttons based on that.
-      else{
-      this.notifications.push(notification)
-      this.orderLastFirst()
+      else if(notification.notification_type == 'matchinvite'){
+        var alreadyin = false
+        for(let i = 0; i < this.notifications.length; i++){
+          if(this.notifications[i].from == notification.from){
+            alreadyin = true
+          }
+        }
+        if(!alreadyin){
+          this.notifications.push(notification)
+        }
+        this.orderLastFirst()
       }
+      else if(notification.notification_type == 'newmessage'){
+        console.log('newmessage')
+        var alreadyin = false
+        for(let i = 0; i < this.notifications.length; i++){
+          if(this.notifications[i].from == notification.from){
+            alreadyin = true
+          }
+        }
+        if(!alreadyin){
+          this.notifications.push(notification)
+        }
+        this.orderLastFirst()
 
+      }
     })
   }
 
@@ -84,6 +106,16 @@ export class NotificationsComponent implements OnInit {
         delete(this.notifications[i])
       }
     }
+  }
+
+  // In case of a newmessage notification, a player can open the chat
+  openChat(friend: String){
+    this._chatmessageService.startChat({
+      message_type: 'openchat',
+      current_user: this.current_user.username,
+      other_user: friend,
+      chat_type: 'private'
+    })
   }
 
   // Sorts notifications by showing the most recent ones first

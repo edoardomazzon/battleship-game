@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FriendRequest } from '../models/friend-request';
 import {io, Socket} from 'socket.io-client';
-import { Observable } from 'rxjs';
+import { Observable, raceWith } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,10 +31,12 @@ export class FriendRequestService {
         receiver: friendrequest.receiver
       })
     })
-    /* Da qui il server dovrà ascoltare la emit e a sua volta fare una emit
-       di 'friendrequest'+friendrequest.receiver così chi riceve la richiesta di amicizia è subito avvisato e di conseguenza aggiorna la sua lista
-       di pending_friend_requests senza dover rifare la query; in myprofile.component.ts basterà fare this.friend_requests.push(friendrequest.sender)
-       e in più aggiornare anche il localstorage con la nuova friendrequest inserita in lista. */
+    // Telling the client to make the red notification badge appear if the friends menu is not already expanded
+    this.socket.emit('newnotification',
+      {user: friendrequest.receiver,
+       from: friendrequest.sender,
+       notification_type: 'friendrequest'
+      })
   }
 
   acceptFriendRequest(accepted_request: FriendRequest){

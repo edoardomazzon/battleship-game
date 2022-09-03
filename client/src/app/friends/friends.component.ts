@@ -118,7 +118,7 @@ export class FriendsComponent implements OnInit {
         }
       }
     })
-    this.openFriendSection1()
+    this.openFriendSection2()
   }
 
   //Function used to update the browser's localstorage and this component's fields with updated user info from db

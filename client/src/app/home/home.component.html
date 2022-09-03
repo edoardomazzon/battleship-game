@@ -7,36 +7,34 @@
       <app-game></app-game>
     </div>
 
-  <div *ngIf="!isplaying">
-    <div *ngIf="!isspectating">
-      <div class="text-center my-8">
-        <button *ngIf="!isready" class="text-center btn !bg-success" (click)="readyUp()">Ready up</button>
-        <button *ngIf="isready"  class="btn !bg-red-error" (click)="cancelMatchMaking()">Cancel Matchmaking</button>
+    <div *ngIf="!isplaying">
+      <div *ngIf="!isspectating">
+        <div class="text-center my-8">
+          <button *ngIf="!isready" class="text-center btn !bg-success" (click)="readyUp()">Ready up</button>
+          <button *ngIf="isready"  class="btn !bg-red-error" (click)="cancelMatchMaking()">Cancel Matchmaking</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto">
+          <ul *ngFor="let match of ongoing_matches">
+            <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
+              {{ match.player1 }} vs {{ match.player2 }}
+              <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
+            </li>
+          </ul>
+          <app-my-profile></app-my-profile>
+        </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto">
-        <ul *ngFor="let match of ongoing_matches">
-          <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
-            {{ match.player1 }} vs {{ match.player2 }}
-            <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
-          </li>
-        </ul>
-
-        <app-my-profile></app-my-profile>
+      <div *ngIf="isspectating">
+        <app-spectate></app-spectate>
+        <div class="text-center pt-4">
+          <button class="btn !bg-red-error" (click)="stopSpectating()">Stop spectating</button>
+        </div>
       </div>
+
+      <app-chat></app-chat>
+
     </div>
-
-    <div *ngIf="isspectating">
-      <app-spectate></app-spectate>
-      <div class="text-center pt-4">
-        <button class="btn !bg-red-error" (click)="stopSpectating()">Stop spectating</button>
-      </div>
-
-    </div>
-
-    <app-chat></app-chat>
-
-  </div>
 
 
 

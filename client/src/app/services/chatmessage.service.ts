@@ -21,7 +21,7 @@ export class ChatmessageService {
   receiveMessages(): Observable<any>{
     return new Observable((observer) => {
 
-      this.socket.on('yousentmessage'+this.current_user.username, (message: any) => {
+      this.socket.on('yousentmessage'+this.current_user.username, (message) => {
         message = {
           from: message.from,
           to: message.to,
@@ -31,7 +31,7 @@ export class ChatmessageService {
         observer.next(message);
       });
 
-      this.socket.on('youreceivedmessage'+this.current_user.username, (message: any) => {
+      this.socket.on('youreceivedmessage'+this.current_user.username, (message) => {
         message = {
           from: message.from,
           to: message.to,
@@ -41,7 +41,11 @@ export class ChatmessageService {
         observer.next(message);
       });
 
-      this.socket.on('openchat', (message: any) => {
+      this.socket.on('openchat', (message) => {
+        observer.next(message)
+      })
+
+      this.socket.on('yourmessagereceived'+this.current_user.username, (message) => {
         observer.next(message)
       })
 
@@ -83,5 +87,20 @@ export class ChatmessageService {
 
   startChat(players: any){
     this.socket.emit('startchat', players)
+  }
+
+  confirmReception(sender: String){
+    this.socket.emit('confirmreception', {sender: sender, message_type: 'yourmessagereceived'})
+  }
+
+  notifyUnreadMessage(current_user: String, user: String){
+    var notification = {
+      user: user,
+      from: current_user,
+      notification_type: 'newmessage',
+      timestamp: new Date()
+    }
+    this.socket.emit('newnotification', notification)
+    this._httpClient.post(this.baseURL+'createnotification', notification).subscribe()
   }
 }

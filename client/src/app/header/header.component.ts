@@ -14,6 +14,8 @@ export class HeaderComponent implements OnInit {
   public friendsTab: Boolean
   public notificationsTab: Boolean
   public unreadnotifications: number
+  public unreadfriendrequests: number
+  public canopenmenus: Boolean
   private current_user: any
 
   constructor(private _router: Router, public _authservice: AuthService, private _notificationsService: NotificationsService) {
@@ -22,6 +24,9 @@ export class HeaderComponent implements OnInit {
     this.profileTab = false
     this.notificationsTab = false
     this.unreadnotifications = 0
+    this.unreadfriendrequests = 0
+    this.canopenmenus = true
+
   }
 
   ngOnInit() {
@@ -30,7 +35,18 @@ export class HeaderComponent implements OnInit {
 
   countUnreadNotifications(){
     this._notificationsService.listenToNotifications(this.current_user.username).subscribe((notification) => {
-      if(!this.notificationsTab){ this.unreadnotifications += 1 }
+      if(!this.notificationsTab && ( notification.notification_type == 'matchinvite' || notification.notification_type == 'newmessage')){ this.unreadnotifications += 1 }
+      else if(!this.friendsTab && notification.notification_type == 'friendrequest'){ this.unreadfriendrequests += 1 }
+      else if(notification.notification_type == 'closeheadermenus'){
+        console.log('cant open menus now')
+        this.notificationsTab = false
+        this.friendsTab = false
+        this.profileTab = false
+        this.canopenmenus = false
+      }
+      else if(notification.notification_type == 'openheadermenus'){
+        this.canopenmenus = true
+      }
     })
   }
 
@@ -44,19 +60,27 @@ export class HeaderComponent implements OnInit {
   }
 
   openProfileMenu(){
-    this.profileTab = !this.profileTab
-    this.friendsTab = false
-    this.notificationsTab = false
+    if(this.canopenmenus){
+      this.profileTab = !this.profileTab
+      this.friendsTab = false
+      this.notificationsTab = false
+    }
   }
   openFriendsMenu(){
-    this.friendsTab = !this.friendsTab
-    this.profileTab = false
-    this.notificationsTab = false
+    if(this.canopenmenus){
+      this.friendsTab = !this.friendsTab
+      this.profileTab = false
+      this.notificationsTab = false
+      this.unreadfriendrequests = 0
+    }
+
   }
   openNotifications(){
-    this.friendsTab = false
-    this.profileTab = false
-    this.unreadnotifications = 0
-    this.notificationsTab = !this.notificationsTab
+    if(this.canopenmenus){
+      this.friendsTab = false
+      this.profileTab = false
+      this.unreadnotifications = 0
+      this.notificationsTab = !this.notificationsTab
+    }
   }
 }

@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit {
       if(observer.message_type == 'yougotmatched'){
         this.isready = false
         this.isplaying = true
+        this._matchMakingService.closeMenus(this.current_user.username)
         localStorage.setItem('matchinfo', JSON.stringify({
           isplaying: JSON.stringify(true),
           enemy: observer.enemy,
@@ -83,6 +84,8 @@ export class HomeComponent implements OnInit {
       else if(observer.message_type == 'matchended'){
         localStorage.removeItem('matchinfo')
         this.isplaying = false
+        this.isready = false
+        this._matchMakingService.openMenus(this.current_user.username)
       }
       else if(observer.message_type == 'newongoingmatches'){
         this.ongoing_matches = new Array()
@@ -92,7 +95,7 @@ export class HomeComponent implements OnInit {
         this.ongoing_matches = observer.ongoing_matches
       }
       // If a user accepted our invite to play
-      if(observer.message_type == 'matchinviteaccepted'){
+      else if(observer.message_type == 'matchinviteaccepted'){
         // If we're not playing or waiting to play, we can start the match and notify the other user that he can start loading its match itnerface
         if(!this.isplaying && !this.isready){
           const starttime = new Date()
@@ -119,6 +122,7 @@ export class HomeComponent implements OnInit {
 
           this.isready = false
           this.isplaying = true
+          this._matchMakingService.closeMenus(this.current_user.username)
 
         }
         // If we're already in a match, we ignore the fact that the user accepted our invite and notify him that we are not available atm
