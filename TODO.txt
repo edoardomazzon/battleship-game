@@ -2,7 +2,6 @@ In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli pro
 
 ULTIME FUNZIONALITA' PRINCIPALI:
 
-  - Sistema di notifiche per messaggi non letti
   - Sistemare la chat graficamente, sia in gioco che nella home (e anche agli spettatori ma tanto quella è uguale a quella di gioco)
   - Pannello amministratore: bloccare utente; bannare utente; promuovere utente ad admin; vedere statistiche; resettare statistiche; inviare avvisi a tutti gli utenti
     (sotto forma di notifica); viste da db con diversi ordinamenti (in base al punteggio o altre statistiche). Pensavamo di salvarci nel client tutti gli utenti
@@ -12,11 +11,12 @@ ULTIME FUNZIONALITA' PRINCIPALI:
   - App mobile
 
 IMPLEMENTAZIONI E FIX:
+ -1. Quando si elimina un amico, l'altro non lo sente
   0. Le partite non vengono vinte correttamente; se A lascia, B vince due volte, poi se si fa un'altra partita e B lascia, A vince 3 volte (secondo
      me è un problema di qualche socket che rimane attivo)
   1. Segnalare con un errore che il login non è andato a buon fine
   2. Allungare le sessioni di login
-  3. Eliminare bene le notifiche senza lasciare null (quando si accetta un invit0)
+  3. Eliminare bene le notifiche senza lasciare null (quando si accetta un invito)
   4. Quando blocchi un utente si deve anche eliminare dalla friends list
   5. Quando inizia una partita chiudere tutti i menu a tendina
   6. Sistemare il friend component che fa delle emit inutili; praticamente quando bisogna eliminare una friend request dalla lista, 
@@ -31,4 +31,5 @@ IMPLEMENTAZIONI E FIX:
       prima di fare la localStorage.setItem('current user')
   11. Mettere commenti in inglese ovunque
   12. Eliminare file inutili
+  13. Solo gli utenti admin possono fare POST su 'admindashboard'
 

@@ -62,6 +62,10 @@ const UserSchema = mongoose.Schema({
         type:  Array,
         required: false
     },
+    isbanend: {
+        type: Boolean,
+        required: false
+    },
     salt: {
         type: String,
         required: false

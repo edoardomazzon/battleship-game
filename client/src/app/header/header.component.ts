@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
 import { AuthService} from '../services/auth.service';
+import { IsAdminService } from '../services/is-admin.service';
 import { NotificationsService } from '../services/notifications.service';
 
 @Component({
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
   public canopenmenus: Boolean
   private current_user: any
 
-  constructor(private _router: Router, public _authservice: AuthService, private _notificationsService: NotificationsService) {
+  constructor(private _router: Router, public _authservice: AuthService, private _notificationsService: NotificationsService, private _isadminService: IsAdminService) {
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     this.friendsTab = false
     this.profileTab = false
@@ -48,6 +49,10 @@ export class HeaderComponent implements OnInit {
         this.canopenmenus = true
       }
     })
+  }
+
+  isAdmin(){
+    return this._isadminService.isAdmin()
   }
 
   logoutUser(){

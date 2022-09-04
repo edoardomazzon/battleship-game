@@ -10,17 +10,18 @@ import { MatchmakingService } from '../services/matchmaking.service';
 })
 
 export class HomeComponent implements OnInit {
-  private baseURL = 'http://localhost:3000/'
-  private readyUpURL = 'http://localhost:3000/readyup'
+  public baseURL = 'http://localhost:3000/'
   public isready = false
   public isplaying: Boolean
   public isspectating: Boolean
   public current_user: any
   public ongoing_matches: any
+  public isadmin: Boolean
 
   constructor(private _router: Router, private _httpClient: HttpClient, private _matchMakingService: MatchmakingService) {
     this.isplaying = false
     this.isspectating = false
+    this.isadmin = false
   }
 
   ngOnInit(): void {
@@ -34,6 +35,7 @@ export class HomeComponent implements OnInit {
       }
     }
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    this.isadmin = (this.current_user.role == 'admin')
     this.listenToMatchmaking()
    }
 

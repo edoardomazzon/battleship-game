@@ -52,6 +52,7 @@ const removeFriendRoute = require('./routes/removefriend');
 const friendRequestRoute = require('./routes/friendrequest');
 const blacklistUserRoute = require('./routes/blacklistuser');
 const updateAccuracyRoute = require('./routes/updateaccuracy');
+const adminDashboardRoute = require('./routes/admindashboard')
 const createNotificationRoute = require('./routes/createnotification');
 const deleteNotificationRoute = require('./routes/deletenotification');
 const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
@@ -73,6 +74,7 @@ app.use('/removefriend', removeFriendRoute);
 app.use('/friendrequest', friendRequestRoute);
 app.use('/blacklistuser', blacklistUserRoute);
 app.use('/updateaccuracy', updateAccuracyRoute);
+app.use('/admindashboard', adminDashboardRoute);
 app.use('/createnotification', createNotificationRoute);
 app.use('/deletenotification', deleteNotificationRoute);
 app.use('/acceptfriendrequest', acceptFriendRequestRoute);

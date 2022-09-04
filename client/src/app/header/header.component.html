@@ -18,21 +18,23 @@
 
   <div class="flex" *ngIf="this._authservice.isAuthenticated()">
 
-    <div class="btn mr-5 cursor-pointer relative" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : !canopenmenus}" (click)="openNotifications()">
+    <!-- Notifications menu -->
+    <div *ngIf="!isAdmin()" class="btn mr-5 cursor-pointer relative" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : !canopenmenus}" (click)="openNotifications()">
       <svg class="w-8 h-8" viewBox="0 0 26 26" style="fill: rgb(255, 255, 255)">
         <path d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"></path>
       </svg>
       <div *ngIf="unreadnotifications > 0" class="bg-red text-white rounded-full absolute -top-[5px] -right-[5px] w-5 h-5 flex items-center justify-center">
-        <span class="text-xxs">{{ unreadnotifications }}</span>
+
       </div>
     </div>
 
-    <!-- Notifications menu -->
+
     <div *ngIf="notificationsTab">
       <app-notifications></app-notifications>
     </div>
 
-    <div class="btn mr-5 cursor-pointer relative" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : !canopenmenus}" (click)="openFriendsMenu()">
+    <!-- Friends menu -->
+    <div *ngIf="!isAdmin()" class="btn mr-5 cursor-pointer relative" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : !canopenmenus}" (click)="openFriendsMenu()">
       <svg class="w-8 h-8" viewBox="0 0 475.851 475.851">
         <g>
           <path class="fill-white" d="M151.549,145.274c0,23.39,9.145,50.385,24.462,72.214c17.389,24.78,39.376,38.427,61.911,38.427     c22.534,0,44.521-13.647,61.91-38.428c15.317-21.828,24.462-48.824,24.462-72.213c0-47.626-38.746-86.372-86.372-86.372     C190.296,58.902,151.549,97.648,151.549,145.274z M237.922,73.902c39.354,0,71.372,32.018,71.372,71.372     c0,20.118-8.33,44.487-21.74,63.598c-14.29,20.364-32.38,32.043-49.632,32.043c-17.252,0-35.342-11.679-49.632-32.043     c-13.41-19.11-21.741-43.479-21.741-63.598C166.549,105.919,198.567,73.902,237.922,73.902z"/>
@@ -45,25 +47,23 @@
           <path class="fill-white" d="M303.345,70.438c11.336-10.936,26.254-16.958,42.006-16.958c33.374,0,60.526,27.152,60.526,60.527     c0,17.154-7.112,37.947-18.563,54.266c-12.128,17.286-27.424,27.2-41.964,27.2c-5.593,0-11.259-1.406-16.841-4.18     c-3.711-1.844-8.212-0.331-10.055,3.379c-1.843,3.709-0.33,8.21,3.379,10.054c7.675,3.814,15.587,5.748,23.517,5.748     c19.783,0,39.048-11.927,54.243-33.585c13.327-18.994,21.283-42.501,21.283-62.881c0-41.646-33.881-75.527-75.526-75.527     c-19.657,0-38.273,7.516-52.42,21.163c-2.981,2.875-3.066,7.624-0.19,10.604C295.614,73.229,300.363,73.314,303.345,70.438z"/>
         </g>
       </svg>
-      <div *ngIf="unreadfriendrequests > 0" class="bg-red text-white rounded-full absolute -top-[5px] -right-[5px] w-5 h-5 flex items-center justify-center">
-        <span class="text-xxs">{{ unreadfriendrequests }}</span>
-      </div>
+      <div *ngIf="unreadfriendrequests > 0" class="bg-red text-white rounded-full absolute -top-[5px] -right-[5px] w-5 h-5 flex items-center justify-center"></div>
     </div>
 
-      <!-- tendina con dentro due sezioni (amici e richieste) -->
-      <div *ngIf="friendsTab">
-        <app-friends></app-friends>
-      </div>
+    <div *ngIf="friendsTab">
+      <app-friends></app-friends>
+    </div>
 
+    <!-- Profile menu -->
     <div class="btn cursor-pointer" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : !canopenmenus}" (click)="openProfileMenu()">
       <svg class="w-8 h-8" style="vertical-align: middle;fill:#fff;overflow:hidden;" viewBox="0 0 1024 1024">
         <path d="M843.282963 870.115556c-8.438519-140.515556-104.296296-257.422222-233.908148-297.14963C687.881481 536.272593 742.4 456.533333 742.4 364.088889c0-127.241481-103.158519-230.4-230.4-230.4S281.6 236.847407 281.6 364.088889c0 92.444444 54.518519 172.183704 133.12 208.877037-129.611852 39.727407-225.46963 156.634074-233.908148 297.14963-0.663704 10.903704 7.964444 20.195556 18.962963 20.195556l0 0c9.955556 0 18.299259-7.774815 18.962963-17.73037C227.745185 718.506667 355.65037 596.385185 512 596.385185s284.254815 122.121481 293.357037 276.195556c0.568889 9.955556 8.912593 17.73037 18.962963 17.73037C835.318519 890.311111 843.946667 881.019259 843.282963 870.115556zM319.525926 364.088889c0-106.287407 86.186667-192.474074 192.474074-192.474074s192.474074 86.186667 192.474074 192.474074c0 106.287407-86.186667 192.474074-192.474074 192.474074S319.525926 470.376296 319.525926 364.088889z"/>
       </svg>
     </div>
 
-    <!-- tendina con dentro due voci (vai al profilo e logout) -->
     <div *ngIf="profileTab" class="absolute top-full right-8 bg-gray-300 text-black p-5 flex flex-col items-center z-10">
       <button (click)="logoutUser()">Logout</button>
     </div>
+
   </div>
 </header>

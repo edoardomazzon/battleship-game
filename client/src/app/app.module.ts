@@ -26,7 +26,6 @@ import { NotificationsComponent } from './notifications/notifications.component'
 const routes: Routes = [
   {path: 'register', component: RegisterComponent, canActivate : [IsNotAuthenticatedService]},
   {path: 'login', component: LoginComponent, canActivate : [IsNotAuthenticatedService]},
-  {path: 'admindashboard', component: AdminDashboardComponent, canActivate: [IsAdminService]},
   {path: '', component: HomeComponent, canActivate: [IsAuthenticatedService]},
   {path: '**', redirectTo: '/'}
 ]

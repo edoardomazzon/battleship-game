@@ -1,4 +1,4 @@
-<div>
+<div *ngIf=" !isadmin ">
   <!-- Commentare il div sottostante se si vuole avere i campi di prova subito in alto nella home -->
   <div class="game-container h-screen w-50 bg-navy">
     <h1 class="text-center pt-1 text-white">Battleship game</h1>
@@ -40,4 +40,10 @@
 
   </div>
   <!-- Commentare fino a qui-->
+</div>
+
+
+<!-- ADMINISTRATOR CONTROL PANEL -->
+<div *ngIf="isadmin">
+  <app-admin-dashboard></app-admin-dashboard>
 </div>

@@ -23,4 +23,16 @@ export class IsAdminService implements CanActivate{
     this._router.navigateByUrl('/')
     return false
   }
+
+  isAdmin(): boolean{
+    var auth_token = localStorage.getItem('auth_token')
+    if(auth_token != null){
+      var role = JSON.parse(JSON.stringify(jwt_decode(auth_token))).role
+      if (role != 'admin'){
+        return false;
+      }
+      return true
+    }
+    return false
+  }
 }
