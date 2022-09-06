@@ -7,7 +7,7 @@ const router = express.Router();
 // Activate when a moderator selecets all users, bans or unbans a user, promotes a user, wipes a users's statistics or notifies all users.
 // Based on the request type, one of these functionalities is utilized
 router.post("/", async (req, res) => {
-    request = req.body
+    const request = req.body
 
     // Selecting all users from the database
     if(request.request_type == 'allusers'){
