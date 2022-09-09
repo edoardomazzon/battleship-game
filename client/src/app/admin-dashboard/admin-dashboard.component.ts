@@ -49,6 +49,7 @@ export class AdminDashboardComponent implements OnInit {
   openFunctionalitiesSection(){
     this.functionalitiessection = true
     this.statisticssection = false
+    this.getAllUsers()
   }
 
   // Opens the functionalities section

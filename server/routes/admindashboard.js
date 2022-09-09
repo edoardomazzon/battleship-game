@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
 
     // Banning a user
     else if(request.request_type == 'ban'){
+        console.log('banning user')
         try{
             User.updateOne({username: request.username}, {isbanned: true}).then()
         }catch(err){
