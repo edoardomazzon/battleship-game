@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
 
   countUnreadNotifications(){
     this._notificationsService.listenToNotifications(this.current_user.username).subscribe((notification) => {
-      if(!this.notificationsTab && ( notification.notification_type == 'matchinvite' || notification.notification_type == 'newmessage')){ this.unreadnotifications += 1 }
+      if(!this.notificationsTab && ( notification.notification_type == 'matchinvite' || notification.notification_type == 'newmessage' || notification.notification_type == 'modmessage')){ this.unreadnotifications += 1 }
       else if(!this.friendsTab && notification.notification_type == 'friendrequest'){ this.unreadfriendrequests += 1 }
       else if(notification.notification_type == 'closeheadermenus'){
         console.log('cant open menus now')

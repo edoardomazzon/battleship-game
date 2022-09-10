@@ -10,11 +10,11 @@
   <ul> ALL USERS
     <li *ngFor="let user of users">
       {{ user.username }}
-      <button class="btn !bg-red-error" (click)="banUser(user.username)">Ban</button>
-      <button class="btn !bg-success" (click)="unbanUser(user.username)">Unban</button>
-      <button class="btn !bg-green" (click)="promoteUser(user.username)">Promote</button>
-      <button class="btn !bg-yellow-warning" (click)="wipeUser(user.username)">Wipe stats</button>
-      <button class="btn">Notify</button>
+      <button class="btn !bg-red-error" (click)="confirmBan(user.username)" [ngClass]="{'pointer-events-none !bg-gray-400': user.isbanned}">Ban</button>
+      <button class="btn !bg-success" (click)="confirmUnban(user.username)" [ngClass]="{'pointer-events-none !bg-gray-400': !user.isbanned}">Unban</button>
+      <button class="btn !bg-green" (click)="confirmPromote(user.username)" [ngClass]="{'pointer-events-none !bg-gray-400': user.role == 'admin'}">Promote</button>
+      <button class="btn !bg-yellow-warning" (click)="confirmWipe(user.username)">Wipe stats</button>
+      <button class="btn" (click)="promptNotificationToUser(user.username)">Notify</button>
     </li>
   </ul>
   <form>
@@ -64,3 +64,4 @@
     Back
   </button>
 </div>
+<button class="btn" (click)="promptNotificationToAllUsers()"> Notify all </button>

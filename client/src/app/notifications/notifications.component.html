@@ -18,6 +18,10 @@
           </svg>
         </button>
       </div>
+      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'modmessage'">
+        <strong>Mod: </strong><span class="text-xxs text-yellow-warning">{{notification.text_content}}</span>
+        <button class="btn !bg-success" (click)="markNotificationAsRead(notification)">Ok</button>
+      </div>
     </li>
   </ul>
 </div>

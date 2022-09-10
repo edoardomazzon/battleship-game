@@ -1,7 +1,6 @@
 const express = require('express');
 const User = require('../models/user.js');
 const Notification = require('../models/notification.js');
-const { request } = require('express');
 const router = express.Router();
 
 // Activate when a moderator selecets all users, bans or unbans a user, promotes a user, wipes a users's statistics or notifies all users.
@@ -22,7 +21,6 @@ router.post("/", async (req, res) => {
 
     // Banning a user
     else if(request.request_type == 'ban'){
-        console.log('banning user')
         try{
             User.updateOne({username: request.username}, {isbanned: true}).then()
         }catch(err){
@@ -70,14 +68,19 @@ router.post("/", async (req, res) => {
         try{
             User.find().then((allusers) => {
                 for(i = 0; i < allusers.length; i++){
-                    var notif = {
-                        user: request.user,
-                        from: request.from,
-                        notification_type: request.notification_type,
-                        timestamp: request.timestamp,
-                        message: request.message
+                    if(allusers[i].role != 'admin'){
+                        var notif = {
+                            user: allusers[i].username,
+                            from: 'Moderators',
+                            notification_type: 'modmessage',
+                            timestamp: request.timestamp,
+                            text_content: request.message
+                        }
+                        console.log(notif)
+                        notif = new Notification(notif)
+                        notif.save()
                     }
-                    const newnotif = Notification.save(notif)
+
                 }
             })
         }catch(err){

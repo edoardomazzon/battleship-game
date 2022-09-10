@@ -29,14 +29,16 @@ export class LoginService {
       tap( (data) => {
         //Otteniamo la response dal server (vedere route login.js in server per capire com'è fatta la response)
         this.response = data;
-        localStorage.clear()
-        //Salviamo in localstorage il token
-        this.token = this.response.token;
-        localStorage.setItem('auth_token', this.token);
+        if(this.response != 'banned'){
+          localStorage.clear()
+          //Salviamo in localstorage il token
+          this.token = this.response.token;
+          localStorage.setItem('auth_token', this.token);
 
-        //Salviamo in localstorage l'utente per averne i dati comodamente estraibili in seugito
-        this.user = this.response.user;
-        localStorage.setItem('current_user', JSON.stringify(this.user));
+          //Salviamo in localstorage l'utente per averne i dati comodamente estraibili in seugito
+          this.user = this.response.user;
+          localStorage.setItem('current_user', JSON.stringify(this.user));
+        }
       }));
   }
 }

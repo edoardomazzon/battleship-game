@@ -192,40 +192,78 @@ export class AdminDashboardComponent implements OnInit {
   // Bans the selected user
   banUser(username: String){
     this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'ban', username: username}).subscribe()
+    for(let user of this.users){
+      if(user.username == username){
+        user.isbanned = true
+      }
+    }
+  }
+  confirmBan(username: String){
+    if(window.confirm('Are you sure you want to ban '+username+'?')){
+      this.banUser(username)
+    }
   }
 
   // Unbans the selected user
   unbanUser(username: String){
     this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'unban', username: username}).subscribe()
+    for(let user of this.users){
+      if(user.username == username){
+        user.isbanned = false
+      }
+    }
+  }
+  confirmUnban(username: String){
+    if(window.confirm('Are you sure you want to unban '+username+'?')){
+      this.unbanUser(username)
+    }
   }
 
   // Promotes the selected user to administrator
   promoteUser(username: String){
     this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'promote', username: username}).subscribe()
   }
+  confirmPromote(username: String){
+    if(window.confirm('Are you sure you want to promote '+username+' to moderator?')){
+      this.promoteUser(username)
+    }
+  }
 
   // Wipes the selected user's statistics (winstreaks, accuracy, games played, etc.)
   wipeUser(username: String){
     this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'wipestats', username: username}).subscribe()
   }
+  confirmWipe(username: String){
+    if(window.confirm('Are you sure you want to wipe '+username+'\'s game statistics?')){
+      this.wipeUser(username)
+    }
+  }
 
   // Activates a popup (or a textbox somewhere in the page) that contains a textbox with the message to be sent to the selected user as a notification
   promptNotificationToUser(username: String){
     // Should make a textbox appear or popup; whatever the administrator types in it, it will be sent to the selected user
+    var message = prompt('Enter the message you want to send to'+ username, '');
+    if (message != null && message != "") {
+      this.sendNotificationToUser(username, message)
+    }
   }
 
   // Sends a custom notification to the selected user
   sendNotificationToUser(username: String, message: String){
-    this._httpClient.post(this.baseURL+'createnotification', {user: username, from: 'moderators', notification_type: 'modmessage', message: message, timestamp: new Date()}).subscribe()
+    this._httpClient.post(this.baseURL+'createnotification', {user: username, from: 'moderators', notification_type: 'modmessage', text_content: message, timestamp: new Date()}).subscribe()
   }
 
   // Activates a popup (or a textbox somewhere in the page) that contains a textbox with the message to be sent to the selected user as a notification
   promptNotificationToAllUsers(){
     // Should make a textbox appear or popup; whatever the administrator types in it, it will be sent to all users
+    var message = prompt('Enter the message you want to send to everyone');
+    if (message != null && message != "") {
+      this.sendNotificationToAllUsers(message)
+    }
   }
 
   // Sends a custom notification to all the non-administrator users
   sendNotificationToAllUsers(message: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'notifyall', message: message}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'notifyall', message: message, timestamp: new Date()}).subscribe()
   }
 }

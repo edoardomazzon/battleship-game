@@ -66,6 +66,9 @@ export class NotificationsComponent implements OnInit {
         this.orderLastFirst()
 
       }
+      else if(notification.notification_type == 'modmessage'){
+        this.notifications.push(notification)
+      }
     })
   }
 

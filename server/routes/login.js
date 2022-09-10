@@ -67,8 +67,10 @@ passport.use(
 
 router.get("/", passport.authenticate("basic", {session: false}), async (req, res) => {
     // If we reach this point, the user is successfully authenticated and
-    // has been injected into req.user
-
+    // has bee n injected into req.user
+    if(req.user.isbanned){
+        return res.json('banned')
+    }
     // We now generate a JWT with the useful user data
     // and return it as response    
     var tokendata = {

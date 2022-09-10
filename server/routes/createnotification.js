@@ -10,9 +10,9 @@ const Notification = require('../models/notification.js');
 
 router.post('/', async(req, res) => {
     const newnotif = new Notification(req.body)
-
     if(newnotif.notification_type == 'modmessage'){
         newnotif.save()
+        console.log(newnotif)
     }
 
     else{

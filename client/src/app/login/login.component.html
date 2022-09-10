@@ -5,6 +5,7 @@
       <div>
         <label for="username">Username</label>
         <input type="text" id="username" [(ngModel)]="authuser.username" name="username" />
+        <p class="text-red-error text-xxs" *ngIf="yourebanned"> Your account has been temporarily banned</p>
       </div>
 
       <div class="my-7">
