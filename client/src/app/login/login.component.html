@@ -1,22 +1,44 @@
 <div class="mt-5 mb-11">
-  <h1 class="text-center pb-5">Login</h1>
-  <div class="container max-w-[768px]">
-    <form class="shadow-2xl container py-8">
-      <div>
-        <label for="username">Username</label>
-        <input type="text" id="username" [(ngModel)]="authuser.username" name="username" />
-        <p class="text-red-error text-xxs" *ngIf="yourebanned"> Your account has been temporarily banned</p>
-      </div>
-
-      <div class="my-7">
-        <div class="flex justify-between items-center">
-          <label for="password">Password</label>
-          <a href="/reset-password" class="text-navy font-bold">Forgot your password?</a> <!-- capire come fare -->
+  <div *ngIf="!changing_password">
+    <h1 class="text-center pb-5">Login</h1>
+    <div class="container max-w-[768px]">
+      <form class="shadow-2xl container py-8">
+        <div>
+          <label for="username">Username</label>
+          <input type="text" id="username" [(ngModel)]="authuser.username" name="username" />
+          <p class="text-red-error text-xxs" *ngIf="yourebanned"> Your account has been temporarily banned</p>
         </div>
-        <input type="password" id="password" [(ngModel)]="authuser.password" name="password" />
-      </div>
-      <button (click)="loginUser()" class="btn w-full">Sign in</button>
-      <p class="my-1"> Don't have an account? Sign up <a href="/register" class="text-navy font-bold">here</a></p>
-    </form>
+
+        <div class="my-7">
+          <div class="flex justify-between items-center">
+            <label for="password">Password</label>
+            <a href="/reset-password" class="text-navy font-bold">Forgot your password?</a> <!-- capire come fare -->
+          </div>
+          <input type="password" id="password" [(ngModel)]="authuser.password" name="password" />
+        </div>
+        <button (click)="loginUser()" class="btn w-full">Sign in</button>
+        <p class="my-1"> Don't have an account? Sign up <a href="/register" class="text-navy font-bold">here</a></p>
+      </form>
+    </div>
   </div>
+
+  <div *ngIf="changing_password">
+    <h1 class="text-center pb-5">Change your password</h1>
+    <div class="container max-w-[768px]">
+      <form class="shadow-2xl container py-8">
+        <div>
+          <label for="newpassword1">New password</label>
+          <input type="password" id="newpassword1" [(ngModel)]="firstpasswordchangefield" name="newpassword1" />
+        </div>
+
+        <div class="my-7">
+          <label for="newpassword2">Repeat new password</label>
+          <input (input)="checkPasswordMismatch()" type="password" id="newpassword2" [(ngModel)]="secondpasswordchangefield" name="newpassword2" />
+          <p class="text-red-error text-xxs" *ngIf="warnpasswordmismatch"> The two passwords don't match</p>
+        </div>
+        <button (click)="changePassword(firstpasswordchangefield)" :[ngClass]="{' !bg-red-error disabled pointer-events-none': warnpasswordmismatch == true}" class="btn bg-success w-full">Confirm</button>
+      </form>
+    </div>
+  </div>
+
 </div>

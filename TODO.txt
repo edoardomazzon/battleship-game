@@ -3,20 +3,12 @@ In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli pro
 ULTIME FUNZIONALITA' PRINCIPALI:
 
 
-  - Pannello amministratore: bloccare utente; bannare utente; promuovere utente ad admin; vedere statistiche; resettare statistiche; inviare avvisi a tutti gli utenti
-    (sotto forma di notifica); viste da db con diversi ordinamenti (in base al punteggio o altre statistiche). Pensavamo di salvarci nel client tutti gli utenti
-    e ordinarli direttamente da lì senza fare query complicate ogni volta; per ordinarli basta cliccare sul nome della colonna che contiene il valore del quale
-    ci interessa l'ordinamento.
-      1. Provare il sistema di notifiche con popup
-      2. Trovare il modo di confermare le azioni con un popup (ad esempio "sei sicuro di voler bannare tizio caio?" in un popup) nella functionalities section
-      3. Far cambiare password immediatamente al primo login a un utente che viene promosso ad amministratore
-      4. Avvisare un giocatore che è stato bannato quando prova a fare login
+  - Far cambiare password immediatamente al primo login a un utente che viene promosso ad amministratore
   - Sistemare la chat graficamente, sia in gioco che nella home (e anche agli spettatori ma tanto quella è uguale a quella di gioco)
   - Se clicchi su un utente vedi in un pop up le sue statistiche
   - App mobile
 
 IMPLEMENTAZIONI E FIX:
- -1. Quando si elimina un amico, l'altro non lo sente
   0. Le partite non vengono vinte correttamente; se A lascia, B vince due volte, poi se si fa un'altra partita e B lascia, A vince 3 volte (secondo
      me è un problema di qualche socket che rimane attivo)
   1. Segnalare con un errore che il login non è andato a buon fine

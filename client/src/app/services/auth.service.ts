@@ -19,7 +19,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const jwthelper: JwtHelperService = new JwtHelperService() //Questa classe serve per il metodo .isTokenExpired()
     const token = localStorage.getItem('auth_token');
-    if(token != null){
+    if(token != null && token != undefined){
       return !jwthelper.isTokenExpired(token);
     }
     return false;

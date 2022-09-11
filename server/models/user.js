@@ -66,6 +66,10 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         required: false
     },
+    needspasswordchange: {
+        type: Boolean,
+        required: false
+    },
     salt: {
         type: String,
         required: false

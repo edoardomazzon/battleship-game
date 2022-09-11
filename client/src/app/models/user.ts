@@ -12,6 +12,7 @@ export class User {
   games_won!: number;
   pfp!: string;
   isbanned!: Boolean;
+  needspasswordchange!: Boolean;
   pending_friend_requests!: Array<String>;
   friends_list!: Array<String>;
   blacklisted_users!: Array<String>;

@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
     // Promoting a user to administrator
     else if(request.request_type == 'promote'){
         try{
-            User.updateOne({username: request.username}, {role: 'admin'}).then()
+            User.updateOne({username: request.username}, {role: 'admin', needspasswordchange: true}).then()
         }catch(err){
             console.log(err)
         }

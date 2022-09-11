@@ -18,9 +18,12 @@ export class HeaderComponent implements OnInit {
   public unreadfriendrequests: number
   public canopenmenus: Boolean
   private current_user: any
+  private interval: any
 
   constructor(private _router: Router, public _authservice: AuthService, private _notificationsService: NotificationsService, private _isadminService: IsAdminService) {
+
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    this.interval = null
     this.friendsTab = false
     this.profileTab = false
     this.notificationsTab = false
@@ -31,10 +34,18 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.countUnreadNotifications()
+    // Checking every second if the user is logged before starting to listen to notifications sent to him
+    this.interval = setInterval(() => {
+      this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+      if(this.current_user != null && this.current_user != undefined){
+        this.countUnreadNotifications()
+        clearInterval(this.interval)
+      }
+    }, 1000)
   }
 
   countUnreadNotifications(){
+    console.log('counting')
     this._notificationsService.listenToNotifications(this.current_user.username).subscribe((notification) => {
       if(!this.notificationsTab && ( notification.notification_type == 'matchinvite' || notification.notification_type == 'newmessage' || notification.notification_type == 'modmessage')){ this.unreadnotifications += 1 }
       else if(!this.friendsTab && notification.notification_type == 'friendrequest'){ this.unreadfriendrequests += 1 }
