@@ -17,10 +17,12 @@ export class LoginComponent implements OnInit {
   public firstpasswordchangefield: string
   public secondpasswordchangefield: string
   public warnpasswordmismatch: Boolean
+  public wrongcredentials: Boolean
   private baseURL = 'http://localhost:3000/login'
 
   constructor(private _loginService: LoginService, private _router: Router, private _httpClient: HttpClient) {
     this.yourebanned = false
+    this.wrongcredentials = false
     this.changing_password = false
     this.firstpasswordchangefield = ''
     this.secondpasswordchangefield = ''
@@ -30,17 +32,23 @@ export class LoginComponent implements OnInit {
   ngOnInit(){
   }
 
-
   loginUser(){
     this._loginService.login(this.authuser).subscribe(authuser =>{
+      if (authuser == 'error'){
+        console.log('wrong')
+        this.wrongcredentials = true
+      }
       if (authuser == 'banned'){
+        this.wrongcredentials = false
         this.yourebanned = true
       }
       else if(authuser.needspasswordchange){
+        this.wrongcredentials = false
         this.changing_password = true
         console.log('user must change password')
       }
       else{
+        this.wrongcredentials = false
         this.yourebanned = false
         this._router.navigateByUrl('/')
       }
@@ -54,7 +62,6 @@ export class LoginComponent implements OnInit {
     else{
       this.warnpasswordmismatch = false
     }
-
   }
 
   changePassword(newpassword: string){

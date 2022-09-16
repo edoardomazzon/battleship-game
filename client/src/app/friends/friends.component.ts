@@ -217,7 +217,15 @@ export class FriendsComponent implements OnInit {
   }
 
   unblockUser(blocked_user: String) {
+    console.log(this.blacklisted_users)
     this._friendRequestService.unblockUser(this.current_user.username, blocked_user)
+    var newlist = new Array()
+    for(let blocked of this.blacklisted_users){
+      if(blocked != blocked_user){ newlist.push(blocked)}
+    }
+    this.blacklisted_users = new Array()
+    for(let blocked of newlist){ this.blacklisted_users.push(blocked)}
+    console.log(this.blacklisted_users)
   }
 
   removeFriend(removed_user: String) {

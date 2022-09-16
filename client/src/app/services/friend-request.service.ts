@@ -111,7 +111,16 @@ export class FriendRequestService {
   }
 
   unblockUser(current_user: String, blocked_user: String){
-    this._httpClient.post(this.baseURL+'unblockuser', {username: current_user, blocked_user: blocked_user}).subscribe()
+    this._httpClient.post(this.baseURL+'unblockuser', {username: current_user, blocked_user: blocked_user}).subscribe((newblacklist) => {
+      var user: any = localStorage.getItem('current_user')
+      if(user != null || user != undefined){
+        user = JSON.parse(user)
+        user.blacklisted_users = newblacklist
+        localStorage.removeItem('current_user')
+        localStorage.setItem('current_user', JSON.stringify(user))
+      }
+    })
+
   }
 
   inviteToPlay(current_user: String, friend: String){
