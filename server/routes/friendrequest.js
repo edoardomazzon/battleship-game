@@ -22,14 +22,10 @@ router.post("/", async (req, res) => {
         new_pending_requests.push(sender.username)
         //Updating user B's pending_friend_requests by substituting it with the new one
         try {
-            const update = await User.updateOne({username: receiver}, {pending_friend_requests: new_pending_requests})
-            res.json('Sent a friend request')
+            await User.updateOne({username: receiver}, {pending_friend_requests: new_pending_requests})
         } catch (err) {
             console.log(err)
         }
-    }
-    else{
-        res.json('Can\'t send friend request: '+receiver+' is already in your friends list or has blacklisted you')
     }
 });
 

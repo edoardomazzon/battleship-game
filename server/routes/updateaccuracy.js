@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user.js');
 
+// Called whenever a user takes a shot and gets the shot result back; here the accuracy is updated as well as the total shots count
+// and the hit shots count
 router.post('/', async(req, res) => {
     const username = req.body.username
     const hit = req.body.hit
@@ -14,12 +16,10 @@ router.post('/', async(req, res) => {
             total_shots_fired = result.shots_fired
             total_shots_hit   = result.shots_hit
             total_shots_fired = total_shots_fired + 1
-            if(hit){
-                total_shots_hit = total_shots_hit + 1
-            }    
+            if(hit){ total_shots_hit = total_shots_hit + 1 }    
             newaccuracy = Math.round(total_shots_hit * 100 / total_shots_fired)
 
-            const update = User.updateOne({username: username}, {
+            User.updateOne({username: username}, {
                 $set:{
                     accuracy: newaccuracy,
                     shots_fired: total_shots_fired,
@@ -27,9 +27,7 @@ router.post('/', async(req, res) => {
                 }
             }).then()
         })
-        res.json('Accuracy updated')
     }catch(err){
-        res.json(err)
         console.log(err)
     }
 })

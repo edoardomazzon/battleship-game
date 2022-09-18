@@ -21,18 +21,16 @@ if (!process.env.JWT_SECRET) {
     process.exit(-1);
 }
 
-//Diciamo di usare l'algoritmo RS256 per il JWT_SECRET
+//Telling the app to use the RS256 algotithm for the JWT_SECRET
 var auth = jwt({
     secret: process.env.JWT_SECRET,
     algorithms: ['RS256']
 });
 
 passport.use(
+    // Using Passport middleware to manage the authentication and the verification of correct credentials
     new passportHTTP.BasicStrategy(function(username, password, done) {
-        // Delegate function we provide to passport middleware
-        // to verify user credentials
-
-        User.getModel().findOne({ username: username }, (err, user) => {
+        User.findOne({ username: username }, (err, user) => {
             if (err) {
                 return done({
                     statusCode: 500,
@@ -61,8 +59,7 @@ passport.use(
 );
 
 router.get("/", passport.authenticate("basic", {session: false}), async (req, res) => {
-    // If we reach this point, the user is successfully authenticated and
-    // has bee n injected into req.user
+    // If we reach this point, the user is successfully authenticated and has been injected into req.user
     if(req.user.isbanned){
         return res.json('banned')
     }
@@ -73,8 +70,7 @@ router.get("/", passport.authenticate("basic", {session: false}), async (req, re
         })
     }
     else{
-        // We now generate a JWT with the useful user data
-        // and return it as response    
+        // We now generate a JWT with the useful user data and return it as response    
         var tokendata = {
             username: req.user.username,
             role: req.user.role
@@ -87,13 +83,12 @@ router.get("/", passport.authenticate("basic", {session: false}), async (req, re
             }
         );
 
-        // Creting a json with user data to save in local storage, but first we have to delete the password, salt and digest fields
+        // Creating a json with user data to save in local storage, but first we have to delete the password, salt and digest fields
         const logged_username = jwt_decode(token_signed);
         var logged_user = await User.findOne({username: logged_username.username});
         logged_user.password = undefined;
         logged_user.salt = undefined;
-        logged_user.digest = undefined;
-        
+        logged_user.digest = undefined;        
         
         return res.status(200).json({
             error: false,
@@ -104,9 +99,8 @@ router.get("/", passport.authenticate("basic", {session: false}), async (req, re
     }    
 });
 
-// Whena user changes a password
+// When a user changes a password
 router.post("/", async (req, res) =>{
-    console.log(req.body)
     try{
         await User.findOne({username: req.body.username}).then((result) => {
             var temp = new User(result)

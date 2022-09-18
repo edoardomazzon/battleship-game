@@ -1,13 +1,12 @@
-// var notification = {
-//     user: friend,
-//     from: current_user,
-//     notification_type: 'matchinvite',
-//     timestamp: new Date()
-//   }
 const express = require('express');
 const router = express.Router();
 const Notification = require('../models/notification.js');
 
+// When a new notification is created, it also gets inserted into the database; if the notification is a message from the moderators,
+// it gets saved automatically, whereas if it's a match invite or an unread message, it will not be inserted in the db if a similar
+// notification from that same user already exists.
+// I.E. If A sends a message to B, the notification is saved, but when A sends a second message to B, the notification isn't saved and
+// B will be just told that he has some "unread messageS"
 router.post('/', async(req, res) => {
     const newnotif = new Notification(req.body)
     if(newnotif.notification_type == 'modmessage'){

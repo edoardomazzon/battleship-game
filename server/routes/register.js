@@ -7,7 +7,7 @@ router.post('/', async (req, res) => {
 
   // Checking if a user with that username or email already exists 
   var u = User.newUser(req.body);
-  const query = await User.findOne({$or:[{username: u.username}, {email: u.email}]}).then((result) => {
+  await User.findOne({$or:[{username: u.username}, {email: u.email}]}).then((result) => {
     if(result != null && result.username == u.username && result.email == u.email){ // Both username and email already in use
       res.json('case0')
     }
@@ -30,7 +30,6 @@ router.post('/', async (req, res) => {
       u.friends_list = [];
       u.blacklisted_users = [];
       u.pending_friend_requests = [];
-      u.isready = false;
       u.isbanned = false;
       u.setPassword(req.body.password);
       // Inserting the user in the db

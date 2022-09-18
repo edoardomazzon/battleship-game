@@ -3,6 +3,7 @@ const Match = require('../models/match.js');
 const User = require('../models/user.js')
 const router = express.Router();
 
+// When a match starts, a match is inserted into the database and both players' "games_played" count increases
 router.post("/", async (req, res) => {
     var newmatch = new Match(req.body)
     try{
@@ -13,8 +14,8 @@ router.post("/", async (req, res) => {
     }
 
     try{
-        const update1 = User.updateOne({username: newmatch.player1}, { $inc:{games_played: 1}}).then(() => {
-            const update2 = User.updateOne({username: newmatch.player2}, { $inc:{games_played: 1}}).then(() => {})})
+        User.updateOne({username: newmatch.player1}, { $inc:{games_played: 1}}).then(() => {
+            User.updateOne({username: newmatch.player2}, { $inc:{games_played: 1}}).then()})
     }catch(err){
         console.log(err)
     }

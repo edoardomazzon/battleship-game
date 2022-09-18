@@ -6,11 +6,8 @@ const User = require('../models/user.js');
 router.post('/', async(req, res) => {
     const username = req.body.username
     try{
-        const update = User.updateOne({username: username}, { current_winstreak: 0}).then(() => {
-            res.json('Updated current_winstreak')
-        })        
+        User.updateOne({username: username}, { current_winstreak: 0}).then()        
     }catch(err){
-        res.json(err)
         console.log(err)
     }
 })
