@@ -560,14 +560,16 @@ export class GameComponent implements OnInit {
     this.detectedenemyactivity = true
     clearTimeout(this.timeout)
     this.stopTimer()
-
-    var matchinfo = localStorage.getItem('matchinfo')
-    var starttime = new Date()
-    if(matchinfo){
-      starttime = JSON.parse(matchinfo).starttime
+    if(!this.youwon && !this.youlost){ // We avoid winning twice or winning by mistake thanks to this if statement
+      var matchinfo = localStorage.getItem('matchinfo')
+      var starttime = new Date()
+      if(matchinfo){
+        starttime = JSON.parse(matchinfo).starttime
+      }
+      this._gameService.winGameDB(this.current_user.username, this.enemy, starttime)
+      this.youwon = true
     }
-    this._gameService.winGameDB(this.current_user.username, this.enemy, starttime)
-    this.youwon = true
+
   }
 
   // Used when the user loses a game
