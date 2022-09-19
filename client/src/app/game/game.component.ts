@@ -546,6 +546,8 @@ export class GameComponent implements OnInit {
     starting the actual match or even during the positioning */
   leaveMatch(reason: String){
     this.detectedenemyactivity = true
+    this.youlost = false
+    this.youwon = false
     clearTimeout(this.timeout)
     this.stopTimer()
     if(reason == 'enemyleftwhileplaying' || reason == 'enemyleftwhilepositioning'){
@@ -557,10 +559,12 @@ export class GameComponent implements OnInit {
 
   // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
+    console.log('winning 1')
     this.detectedenemyactivity = true
     clearTimeout(this.timeout)
     this.stopTimer()
     if(!this.youwon && !this.youlost){ // We avoid winning twice or winning by mistake thanks to this if statement
+      console.log('winning 2')
       var matchinfo = localStorage.getItem('matchinfo')
       var starttime = new Date()
       if(matchinfo){
