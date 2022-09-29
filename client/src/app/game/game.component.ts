@@ -559,18 +559,16 @@ export class GameComponent implements OnInit {
 
   // Used when the user wins a game: updates his games_won counter as well as his winstreak and the matche's "winner" field in the db
   winGame(){
-    console.log('winning 1')
     this.detectedenemyactivity = true
     clearTimeout(this.timeout)
     this.stopTimer()
     if(!this.youwon && !this.youlost){ // We avoid winning twice or winning by mistake thanks to this if statement
-      console.log('winning 2')
       var matchinfo = localStorage.getItem('matchinfo')
       var starttime = new Date()
       if(matchinfo){
         starttime = JSON.parse(matchinfo).starttime
       }
-      this._gameService.winGameDB(this.current_user.username, this.enemy, starttime)
+      this._gameService.winGameDB(this.current_user.username, this.enemy, starttime);
       this.youwon = true
     }
 
@@ -601,7 +599,6 @@ export class GameComponent implements OnInit {
   }
 
   waitForEnemyActivity(){
-    console.log('waiting for enemy activity')
     this.detectedenemyactivity = false
     this.timeout = setTimeout(() => {
       if(!this.detectedenemyactivity){

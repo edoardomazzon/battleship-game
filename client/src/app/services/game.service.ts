@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {io, Socket} from 'socket.io-client';
-import { EmptyError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -92,12 +92,12 @@ export class GameService {
     this.socket.emit('matchleft', leavenotification)
   }
 
-  winGameDB(current_user: String, enemy: String, timestamp: any){
-    this._httpClient.post(this.baseURL+'wingame', {
+  winGameDB(current_user: String, enemy: String, timestamp: Date){
+    this._httpClient.post('http://localhost:3000/wingame/', {
       username: current_user,
       enemy: enemy,
       timestamp: timestamp
-    }).subscribe()
+    }).subscribe((response) => {console.log(response)})
     this.socket.emit('matchended', {player1: current_user, player2: enemy})
   }
 

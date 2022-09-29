@@ -5,11 +5,12 @@ const Match = require('../models/match.js')
 
 // When a user wins a game, we increment his games_won counter as well as his current winstreak. If his current winstreak is 
 // greater than his max winstreak, the current winstreak becomes the max winstreak.
-router.post('/', async(req, res) => {
+router.post('/', (req, res) => {
     const username = req.body.username
     var player1
     var player2
 
+    // Updating the match with the actual winner
     if(req.body.username.localeCompare(req.body.enemy) < 0){
         player1 = req.body.username
         player2 = req.body.enemy
@@ -18,24 +19,23 @@ router.post('/', async(req, res) => {
         player1 = req.body.enemy
         player2 = req.body.username
     }
-    var current_max = 0
-    var current_winstreak
-    const select = await User.findOne({username: username}).then((result) => {
-        current_max = result.max_winstreak
-        current_winstreak = result.current_winstreak + 1
+    Match.updateOne({player1: player1, player2: player2, timestamp: req.body.timestamp}, {winner: req.body.username}).then(() => {
+        res.json('ok')
     })
-    try{
-        const update = User.updateOne({username: username}, { $inc:{games_won: 1, current_winstreak: 1}}).then(() => {
-            if(current_winstreak > current_max){
-                const update2 = User.updateOne({username: username}, { $inc:{max_winstreak: 1}}).then()
-            }
-            const updatematch = Match.updateOne({player1: player1, player2: player2, timestamp: req.body.timestamp}, {winner: req.body.username}).then()
-            res.json('Updated games_won')
-        })
-    }catch(err){
-        res.json(err)
-        console.log(err)
-    }
+
+    // Finding the winner to update his winstreaks and win statistics
+    var currentmax = 0
+    var currentwinstreak = 0
+
+    User.findOne({username: username}).then((result) => {
+        console.log('winner is:', result)
+        this.currentmax = result.max_winstreak
+        this.currentwinstreak = result.current_winstreak + 1
+    })
+
+    User.updateOne({username: username}, { $inc:{games_won: 1, current_winstreak: 1}}).then()
+
+    if(currentwinstreak > currentmax){ User.updateOne({username: username}, { $inc:{max_winstreak: 1}}).then() }
 })
 
 module.exports = router
