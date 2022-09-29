@@ -22,12 +22,15 @@ h5 {
   @apply text-xs font-bold;
 }
 .btn {
-  @apply px-4 py-2 bg-navy text-white rounded-lg;
-  &:hover {
-    opacity: .8;
-  }
+  @apply px-4 py-2 text-white rounded-lg border border-solid border-sepia transition duration-500 ease-in-out;
   &_alt {
     @apply bg-white text-navy;
+  }
+  &.noborder {
+    @apply border-none;
+  }
+  &:hover {
+    @apply bg-sepia;
   }
 }
 form label {

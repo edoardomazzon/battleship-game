@@ -1,19 +1,12 @@
 <div *ngIf=" !isadmin ">
   <!-- Commentare il div sottostante se si vuole avere i campi di prova subito in alto nella home -->
-  <div class="game-container h-screen w-50 bg-navy">
-    <h1 class="text-center pt-1 text-white">Battleship game</h1>
-
+  <div class="game-container w-50">
     <div *ngIf="isplaying">
       <app-game></app-game>
     </div>
 
     <div *ngIf="!isplaying">
       <div *ngIf="!isspectating">
-        <div class="text-center my-8">
-          <button *ngIf="!isready" class="text-center btn !bg-success" (click)="readyUp()">Ready up</button>
-          <button *ngIf="isready"  class="btn !bg-red-error" (click)="cancelMatchMaking()">Cancel Matchmaking</button>
-        </div>
-
         <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto">
           <ul *ngFor="let match of ongoing_matches">
             <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
@@ -21,7 +14,12 @@
               <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
             </li>
           </ul>
-          <app-my-profile></app-my-profile>
+          <app-my-profile></app-my-profile><!-- :[ngClass]="{'flex justify-center': ongoing_matches <= 0 }" -->
+        </div>
+
+        <div class="text-center my-8">
+          <button *ngIf="!isready" class="text-center btn noborder !bg-success" (click)="readyUp()">Ready up</button>
+          <button *ngIf="isready"  class="btn noborder !bg-red-error" (click)="cancelMatchMaking()">Cancel Matchmaking</button>
         </div>
       </div>
 
