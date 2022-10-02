@@ -10,7 +10,7 @@ export class NotificationsService {
   private socket: Socket;
   private baseURL = 'http://localhost:3000/'
 
-  constructor(private _httpClient: HttpClient) {
+  constructor() {
     this.socket = io(this.baseURL)
   }
 

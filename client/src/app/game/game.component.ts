@@ -6,8 +6,7 @@ import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-game',
-  templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+  templateUrl: './game.component.html'
 })
 export class GameComponent implements OnInit {
   public current_user: any

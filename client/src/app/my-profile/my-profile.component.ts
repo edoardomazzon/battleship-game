@@ -6,8 +6,7 @@ import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-my-profile',
-  templateUrl: './my-profile.component.html',
-  styleUrls: ['./my-profile.component.scss']
+  templateUrl: './my-profile.component.html'
 })
 export class MyProfileComponent implements OnInit {
   public current_user: any;

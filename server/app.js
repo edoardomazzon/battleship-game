@@ -147,7 +147,7 @@ setInterval(() => {
       ongoing_matches.splice(i, 1)
     }
   }
-  // Sending to all the clients the new ongoing_matches list
+  // Sending the new ongoing_matches list to all the clients
   ios.emit('newongoingmatches', {message_type: 'newongoingmatches', ongoing_matches: ongoing_matches})
 }, 10000)
 
@@ -157,7 +157,6 @@ var confirmedpositonings = new Array()
 
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
-  //console.log("Socekt.io client connected with ID: ", socket.id)
   
   socket.on('startchat', (players) => {
     socket.emit('openchat', players)
@@ -356,11 +355,6 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('newspectatormessage'+message.player1+message.player2, message)
   })  
 
-  // When a spectator sends a message, the other spectators are notified with that message
-  socket.on('stoppedspectating', (spectator) => {
-    socket.broadcast.emit('stoppedspectating'+spectator.spectator, spectator)
-  })
-
   // When a user sends a message to another user who is currently offline (or doesn't have the chat open) or sends an invite to play,
   // a notification is sent
   socket.on('newnotification', (notification) => {
@@ -372,7 +366,8 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('matchinviteaccepted'+inviteinfo.accepted_user, inviteinfo)
   })
 
-  // Alternative
+  // When a friend accepts a match request, the requester has to tell him if he's still available or if he already is in queue/started another game.
+  // If the request receiver accepts and the sender tells him that he's available, the match starts:
   socket.on('availableformatch', (matchinfo) => {
     ios.emit('matchstarted'+matchinfo.user, { 
       message_type: 'yougotmatched',
@@ -381,9 +376,9 @@ ios.on('connection', (socket) => {
     })
   })
 
-  // Alternative
+  // When a friend accepts a match request, the requester has to tell him if he's still available or if he already is in queue/started another game.
+  // If the request receiver accepts and the sender tells him that he's no longer available, the match doesn't start:
   socket.on('notavailableformatch', (notification) => {
-    console.log(notification)
     socket.broadcast.emit('friendnotavailable'+notification.user, {
       notification_type: 'friendnotavailable',
       user: notification.user,

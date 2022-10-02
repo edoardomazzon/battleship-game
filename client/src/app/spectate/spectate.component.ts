@@ -3,8 +3,7 @@ import { SpectateService } from '../services/spectate.service';
 
 @Component({
   selector: 'app-spectate',
-  templateUrl: './spectate.component.html',
-  styleUrls: ['./spectate.component.scss']
+  templateUrl: './spectate.component.html'
 })
 export class SpectateComponent implements OnInit {
   private current_user: any

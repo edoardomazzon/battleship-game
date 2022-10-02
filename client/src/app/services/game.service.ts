@@ -57,7 +57,6 @@ export class GameService {
       })
 
       this.socket.on('disconnected', () => {
-        console.log('disconnected from game')
         this.socket.emit('matchleft', {winner: enemy, message_type: 'enemyleftwhileplaying'})
       })
     })

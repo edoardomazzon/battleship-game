@@ -9,8 +9,7 @@ import { ChatmessageService } from '../services/chatmessage.service';
 
 @Component({
   selector: 'app-friends',
-  templateUrl: './friends.component.html',
-  styleUrls: ['./friends.component.scss']
+  templateUrl: './friends.component.html'
 })
 export class FriendsComponent implements OnInit {
   public inputname: any

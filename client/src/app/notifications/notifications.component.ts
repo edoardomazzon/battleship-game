@@ -5,8 +5,7 @@ import { ChatmessageService } from '../services/chatmessage.service';
 
 @Component({
   selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss']
+  templateUrl: './notifications.component.html'
 })
 export class NotificationsComponent implements OnInit {
   private baseURL = 'http://localhost:3000/'

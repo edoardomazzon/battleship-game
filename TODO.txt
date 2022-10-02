@@ -14,9 +14,5 @@ IMPLEMENTAZIONI E FIX:
   5. Quando A invia una richiesta di amicizia a B ma B ha bloccato A, a B compare comunque il bollino rosso (poi ovviamente non gli compare la richiesta,
      però il bollino rosso non dovrebbe proprio esserci)
   7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)
-  10. Controllare TUTTE le volte che viene salvato il current user in localstorage e togliergli salt digest e password mettendoli a null
-      prima di fare la localStorage.setItem('current user')
-  11. Mettere commenti in inglese ovunque
-  12. Eliminare file inutili
   13. Solo gli utenti admin possono fare POST su 'admindashboard'
 
