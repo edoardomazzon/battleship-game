@@ -8,6 +8,7 @@ import {io, Socket} from 'socket.io-client';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ChatmessageService {
 
   public baseURL = 'http://localhost:3000/'
@@ -21,15 +22,9 @@ export class ChatmessageService {
   receiveMessages(): Observable<any>{
     return new Observable((observer) => {
 
-      this.socket.on('yousentmessage'+this.current_user.username, (message) => {
-        message = {
-          from: message.from,
-          to: message.to,
-          text_content: message.text_content,
-          message_type: 'yousentmessage'
-        }
-        observer.next(message);
-      });
+      this.socket.on('openchat', (message) => {
+        observer.next(message)
+      })
 
       this.socket.on('youreceivedmessage'+this.current_user.username, (message) => {
         message = {
@@ -40,10 +35,6 @@ export class ChatmessageService {
         }
         observer.next(message);
       });
-
-      this.socket.on('openchat', (message) => {
-        observer.next(message)
-      })
 
       this.socket.on('yourmessagereceived'+this.current_user.username, (message) => {
         observer.next(message)

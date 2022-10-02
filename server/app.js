@@ -1,16 +1,14 @@
+
 require('dotenv/config');
 const http = require('http');
-const mongoose = require('mongoose')
 const express = require('express')
-const io = require('socket.io')
-const bodyParser = require('body-parser');
-
 const app = express()
 const server = http.createServer(app)
 const port = 3000
 
 
 // Setting the Socket.io instance to listen on the localhost server and enabling CORS policies for it
+const io = require('socket.io')
 const ios = io(server, {
   cors: {
     origin: "http://localhost:4200",
@@ -18,6 +16,7 @@ const ios = io(server, {
     allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With", "cache-control"]
   }
 });
+
 // Enabling CORS policies for the app as well
 app.all('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -27,9 +26,11 @@ app.all('/*', (req, res, next) => {
 })
 
 // Everytime the server receives a request from the client, the request gets parsed
+const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 // Connecting the database to MongoDB Atlas service through the connection string stored in .env
+const mongoose = require('mongoose')
 mongoose.connect(
   process.env.DB_CONNECTION, () => console.log("Connected to Atlas Database"), (err) => {
      if(err){ console.log(err) } 
@@ -37,7 +38,7 @@ mongoose.connect(
 );
 
 
-// Declaring all existing routes
+// Declaring and importing all existing routes
 const indexRoute = require('./routes/index');
 const loginRoute = require('./routes/login');
 const winGameRoute = require('./routes/wingame');
@@ -163,7 +164,6 @@ ios.on('connection', (socket) => {
   })
 
   socket.on('newmessage', (message) => {
-    socket.emit('yousentmessage'+message.from, message)
     socket.broadcast.emit('youreceivedmessage'+message.to, message)
   })
 
@@ -393,6 +393,4 @@ ios.on('connection', (socket) => {
 
 
 // Server starts listening on port 3000
-server.listen(port, () => {
-  console.log('App listening on port', port)
-})
+server.listen(port)

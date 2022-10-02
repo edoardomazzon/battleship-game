@@ -20,11 +20,11 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser(): void {
-    this._registerService.addUser(this.newuser).subscribe(newuser =>{
-      if (newuser == 'case0' || newuser == 'case1' || newuser == 'case2'){
-        this.case = newuser
+    this._registerService.addUser(this.newuser).subscribe(response =>{
+      if (response == 'case0' || response == 'case1' || response == 'case2'){
+        this.case = response
       }
-      else if(newuser){
+      else if(response){
         this._router.navigateByUrl('/login')
       }
     });
