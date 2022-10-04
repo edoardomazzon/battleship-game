@@ -3,21 +3,19 @@
   che si espande quando premiamo "open chat" dalla friends list (quindi NON si espande quando ci clicchiamo sopra, ha solo scopo grafico)
 -->
 
-<div *ngIf="this.chatopened == true" class="pb-5 pt-6 pl-3 relative">
-  <div *ngIf="chattype != 'match'" title="Close chat" (click)="closeChat()" class="cursor-pointer absolute left-0 top-0"> <!-- if we're in a match we can't close the chat-->
-    <svg width="24" height="24" style="fill: black"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg>
+<div *ngIf="this.chatopened == true" class="py-5 px-3 absolute bg-white text-black rounded-lg bottom-9 right-4">
+  <div *ngIf="chattype != 'match'" title="Close chat" (click)="closeChat()" class="cursor-pointer absolute -left-2 -top-2 bg-black-dark rounded-full"> <!-- if we're in a match we can't close the chat-->
+    <svg width="24" height="24" style="fill: white"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg>
   </div>
-  <ul class="overflow-y-scroll overflow-x-hidden max-h-[380px]">
+  <ul class="overflow-y-auto overflow-x-hidden w-[270px] max-h-[320px]">
     <li *ngFor=" let message of this.messages">
       <a *ngIf="message.text_content != '' " class="font-bold text-xxs">{{ message.from + ':' }}</a>
-      <a class="text-xxs">{{ message.text_content }}</a>
+      <a class="text-xxs break-words">{{ message.text_content }}</a>
       <a *ngIf="message.text_content == '' " class="font-bold text-xxs"> ></a>
     </li>
   </ul>
-  <div class="mt-5">
-    <form class="relative flex items-center mr-3">
-      <input class="chat" type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
-      <button class="btn_alt absolute bottom-0 right-1 !bg-navy !text-white h-full px-2 py-1" (click)="sendMessage()">-></button>
-    </form>
-  </div>
+  <form class="relative flex items-center mt-2.5">
+    <input class="chat" type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
+    <button class="btn noborder absolute bottom-0 right-0 !bg-black !text-white h-full px-1 py-1 flex items-center" (click)="sendMessage()">-></button>
+  </form>
 </div>

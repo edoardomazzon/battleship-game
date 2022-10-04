@@ -5,7 +5,7 @@
       <form class="shadow-2xl container py-8">
         <div>
           <label for="username">Username</label>
-          <input type="text" id="username" [(ngModel)]="authuser.username" name="username" />
+          <input type="text" id="username" [(ngModel)]="authuser.username" name="username" class="focus:outline-none" />
           <p class="text-red-error text-xxs" *ngIf="yourebanned"> Your account has been temporarily banned</p>
           <p class="text-red-error text-xxs" *ngIf="wrongcredentials"> Wrong username or password</p>
         </div>
@@ -15,7 +15,7 @@
             <label for="password">Password</label>
             <a href="/reset-password" class="text-navy font-bold">Forgot your password?</a> <!-- capire come fare -->
           </div>
-          <input type="password" id="password" [(ngModel)]="authuser.password" name="password" />
+          <input type="password" id="password" [(ngModel)]="authuser.password" name="password" class="focus:outline-none" />
           <p class="text-red-error text-xxs" *ngIf="wrongcredentials"> Wrong username or password</p>
         </div>
         <button (click)="loginUser()" class="btn w-full">Sign in</button>

@@ -1,7 +1,7 @@
-<div class="absolute top-full right-8 bg-gray-300 text-black p-2 flex flex-col items-center z-10 min-w-[480px]">
+<div class="absolute top-full right-8 bg-white text-black p-2 flex flex-col items-center z-10 min-w-[480px] rounded-lg">
   <div class="grid grid-cols-2 gap-5">
-    <button (click)="openFriendSection1()" class="btn" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : friendsSection1}">Your friends</button>
-    <button (click)="openFriendSection2()" class="btn" :[ngClass]="{ '!bg-gray-400 pointer-events-none' : friendsSection2}">Manage friends and requests</button>
+    <button (click)="openFriendSection1()" class="btn btn_txtblk" :[ngClass]="{ '!bg-sepia !text-white pointer-events-none' : friendsSection1}">Your friends</button>
+    <button (click)="openFriendSection2()" class="btn btn_txtblk" :[ngClass]="{ '!bg-sepia !text-white pointer-events-none' : friendsSection2}">Manage friends and requests</button>
   </div>
 
   <!-- In this section we show our friends list with the possibility of inviting to play, messaging, removing or blocking them -->

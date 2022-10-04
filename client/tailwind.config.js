@@ -47,7 +47,8 @@ module.exports = {
           warning: '#D4AE04'
         },
         black: {
-          DEFAULT: '#222'
+          DEFAULT: '#222',
+          dark: '#000'
         },
         white: {
           DEFAULT: '#f6f6f6'

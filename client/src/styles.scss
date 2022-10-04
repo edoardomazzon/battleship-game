@@ -23,15 +23,12 @@ h5 {
 }
 .btn {
   @apply px-4 py-2 text-white rounded-lg border border-solid border-sepia transition duration-500 ease-in-out;
-  &_alt {
-    @apply bg-white text-navy;
-  }
-  &.noborder {
-    @apply border-none;
-  }
-  &:hover {
-    @apply bg-sepia;
-  }
+  &:hover { @apply bg-sepia; }
+  &_alt { @apply bg-white text-navy; }
+  &_txtblk { @apply text-black; &:hover {
+    @apply text-white;
+  } }
+  &.noborder { @apply border-none; }
 }
 form label {
   @apply block pb-1;
@@ -39,6 +36,6 @@ form label {
 form input {
   @apply w-full block relative py-3 px-2 border-2 border-navy rounded-lg text-black text-base focus:outline-navy;
   &.chat {
-    @apply py-1.5 border text-micro;
+    @apply py-1.5 border text-xxs;
   }
 }
