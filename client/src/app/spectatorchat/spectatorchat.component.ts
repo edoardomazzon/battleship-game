@@ -4,7 +4,6 @@ import { SpectatorchatService } from '../services/spectatorchat.service';
 @Component({
   selector: 'app-spectatorchat',
   templateUrl: './spectatorchat.component.html',
-  styleUrls: ['./spectatorchat.component.scss']
 })
 export class SpectatorchatComponent implements OnInit {
   public messages: Array<any> = new Array()

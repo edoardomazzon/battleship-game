@@ -1,11 +1,11 @@
-<div class="mt-5 mb-11">
+<div>
   <div *ngIf="!changing_password">
     <h1 class="text-center pb-5">Login</h1>
     <div class="container max-w-[768px]">
       <form class="shadow-2xl container py-8">
         <div>
           <label for="username">Username</label>
-          <input type="text" id="username" [(ngModel)]="authuser.username" name="username" class="focus:outline-none" />
+          <input type="text" id="username" [(ngModel)]="authuser.username" name="username" />
           <p class="text-red-error text-xxs" *ngIf="yourebanned"> Your account has been temporarily banned</p>
           <p class="text-red-error text-xxs" *ngIf="wrongcredentials"> Wrong username or password</p>
         </div>
@@ -13,13 +13,13 @@
         <div class="my-7">
           <div class="flex justify-between items-center">
             <label for="password">Password</label>
-            <a href="/reset-password" class="text-navy font-bold">Forgot your password?</a> <!-- capire come fare -->
+            <a href="/reset-password" class="text-sepia font-bold">Forgot your password?</a> <!-- capire come fare -->
           </div>
-          <input type="password" id="password" [(ngModel)]="authuser.password" name="password" class="focus:outline-none" />
+          <input type="password" id="password" [(ngModel)]="authuser.password" name="password" />
           <p class="text-red-error text-xxs" *ngIf="wrongcredentials"> Wrong username or password</p>
         </div>
         <button (click)="loginUser()" class="btn w-full">Sign in</button>
-        <p class="my-1"> Don't have an account? Sign up <a href="/register" class="text-navy font-bold">here</a></p>
+        <p class="my-1"> Don't have an account? Sign up <a href="/register" class="text-sepia font-bold">here</a></p>
       </form>
     </div>
   </div>
@@ -42,5 +42,4 @@
       </form>
     </div>
   </div>
-
 </div>

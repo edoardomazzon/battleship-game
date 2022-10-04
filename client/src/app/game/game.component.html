@@ -368,7 +368,7 @@
 
         <div *ngFor="let row of enemyfield; index as i" class="grid grid-cols-10 bg-white">
           <div *ngFor="let cell of row; index as j" class="bg-white w-full h-8 border border-black">
-            <!-- <div *ngIf="cell.value != 0 && !cell.hit" class="bg-navy w-full h-full"></div>
+            <!-- <div *ngIf="cell.value != 0 && !cell.hit" class="bg-white w-full h-full"></div>
             <div *ngIf="cell.value != 0 && cell.hit" class="border border-error text-error w-full h-full">X</div> -->
             <div *ngIf="cell == '?' && myturn == true" class="w-full h-full">
               <button (click)="fire(i, j)" class="w-full h-full"></button>
@@ -405,7 +405,7 @@
     <div class="flex items-center justify-between gap-x-5">
       <button *ngIf="!this.enemywantsrematch" class="btn !bg-success" (click)="askForRematch()">Ask for rematch</button>
       <button *ngIf="this.enemywantsrematch" class="btn !bg-success" (click)="acceptRematch()">Accept rematch</button>
-      <button class="btn !bg-red-error" (click)="leaveMatch('enemyleftaftermatchended')">Leave</button>
+      <button class="btn noborder btn_red" (click)="leaveMatch('enemyleftaftermatchended')">Leave</button>
     </div>
   </div>
 
@@ -425,8 +425,8 @@
 
   <!-- Game buttons -->
   <div class="text-center pt-3">
-    <button *ngIf="!gamestarted && !hasconfirmedpositioning && !youwon && !youlost && !enemyleft" class="btn !bg-red-error" (click)="leaveMatch('enemyleftwhilepositioning')">Leave Match</button>
-    <button *ngIf="gamestarted && !youwon && !enemyleft && !youlost" class="btn !bg-red-error" (click)="leaveMatch('enemyleftwhileplaying')">Leave Match</button>
+    <button *ngIf="!gamestarted && !hasconfirmedpositioning && !youwon && !youlost && !enemyleft" class="btn noborder btn_red" (click)="leaveMatch('enemyleftwhilepositioning')">Leave Match</button>
+    <button *ngIf="gamestarted && !youwon && !enemyleft && !youlost" class="btn noborder btn_red" (click)="leaveMatch('enemyleftwhileplaying')">Leave Match</button>
   </div>
 
 </div>
