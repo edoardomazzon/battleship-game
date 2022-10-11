@@ -385,7 +385,7 @@
       </div>
       <!-- CHAT COMPONENT-->
       <div class="chat-live ml-8">
-        <div class="bg-gray-300 h-[480px] w-[300px]">
+        <div class="h-[480px] w-[300px]">
           <div *ngIf="gamestarted == true">
             <app-chat></app-chat>
           </div>
@@ -405,7 +405,7 @@
     <div class="flex items-center justify-between gap-x-5">
       <button *ngIf="!this.enemywantsrematch" class="btn btn_green" (click)="askForRematch()">Ask for rematch</button>
       <button *ngIf="this.enemywantsrematch" class="btn btn_green" (click)="acceptRematch()">Accept rematch</button>
-      <button class="btn noborder btn_red" (click)="leaveMatch('enemyleftaftermatchended')">Leave</button>
+      <button class="btn btn_red" (click)="leaveMatch('enemyleftaftermatchended')">Leave</button>
     </div>
   </div>
 
@@ -425,8 +425,8 @@
 
   <!-- Game buttons -->
   <div class="text-center pt-3">
-    <button *ngIf="!gamestarted && !hasconfirmedpositioning && !youwon && !youlost && !enemyleft" class="btn noborder btn_red" (click)="leaveMatch('enemyleftwhilepositioning')">Leave Match</button>
-    <button *ngIf="gamestarted && !youwon && !enemyleft && !youlost" class="btn noborder btn_red" (click)="leaveMatch('enemyleftwhileplaying')">Leave Match</button>
+    <button *ngIf="!gamestarted && !hasconfirmedpositioning && !youwon && !youlost && !enemyleft" class="btn btn_red" (click)="leaveMatch('enemyleftwhilepositioning')">Leave Match</button>
+    <button *ngIf="gamestarted && !youwon && !enemyleft && !youlost" class="btn btn_red" (click)="leaveMatch('enemyleftwhileplaying')">Leave Match</button>
   </div>
 
 </div>

@@ -24,6 +24,7 @@ h5 {
 .btn {
   @apply px-4 py-2 text-white rounded-lg border border-solid border-sepia transition duration-500 ease-in-out;
   &:hover { @apply bg-sepia; }
+  &.noborder { @apply border-none border-0; }
   &_little {
     @apply text-xxs px-2.5;
   }
@@ -48,7 +49,6 @@ h5 {
     @apply text-black; 
     &:hover { @apply text-white; }
   }
-  &.noborder { @apply border-none border-0; }
 }
 form label {
   @apply block pb-1;
