@@ -4,14 +4,14 @@
     <li *ngFor="let notification of notifications" class="mb-1">
       <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'matchinvite'">
         <strong>{{ notification.from }}</strong> invited you to a game
-        <button class="btn !py-1 !px-2 !bg-success after:content-['\2713']" (click)="acceptMatch(notification.from); markNotificationAsRead(notification)"></button>
+        <button class="btn !py-1 !px-2 btn_green after:content-['\2713']" (click)="acceptMatch(notification.from); markNotificationAsRead(notification)"></button>
       </div>
       <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'friendnotavailable'" class="text-red-error text-xs">
         {{ notification.from }} is no longer available
       </div>
       <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'newmessage'">
         Unread messages from <strong>{{ notification.from }}</strong>
-        <button class="btn !py-1 !px-2 !bg-success" (click)="openChat(notification.from); markNotificationAsRead(notification)">
+        <button class="btn !py-1 !px-2 btn_green" (click)="openChat(notification.from); markNotificationAsRead(notification)">
           <svg width="24" height="24" style="fill: rgba(0, 0, 0, 1)">
             <path d="M16 2H8C4.691 2 2 4.691 2 8v13a1 1 0 0 0 1 1h13c3.309 0 6-2.691 6-6V8c0-3.309-2.691-6-6-6zm4 14c0 2.206-1.794 4-4 4H4V8c0-2.206 1.794-4 4-4h8c2.206 0 4 1.794 4 4v8z"></path>
             <path d="M7 9h10v2H7zm0 4h7v2H7z"></path>
@@ -20,7 +20,7 @@
       </div>
       <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'modmessage'">
         <strong>Mod: </strong><span class="text-xxs text-yellow-warning">{{notification.text_content}}</span>
-        <button class="btn !bg-success" (click)="markNotificationAsRead(notification)">Ok</button>
+        <button class="btn btn_green" (click)="markNotificationAsRead(notification)">Ok</button>
       </div>
     </li>
   </ul>

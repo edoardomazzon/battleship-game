@@ -334,8 +334,8 @@
         <div *ngIf="!hasconfirmedpositioning" class="flex flex-col items-center justify-center gap-y-2 p-5 mt-6">
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48 whitespace-nowrap" (click)="randomPlaceShips()">Random placement</button>
           <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted" class="btn text-xxs w-48" (click)="resetPlacement()">Reset</button>
-          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && hasplacedallships" class="btn !bg-success text-xxs w-48" (click)="confirmShipPlacement()">Confirm positioning</button>
-          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && !hasplacedallships" class="btn !bg-yellow-warning text-xxs w-48" (click)="warnShipPlacement()">Confirm positioning</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && hasplacedallships" class="btn btn_green text-xxs w-48" (click)="confirmShipPlacement()">Confirm positioning</button>
+          <button *ngIf="!hasconfirmedpositioning && !youwon && !youlost && !gamestarted && !hasplacedallships" class="btn btn_ylw text-xxs w-48" (click)="warnShipPlacement()">Confirm positioning</button>
           <span class="text-micro text-yellow-warning" *ngIf="warning != null">{{ warning }}</span>
         </div>
       </div>
@@ -350,8 +350,8 @@
               <span class="bg-black w-2 h-2 rounded-full"></span>
             </div>
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'none'" class="border border-black w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
-            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black !bg-red-error w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
-            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black !bg-success w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black btn_red w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black btn_green w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasconfirmedpositioning && selectedShip == 'none'" class="border border-black w-full h-full"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && hasplacedallships && hasconfirmedpositioning" class="border border-black w-full h-full"></div>
             <div *ngIf="cell.value > 0 && !cell.hit && !hasconfirmedpositioning && selectedShip != 'none'" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div>
@@ -403,8 +403,8 @@
   <div *ngIf="youlost && !enemyleft" class="game absolute top-5 left-[37%] p-10 rounded-lg"> <!-- IF WE LOSE AND THE ENEMY STILL HASN'T LEFT WE CAN STILL ASK FOR A REMATCH -->
     <p class="text-xl font-bold text-white mb-4">You lost</p>
     <div class="flex items-center justify-between gap-x-5">
-      <button *ngIf="!this.enemywantsrematch" class="btn !bg-success" (click)="askForRematch()">Ask for rematch</button>
-      <button *ngIf="this.enemywantsrematch" class="btn !bg-success" (click)="acceptRematch()">Accept rematch</button>
+      <button *ngIf="!this.enemywantsrematch" class="btn btn_green" (click)="askForRematch()">Ask for rematch</button>
+      <button *ngIf="this.enemywantsrematch" class="btn btn_green" (click)="acceptRematch()">Accept rematch</button>
       <button class="btn noborder btn_red" (click)="leaveMatch('enemyleftaftermatchended')">Leave</button>
     </div>
   </div>
@@ -417,9 +417,9 @@
   <div *ngIf="!enemyleft && youwon" class="game absolute top-5 left-[37%] p-10 rounded-lg"> <!-- IF WE WON AND THE ENEMY DIDN'T LEAVE THE MATCH -->
     <p class="text-xl font-bold text-white mb-4">You won</p>
     <div class="flex items-center justify-between gap-x-5">
-      <button *ngIf="!this.enemywantsrematch" class="btn !bg-success" (click)="askForRematch()">Ask for rematch</button>
-      <button *ngIf="this.enemywantsrematch" class="btn !bg-success" (click)="acceptRematch()">Accept rematch</button>
-      <button class="btn !bg-red-error" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
+      <button *ngIf="!this.enemywantsrematch" class="btn btn_green" (click)="askForRematch()">Ask for rematch</button>
+      <button *ngIf="this.enemywantsrematch" class="btn btn_green" (click)="acceptRematch()">Accept rematch</button>
+      <button class="btn btn_red" (click)="leaveMatch('enemyleftaftermatchended')" >Leave</button>
     </div>
   </div>
 

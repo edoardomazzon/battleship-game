@@ -38,7 +38,7 @@
           <input (input)="checkPasswordMismatch()" type="password" id="newpassword2" [(ngModel)]="secondpasswordchangefield" name="newpassword2" />
           <p class="text-red-error text-xxs" *ngIf="warnpasswordmismatch"> The two passwords don't match</p>
         </div>
-        <button (click)="changePassword(firstpasswordchangefield)" :[ngClass]="{' !bg-red-error disabled pointer-events-none': warnpasswordmismatch == true}" class="btn bg-success w-full">Confirm</button>
+        <button (click)="changePassword(firstpasswordchangefield)" :[ngClass]="{' btn_red disabled pointer-events-none': warnpasswordmismatch == true}" class="btn bg-success w-full">Confirm</button>
       </form>
     </div>
   </div>

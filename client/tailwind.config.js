@@ -32,9 +32,9 @@ module.exports = {
           DEFAULT: '#B8A88A',
           darker: '#433422'
         },
-        // navy: {
-        //   DEFAULT: '#3F5277'
-        // },
+        gray: {
+          DEFAULT: '#5e5a5a'
+        },
         success: {
           DEFAULT: '#1a912c'
         },

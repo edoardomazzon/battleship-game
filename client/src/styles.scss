@@ -24,20 +24,29 @@ h5 {
 .btn {
   @apply px-4 py-2 text-white rounded-lg border border-solid border-sepia transition duration-500 ease-in-out;
   &:hover { @apply bg-sepia; }
+  &_little {
+    @apply text-xxs px-2.5;
+  }
   &_alt { @apply bg-white text-sepia; }
   &_green {
-    @apply border border-solid border-success;
-    &:hover { @apply bg-success; }
+    @apply bg-success border-sepia/0;
+    &:hover { @apply bg-transparent border-success; }
   }
   &_red {
-    @apply bg-red-error;
+    @apply bg-red-error border-sepia/0;
     &:hover { @apply bg-transparent border-red-error; }
+  }
+  &_ylw {
+    @apply bg-yellow-warning border-sepia/0;
+    &:hover { @apply bg-transparent border-yellow-warning; }
+  }
+  &_gray {
+    @apply bg-gray border-sepia/0;
+    &:hover { @apply bg-transparent border-gray; }
   }
   &_txtblk {
     @apply text-black; 
-    &:hover {
-      @apply text-white;
-    }
+    &:hover { @apply text-white; }
   }
   &.noborder { @apply border-none border-0; }
 }
@@ -49,5 +58,8 @@ form input {
   &:focus { box-shadow: 0 0 0 1.5px #B8A88A; }
   &.chat {
     @apply py-1.5 border text-xxs;
+  }
+  &.smaller {
+    @apply text-xxs p-2;
   }
 }

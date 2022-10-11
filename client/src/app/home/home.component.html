@@ -11,7 +11,7 @@
           <ul *ngFor="let match of ongoing_matches">
             <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
               {{ match.player1 }} vs {{ match.player2 }}
-              <button class="btn !bg-success" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
+              <button class="btn btn_red" (click)="startSpectating(match.player1, match.player2)">Spectate match</button>
             </li>
           </ul>
           <app-my-profile></app-my-profile><!-- :[ngClass]="{'flex justify-center': ongoing_matches <= 0 }" -->
@@ -26,7 +26,7 @@
       <div *ngIf="isspectating">
         <app-spectate></app-spectate>
         <div class="text-center pt-4">
-          <button class="btn !bg-red-error" (click)="stopSpectating()">Stop spectating</button>
+          <button class="btn btn_red" (click)="stopSpectating()">Stop spectating</button>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-<div class="absolute top-full right-8 bg-white text-black p-2 flex flex-col items-center z-10 min-w-[480px] rounded-lg">
+<div class="absolute top-full right-8 bg-white text-black p-2 flex flex-col items-center z-10 min-w-[250px] lg:min-w-[480px] rounded-lg">
   <div class="grid grid-cols-2 gap-5">
     <button (click)="openFriendSection1()" class="btn btn_txtblk" :[ngClass]="{ '!bg-sepia !text-white pointer-events-none' : friendsSection1}">Your friends</button>
     <button (click)="openFriendSection2()" class="btn btn_txtblk" :[ngClass]="{ '!bg-sepia !text-white pointer-events-none' : friendsSection2}">Manage friends and requests</button>
@@ -37,7 +37,7 @@
   <div *ngIf="this.friendsSection2" class="pt-3">
     <div class="text-center font-bold mb-2">SEARCH USERS BY USERNAME</div>
     <form>
-      <input type="text" id="username" [(ngModel)]="inputname" name="username" class="min-w-[360px] !py-2 !text-xs" />
+      <input type="text" id="username" [(ngModel)]="inputname" name="username" class="min-w-[270px] lg:min-w-[360px] !py-2 !text-xs" />
       <button (click)="searchUsers(inputname)"></button>
     </form>
     <div>

@@ -241,7 +241,7 @@ export class AdminDashboardComponent implements OnInit {
   // Activates a popup (or a textbox somewhere in the page) that contains a textbox with the message to be sent to the selected user as a notification
   promptNotificationToUser(username: String){
     // Should make a textbox appear or popup; whatever the administrator types in it, it will be sent to the selected user
-    var message = prompt('Enter the message you want to send to'+ username, '');
+    var message = prompt('Enter the message you want to send to ' + username, '');
     if (message != null && message != "") {
       this.sendNotificationToUser(username, message)
     }
