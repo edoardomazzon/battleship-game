@@ -1,18 +1,17 @@
-In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli problemi o warning che vediamo e dovremo risolverli tutti. L'obiettivo è finire il progetto in modo che non lanci nessun warning, o comunque che non avvengano errori. 
+In questo file, che useremo come blocco note, ci appunteremo tutti i piccoli problemi o warning che vediamo e dovremo risolverli tutti.
+L'obiettivo è finire il progetto in modo che non lanci nessun warning, o comunque che non avvengano errori. 
 
 ULTIME FUNZIONALITA' PRINCIPALI:
-
-  - Sistemare la chat graficamente, sia in gioco che nella home (e anche agli spettatori ma tanto quella è uguale a quella di gioco)
+  - Sistemare la chat in gioco (e anche agli spettatori ma tanto quella è uguale a quella di gioco)
   - Se clicchi su un utente vedi in un pop up le sue statistiche
   - App mobile
 
 IMPLEMENTAZIONI E FIX:
   1. Segnalare con un errore che il login non è andato a buon fine
-  2. Allungare le sessioni di login
-  3. Sistemare graficamente admin dashboard
-  4. Quando arriva una richiesta di amicizia compare il badge rosso ma non compare la richiesta a meno che non si chiuda e si riapra la sezione
-  5. Quando A invia una richiesta di amicizia a B ma B ha bloccato A, a B compare comunque il bollino rosso (poi ovviamente non gli compare la richiesta,
+  2. Quando arriva una richiesta di amicizia compare il badge rosso ma non compare la richiesta a meno che non si chiuda e si riapra la sezione
+  3. Quando A invia una richiesta di amicizia a B ma B ha bloccato A, a B compare comunque il bollino rosso (poi ovviamente non gli compare la richiesta,
      però il bollino rosso non dovrebbe proprio esserci)
-  7. Chat component fisso in absolute in cima a tutto (anche nella home e in my profile)
-  13. Solo gli utenti admin possono fare POST su 'admindashboard'
-
+  4. Da finire Chat component ingame e my profile
+  5. Solo gli utenti admin possono fare POST su 'admindashboard'
+  6. Aggiungere il reset password
+  7. Sistemare che al click della chat dal pannello 'Your Friends' si chiuda tutto il menù

@@ -79,7 +79,7 @@ router.get("/", passport.authenticate("basic", {session: false}), async (req, re
         var token_signed = jsonwebtoken.sign(
             tokendata,
             process.env.JWT_SECRET, {
-                expiresIn: "1h"
+                expiresIn: "5h"
             }
         );
 

@@ -63,3 +63,18 @@ form input {
     @apply text-xxs p-2;
   }
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2 cursor-grab;
+}
+::-webkit-scrollbar-track {
+  @apply bg-white;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-black/50 rounded-lg;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-black/100;
+  @apply cursor-grabbing;
+}
