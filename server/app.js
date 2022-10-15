@@ -134,12 +134,14 @@ setInterval(() => {
     }  
 }, 5000);
 
-// List of matches that are currently been played; once a match is created, it gets added to this list. When it ends, it gets removed.
-// This prevents the clients to constantly query up ongoing matches, which would overload the database with requests. Every 10 seconds,
-// this list is sent to every client through an emit. When notified by both the winner and loser, the server removes the match from this list.
-// If for some reason the two playing clients are unable to notify the server that the game is over, the match will be removed automatically if
-// it's sarted more than 2.5 minutes before (estimated average time for a battleshipmatch is 2 minutes)
-ongoing_matches = new Array() // {player1: String, player2: String, starttime: Date} with player1 and 2 not necessarily in alphabetical order
+/*
+List of matches that are currently been played; once a match is created, it gets added to this list. When it ends, it gets removed.
+This prevents the clients to constantly query up ongoing matches, which would overload the database with requests. Every 10 seconds,
+this list is sent to every client through an emit. When notified by both the winner and loser, the server removes the match from this list.
+If for some reason the two playing clients are unable to notify the server that the game is over, the match will be removed automatically if
+it's sarted more than 2.5 minutes before (estimated average time for a battleshipmatch is 2 minutes)
+*/
+ongoing_matches = new Array() // list of {player1: String, player2: String, starttime: Date} with player1 and 2 not necessarily in alphabetical order
 setInterval(() => {
   const current_time = new Date()
   // Deleting from the list all the matches that started more than 150 seconds ago
@@ -159,45 +161,37 @@ var confirmedpositonings = new Array()
 //Setting up Socket.io server side (ios stands for IO Server)
 ios.on('connection', (socket) => {
   
+  // Telling the chat component to show the chat in the HTML section
   socket.on('startchat', (players) => {
-    // Since this emit is not broacasted, only the same Client Socket can hear it
+    // Since this emit is not "broacasted", only the same Client Socket can hear it
     socket.emit('openchat', players)
   })
 
+  // A new chat message is sent from a user to another
   socket.on('newmessage', (message) => {
     socket.broadcast.emit('youreceivedmessage'+message.to, message)
   })
 
+  // The chat message recipient confirms that he read the message as he was in the chat
   socket.on('confirmreception', (sender) => {
     socket.broadcast.emit('yourmessagereceived'+sender.sender, {message_type: 'yourmessagereceived'})
   })
-  
+
+  // Sending a friend request
   socket.on('newfriendrequest', (friendrequest) =>{
-    // Notifying the request receiver's client so that it can immediately update its pending requests list without having
-    // to query the database. We use BROADCAST since we need to notify other sockets and not ours.
     socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest)
   })
 
-  socket.on('newacceptedrequest', (newacceptedrequest) => {
-    // Notifying the accepted user to update its client
+  // Acceèting a friend request and notify the accepted user to update its client's "friend_list" by adding the accepter
+  socket.on('newacceptedrequest', (newacceptedrequest) => {    
     var message = {
       request_type: "yougotaccepted",
       accepting_user: ""+newacceptedrequest.accepting_user
     }
     socket.broadcast.emit('yougotaccepted'+newacceptedrequest.accepted_user, message)
   })
-  
-  socket.on('newrejectedrequest', (newrejectedrequest) => {
-    // Notifying the rejecting user's client so it can immediately update its component fields and localstorage
-    socket.emit('rejectedrequest'+newrejectedrequest.rejecting_user, newrejectedrequest)
-  })
-  
-  socket.on('newblockeduser', (newblock) => {
-    // Notifying the blocking user's client so it can immediately update its component fields and localstorage
-    socket.emit('blockeduser'+newblock.blocker, newblock)
-  })
 
-  // Notifying the deleted user's client so it can immediately update its component fields and localstorage
+  // Notifying the deleted friend's client so it can immediately update its component fields and localstorage
   socket.on('deletefriend', (newdelete) => {
     socket.broadcast.emit('yougotdeleted'+newdelete.deleted,{
       request_type: 'yougotdeleted',
