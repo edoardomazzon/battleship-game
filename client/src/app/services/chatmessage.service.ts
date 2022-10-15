@@ -65,12 +65,11 @@ export class ChatmessageService {
   }
 
   sendMessage(chattype: String, newmessage: any){
-    // Saving the message in the db only if it comes from a private chat and not a match chat, which won't be kept track of
     if(chattype == 'private'){
       this._httpClient.post(this.baseURL+'chatmessage', newmessage).subscribe()
     }
     this.socket.emit('newmessage', newmessage)
-    // If the message comes from a match chat (therefore a public chat), the message is sent to the spectators as well
+
     if(chattype == 'match'){
       this.socket.emit('newplayermessage', newmessage)
     }

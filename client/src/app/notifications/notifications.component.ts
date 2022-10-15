@@ -52,7 +52,6 @@ export class NotificationsComponent implements OnInit {
         this.orderLastFirst()
       }
       else if(notification.notification_type == 'newmessage'){
-        console.log('newmessage')
         var alreadyin = false
         for(let i = 0; i < this.notifications.length; i++){
           if(this.notifications[i].from == notification.from){

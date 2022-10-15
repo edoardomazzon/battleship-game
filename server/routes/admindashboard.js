@@ -76,7 +76,6 @@ router.post("/", async (req, res) => {
                             timestamp: request.timestamp,
                             text_content: request.message
                         }
-                        console.log(notif)
                         notif = new Notification(notif)
                         notif.save()
                     }

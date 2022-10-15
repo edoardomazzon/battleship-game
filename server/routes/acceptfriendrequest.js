@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
         const update1 = await User.updateOne({username: accept_sender}, {friends_list: friendslist1})
     } catch (err) {
             console.log(err)
-        }
+    }
         
     // Pushing A's username into B's Friends List
     var friendslist2 = new Array()

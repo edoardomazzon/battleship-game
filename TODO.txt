@@ -11,7 +11,7 @@ IMPLEMENTAZIONI E FIX:
   2. Quando arriva una richiesta di amicizia compare il badge rosso ma non compare la richiesta a meno che non si chiuda e si riapra la sezione
   3. Quando A invia una richiesta di amicizia a B ma B ha bloccato A, a B compare comunque il bollino rosso (poi ovviamente non gli compare la richiesta,
      però il bollino rosso non dovrebbe proprio esserci)
-  4. Da finire Chat component ingame e my profile
   5. Solo gli utenti admin possono fare POST su 'admindashboard'
   6. Aggiungere il reset password
-  7. Sistemare che al click della chat dal pannello 'Your Friends' si chiuda tutto il menù
+  8. Sistemare graficamente la notification component
+  9. Sistemare quella merda di friend component

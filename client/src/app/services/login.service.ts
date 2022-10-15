@@ -38,7 +38,6 @@ export class LoginService {
               localStorage.setItem('username', JSON.stringify(this.response.username))
             }
             else{
-              console.log(this.response)
               localStorage.clear()
               //Salviamo in localstorage il token
               this.token = this.response.token;

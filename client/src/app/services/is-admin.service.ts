@@ -13,7 +13,6 @@ export class IsAdminService implements CanActivate{
     var auth_token = localStorage.getItem('auth_token')
     if(auth_token != null){
       var role = JSON.parse(JSON.stringify(jwt_decode(auth_token))).role
-      console.log(role)
       if (role != 'admin'){
         this._router.navigateByUrl('/')
         return false;

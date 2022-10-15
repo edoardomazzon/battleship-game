@@ -28,7 +28,6 @@ router.post('/', (req, res) => {
     var currentwinstreak = 0
 
     User.findOne({username: username}).then((result) => {
-        console.log('winner is:', result)
         this.currentmax = result.max_winstreak
         this.currentwinstreak = result.current_winstreak + 1
     })

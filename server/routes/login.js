@@ -104,9 +104,7 @@ router.post("/", async (req, res) =>{
     try{
         await User.findOne({username: req.body.username}).then((result) => {
             var temp = new User(result)
-            console.log(temp.password, temp.salt, temp.digest)
             temp.setPassword(req.body.newpassword)
-            console.log(temp.password, temp.salt, temp.digest)
             User.updateOne({username: req.body.username}, {password: temp.password, salt: temp.salt, digest: temp.digest, needspasswordchange: false}).then(() => {
                 res.json('ok')
             })

@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
   loginUser(){
     this._loginService.login(this.authuser).subscribe(authuser =>{
       if (authuser == 'error'){
-        console.log('wrong')
         this.wrongcredentials = true
       }
       if (authuser == 'banned'){
@@ -44,7 +43,6 @@ export class LoginComponent implements OnInit {
       else if(authuser.needspasswordchange){
         this.wrongcredentials = false
         this.changing_password = true
-        console.log('user must change password')
       }
       else{
         this.wrongcredentials = false
@@ -67,7 +65,6 @@ export class LoginComponent implements OnInit {
     if(this.firstpasswordchangefield == this.secondpasswordchangefield && this.firstpasswordchangefield != '' && this.secondpasswordchangefield != ''){
       const username = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('username'))))
       this._httpClient.post(this.baseURL, {username: username, newpassword: newpassword}).subscribe((response) => {
-        console.log(response)
         if(response == 'ok'){
           this._loginService.login({username: username, password: newpassword}).subscribe((authuser) => {
             this._router.navigateByUrl('/')

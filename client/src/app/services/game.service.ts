@@ -96,7 +96,7 @@ export class GameService {
       username: current_user,
       enemy: enemy,
       timestamp: timestamp
-    }).subscribe((response) => {console.log(response)})
+    }).subscribe()
     this.socket.emit('matchended', {player1: current_user, player2: enemy})
   }
 

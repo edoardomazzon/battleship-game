@@ -160,6 +160,7 @@ var confirmedpositonings = new Array()
 ios.on('connection', (socket) => {
   
   socket.on('startchat', (players) => {
+    // Since this emit is not broacasted, only the same Client Socket can hear it
     socket.emit('openchat', players)
   })
 
@@ -178,8 +179,6 @@ ios.on('connection', (socket) => {
   })
 
   socket.on('newacceptedrequest', (newacceptedrequest) => {
-    // Notifying the accepter to update its client data
-    socket.emit('acceptedrequest'+newacceptedrequest.accepting_user, newacceptedrequest)
     // Notifying the accepted user to update its client
     var message = {
       request_type: "yougotaccepted",
@@ -198,10 +197,8 @@ ios.on('connection', (socket) => {
     socket.emit('blockeduser'+newblock.blocker, newblock)
   })
 
-  socket.on('newdeletedfriend', (newdelete) => {
-    // Notifying the deleting user's client so it can immediately update its component fields and localstorage
-    socket.emit('deletedfriend'+newdelete.deleter, newdelete)
-    // Notifying the deleted user's client so it can immediately update its component fields and localstorage
+  // Notifying the deleted user's client so it can immediately update its component fields and localstorage
+  socket.on('deletefriend', (newdelete) => {
     socket.broadcast.emit('yougotdeleted'+newdelete.deleted,{
       request_type: 'yougotdeleted',
       deleter: newdelete.deleter

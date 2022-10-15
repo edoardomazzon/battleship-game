@@ -25,26 +25,16 @@ export class ChatComponent implements OnInit {
       if(message.message_type == 'openchat'){
         this.player1 = message.current_user
         this.player2 = message.other_user
+        this.chattype = message.chattype
         if(message.chat_type == 'private'){
-          this.chattype = 'private'
           this.getMessages()
         }
-        if(message.chat_type == 'match'){
-          // Mettere una variabile a false in modo che non compaia il bottone "close chat" perché durante il match
-          // La chat non può essere chiusa
-        }
         this.chatopened = true
-        console.log(this.chattype)
       }
       else if(message.message_type == 'youreceivedmessage'){
         this.messages.push(message)
         // Telling the other user that we are in the chat so that he does NOT create a 'newmessage' notification in the DB
         this._chatmessageservice.confirmReception(message.from)
-      }
-
-      else if (message.message_type == 'yousentmessage'){
-        this.messages.push(message) //Inserisco il messaggio inviato nella lista messages senza dover fare la query
-        //this.messages.shift() //Shifto l'array di una posizione per eliminare il messaggio più vecchio
       }
       else if(message.message_type == 'yourmessagereceived'){
         this.otheruseronline = false
@@ -57,20 +47,19 @@ export class ChatComponent implements OnInit {
     this.messages = this._chatmessageservice.getMessagesFromDb(this.player1, this.player2)
   }
 
-  //Invia un messaggio quando l'utente preme sul bottone "invia"
+  // Sends a message once the user hits "enter" or clicks on the "send" button
   public sendMessage(){
     if(this.newmessage != ''){
-      this._chatmessageservice.sendMessage(this.chattype,{from: this.player1, to: this.player2, text_content: this.newmessage})
+      this._chatmessageservice.sendMessage(this.chattype, {from: this.player1, to: this.player2, text_content: this.newmessage})
       this.messages.push({from: this.player1, to: this.player2, text_content: this.newmessage})
-      // If in a second the other user hasn't notified us that he's read the message, we send a notification to him; otherwise we just
-      // set 'otheruseronline' variable back to true, waiting for another confirmation the next time we send a message
 
+      // The other user has 1.5 seconds to us that he's read the message, otherwise we send a notification to him.
       setTimeout(() => {
         if(!this.otheruseronline){
           this._chatmessageservice.notifyUnreadMessage(this.player1, this.player2)
         }
         else{ this.otheruseronline = true}
-      }, 1000)
+      }, 1500)
     }
     this.newmessage = ''
   }
