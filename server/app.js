@@ -346,8 +346,7 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('newspectatormessage'+message.player1+message.player2, message)
   })  
 
-  // When a user sends a message to another user who is currently offline (or doesn't have the chat open) or sends an invite to play,
-  // a notification is sent
+  // When a user sends a notification to another user
   socket.on('newnotification', (notification) => {
     socket.broadcast.emit('newnotification'+notification.user, notification)
   })
@@ -364,16 +363,6 @@ ios.on('connection', (socket) => {
       message_type: 'yougotmatched',
       enemy: matchinfo.from,
       starttime: matchinfo.starttime
-    })
-  })
-
-  // When a friend accepts a match request, the requester has to tell him if he's still available or if he already is in queue/started another game.
-  // If the request receiver accepts and the sender tells him that he's no longer available, the match doesn't start:
-  socket.on('notavailableformatch', (notification) => {
-    socket.broadcast.emit('friendnotavailable'+notification.user, {
-      notification_type: 'friendnotavailable',
-      user: notification.user,
-      from: notification.from
     })
   })
 

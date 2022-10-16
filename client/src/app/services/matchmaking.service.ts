@@ -35,9 +35,11 @@ export class MatchmakingService {
   }
 
   notAvailableForMatch(current_user: String, accepting_user: String){
-    this.socket.emit('notavailableformatch', {
+    this.socket.emit('newnotification', {
       user: accepting_user,
-      from: current_user})
+      from: current_user,
+      notification_type: 'friendnotavailable'
+    })
   }
 
   closeMenus(current_user: String){

@@ -18,15 +18,15 @@ export class NotificationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listenToNotifications()
     this.retrieveNotifications()
+    this.listenToNotifications()
   }
 
-  // Waiting for new notifications;
+  // Waiting for new notifications
   listenToNotifications(){
     this._notificationsService.listenToNotifications(this.current_user.username).subscribe((notification) => {
-      // If we accepted a friend's invite to play, but that friend is no longer available, we add a notification to the list
-      // saying that he's no longer available, which is going to be deleted automatically after 3 seconds
+      // If we accepted a friend's invite to pla but that friend is no longer available, we add a notification
+      // (to be deleted automatically after 3 seconds) to the list saying that he's no longer available
       if(notification.notification_type == 'friendnotavailable'){
         this.notifications.push({notification_type: 'friendnotavailable', from: notification.from, tobedeleted: true})
         setTimeout(() => {
@@ -37,8 +37,7 @@ export class NotificationsComponent implements OnInit {
           }
         }, 3000)
       }
-      // Whatever the notification type is, we add it in the notifications list. On the html side
-      // we will go through each notification type with functions and buttons based on that.
+      // When we receive a match invite
       else if(notification.notification_type == 'matchinvite'){
         var alreadyin = false
         for(let i = 0; i < this.notifications.length; i++){
@@ -51,6 +50,7 @@ export class NotificationsComponent implements OnInit {
         }
         this.orderLastFirst()
       }
+      // When we receive an "unread message" notification
       else if(notification.notification_type == 'newmessage'){
         var alreadyin = false
         for(let i = 0; i < this.notifications.length; i++){
@@ -64,6 +64,7 @@ export class NotificationsComponent implements OnInit {
         this.orderLastFirst()
 
       }
+      // When we receive a communication from the moderators
       else if(notification.notification_type == 'modmessage'){
         this.notifications.push(notification)
       }
