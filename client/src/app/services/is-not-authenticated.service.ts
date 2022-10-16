@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { AuthService } from './auth.service';
 
-//Funziona al contrario di IsAuthenticatedService, vedere "is-authenticated-service.ts"
-
 @Injectable({
   providedIn: 'root'
 })
@@ -21,3 +19,5 @@ export class IsNotAuthenticatedService implements CanActivate {
     return true;
   }
 }
+
+
