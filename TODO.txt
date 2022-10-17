@@ -2,6 +2,7 @@ TODO GABRI:
   1. Segnalare con un errore che il login non è andato a buon fine
   2. Solo gli utenti admin possono fare POST su 'admindashboard'
   3. Togliere il "forgot password?" al login
+  4. Aggiungere recently played anche in db --> aggiornare documento di progetto sia nel capitolo di mongodb che nel capitolo delle routes
   
 TODO EDO:
   1. Notification component da sistemare
@@ -15,6 +16,7 @@ TODO EDO:
   6. Mantenere quadrato il campo (se possibile) di gioco anche quando si ridimensiona la pagina
   7. A volte ci sono delle celle nel campo di gioco che se metti male il mouse non sono cliccabili, tipo il centro della cella non è cliccabile e non capisco perché,
      poi sposti un attimo la freccetta di un millimetro e la cella diventa cliccabile.
+  8. Homepage da sistemare: sezioni con i titoli tipo "recently played" e "current matches". se la lista ongoing_matches è vuota allora metti "no matches available to spectate" mentre se la lista (che creerò in futuro) "recent_enemies" è vuota metteremo "no games played yet"
 
 ULTIME FUNZIONALITA' PRINCIPALI:
   - Se clicchi su un utente vedi in un pop up le sue statistiche
