@@ -2,7 +2,7 @@
   <!-- Game container -->
   <div  class="game md:flex md:gap-x-5"  :[ngClass]="{ 'opacity-30 blur-sm' : youwon || youlost}"> <!-- WHILE WE'RE IN GAME -->
       <!-- Our ships in positioning phase (or both our and enemy's ships during game phase)-->
-      <div class="bg-gray-700 h-[480px] min-w-[266px]">
+      <div class="bg-gray h-[480px] min-w-[266px]">
         <!-- Available ships during positioning phase-->
         <div *ngIf="!gamestarted" class="mt-2 ml-2">
           <ul *ngFor="let placedship of this.placedShips; index as i">
@@ -384,12 +384,8 @@
         </div>
       </div>
       <!-- CHAT COMPONENT-->
-      <div class="chat-live ml-8">
-        <div class="h-[480px] w-[300px]">
-          <div *ngIf="gamestarted == true">
-            <app-chat></app-chat>
-          </div>
-      </div>
+      <div *ngIf="gamestarted == true" class="chat-live fixed bottom-0 right-1">
+        <app-chat></app-chat>
       </div>
   </div>
 

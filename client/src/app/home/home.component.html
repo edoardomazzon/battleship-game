@@ -6,7 +6,7 @@
     </div>
 
     <div *ngIf="!isplaying">
-      <div *ngIf="!isspectating">
+      <div ><!-- *ngIf="!isspectating" -->
         <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto">
           <ul *ngFor="let match of ongoing_matches">
             <li *ngIf="match.player1 != current_user.username && match.player2 != current_user.username">
@@ -31,7 +31,6 @@
       </div>
 
       <app-chat></app-chat>
-
     </div>
 
 

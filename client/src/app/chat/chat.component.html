@@ -2,7 +2,7 @@
   <div *ngIf="chattype != 'match'" title="Close chat" (click)="closeChat()" class="cursor-pointer absolute -left-2 -top-2 bg-black-dark rounded-full"> <!-- if we're in a match we can't close the chat-->
     <svg width="24" height="24" style="fill: white"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg>
   </div>
-  <ul class="chat_list overflow-y-auto overflow-x-hidden w-[270px] max-h-[320px]" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+  <ul class="chat_list overflow-y-auto overflow-x-hidden w-[270px] h-[250px]" #scrollMe [scrollTop]="scrollMe.scrollHeight">
     <li *ngFor="let message of this.messages">
       <a *ngIf="message.text_content != '' " class="font-bold text-xxs">{{ message.from + ':' }}</a>
       <a class="text-xxs break-words">{{ message.text_content }}</a>
@@ -11,8 +11,11 @@
   </ul>
   <form class="relative flex items-center mt-2.5">
     <input class="chat" type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
-    <button class="btn noborder absolute bottom-[3px] right-1.5 !bg-black !rounded-full !px-1.5 !py-1.5 flex items-center" (click)="sendMessage()">
-      <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
+    <button
+      class="btn btn_black absolute bottom-[3px] right-1.5 !rounded-full !px-1.5 !py-1.5 flex items-center fill-white stroke-white hover:fill-black hover:stroke-black"
+      (click)="sendMessage()"
+    >
+      <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
         <line x1="22" y1="2" x2="11" y2="13"></line>
         <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
       </svg>

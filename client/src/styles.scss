@@ -45,6 +45,10 @@ h5 {
     @apply bg-gray border-sepia/0;
     &:hover { @apply bg-transparent border-gray; }
   }
+  &_black {
+    @apply bg-black border-sepia/0;
+    &:hover { @apply bg-transparent border-black; }
+  }
   &_txtblk {
     @apply text-black; 
     &:hover { @apply text-white; }
@@ -66,7 +70,10 @@ form input {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  @apply w-2 cursor-grab;
+  @apply w-2;
+  &:hover {
+    @apply w-3;
+  }
 }
 ::-webkit-scrollbar-track {
   @apply bg-white;
@@ -75,6 +82,5 @@ form input {
   @apply bg-black/50 rounded-lg;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-black/100;
-  @apply cursor-grabbing;
+  @apply bg-black/100 w-3;
 }
