@@ -62,6 +62,10 @@ const UserSchema = mongoose.Schema({
         type:  Array,
         required: false
     },
+    recently_played: {
+        type: Array,
+        required: false
+    },
     isbanned: {
         type: Boolean,
         required: false

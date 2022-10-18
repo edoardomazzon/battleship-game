@@ -23,6 +23,7 @@ router.post("/", async (req, res) => {
         //Updating user B's pending_friend_requests by substituting it with the new one
         try {
             await User.updateOne({username: receiver}, {pending_friend_requests: new_pending_requests})
+            res.json('ok')
         } catch (err) {
             console.log(err)
         }

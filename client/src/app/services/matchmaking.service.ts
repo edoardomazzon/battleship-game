@@ -74,6 +74,11 @@ export class MatchmakingService {
       this.socket.on('matchinviteaccepted'+current_user.username, (message) => {
         observer.next(message)
       })
+
+      this.socket.on('yougotaccepted'+current_user.username, (message) => {
+        message.message_type = 'newfriend'
+        observer.next(message)
+      })
     })
   }
 }

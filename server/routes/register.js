@@ -30,6 +30,7 @@ router.post('/', async (req, res) => {
       u.friends_list = [];
       u.blacklisted_users = [];
       u.pending_friend_requests = [];
+      u.recently_played = [];
       u.isbanned = false;
       u.setPassword(req.body.password);
       // Inserting the user in the db

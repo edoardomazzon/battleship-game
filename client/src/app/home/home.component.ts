@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { FriendRequest } from '../models/friend-request';
 import { MatchmakingService } from '../services/matchmaking.service';
+import { FriendRequestService } from '../services/friend-request.service';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +15,16 @@ export class HomeComponent implements OnInit {
   public isspectating: Boolean
   public current_user: any
   public ongoing_matches: any
+  public recently_played: Array<any>
   public isadmin: Boolean
 
-  constructor(private _router: Router, private _httpClient: HttpClient, private _matchMakingService: MatchmakingService) {
+  constructor(private _matchMakingService: MatchmakingService, private _friendRequestService: FriendRequestService) {
     this.isplaying = false
     this.isspectating = false
     this.isadmin = false
-  }
+    this.recently_played = new Array()
+    this.ongoing_matches = new Array()
+    }
 
   ngOnInit(): void {
     this.isready = false
@@ -34,6 +37,9 @@ export class HomeComponent implements OnInit {
       }
     }
     this.current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
+    for(let i = 0; i < this.current_user.recently_played.length; i++){
+      this.recently_played.push(this.current_user.recently_played[i])
+    }
     this.isadmin = (this.current_user.role == 'admin')
     this.listenToMatchmaking()
    }
@@ -41,7 +47,7 @@ export class HomeComponent implements OnInit {
   // If the user quits, matchmaking is canceled; if these emits don't go off (sometimes the beforeunload event is not caught),
   // the server already has some guarding logic that prevents the user to queue up twice. Once the user logs back in, the client
   // invokes (for further safety) this.cancelMatchmaking() . If the user logs off or exits the page and for some reason the
-  // beforeunload event isn't caught, then the user will ste be in queue and may be matched up with another user, but will end up
+  // beforeunload event isn't caught, then the user will still be in queue and may be matched up with another user, but will end up
   // losing for inactivity.
   @HostListener('window: beforeunload', ['$event'])
   unloadHandler(event: Event) {
@@ -56,9 +62,16 @@ export class HomeComponent implements OnInit {
   listenToMatchmaking(){
     this._matchMakingService.listenToMatchmaking(this.current_user).subscribe((observer) => {
       if(observer.message_type == 'yougotmatched'){
+        // Updating the "recently played" list (no longer than 10) and closing all menus
+        if(!this.recently_played.includes(observer.enemy)){
+          this.recently_played.push(observer.enemy)
+          if(this.recently_played.length > 10){ this.recently_played.shift() }
+        }
         this.isready = false
         this.isplaying = true
         this._matchMakingService.closeMenus(this.current_user.username)
+
+        // Setting up the game environment and create the match in the DB
         localStorage.setItem('matchinfo', JSON.stringify({
           isplaying: JSON.stringify(true),
           enemy: observer.enemy,
@@ -83,6 +96,7 @@ export class HomeComponent implements OnInit {
         }
       }
       else if(observer.message_type == 'matchended'){
+        // We remove any information about the match we just played and reopen the menus
         localStorage.removeItem('matchinfo')
         this.isplaying = false
         this.isready = false
@@ -91,9 +105,10 @@ export class HomeComponent implements OnInit {
       else if(observer.message_type == 'newongoingmatches'){
         this.ongoing_matches = new Array()
         for(let i = 0; i < observer.ongoing_matches.length; i++){
-
+          if(observer.ongoing_matches[i].player1 != this.current_user.username && observer.ongoing_matches[i].player2 != this.current_user.username){
+            this.ongoing_matches.push(observer.ongoing_matches[i])
+          }
         }
-        this.ongoing_matches = observer.ongoing_matches
       }
       // If a user accepted our invite to play
       else if(observer.message_type == 'matchinviteaccepted'){
@@ -131,6 +146,9 @@ export class HomeComponent implements OnInit {
           this.notAvailableForMatch(this.current_user.username, observer.accepting_user)
         }
       }
+      else if(observer.message_type == 'newfriend'){
+        this.current_user.friends_list.push(observer.accepting_user)
+      }
     })
   }
 
@@ -150,6 +168,17 @@ export class HomeComponent implements OnInit {
 
   notAvailableForMatch(current_user: String, accepting_user: String){
     this._matchMakingService.notAvailableForMatch(current_user, accepting_user)
+  }
+
+  sendFriendRequest(username: String){
+    var request = new FriendRequest()
+    request.sender = this.current_user.username
+    request.receiver = username
+    this._friendRequestService.sendFriendRequest(request)
+  }
+
+  inviteToPlay(username: String){
+    this._friendRequestService.inviteToPlay(this.current_user.username, username)
   }
 
 

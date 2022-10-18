@@ -2,7 +2,7 @@
   <!-- Game container -->
   <div  class="game md:flex md:gap-x-5"  :[ngClass]="{ 'opacity-30 blur-sm' : youwon || youlost}"> <!-- WHILE WE'RE IN GAME -->
       <!-- Our ships in positioning phase (or both our and enemy's ships during game phase)-->
-      <div class="bg-gray h-[480px] min-w-[266px]">
+      <div class="h-[480px] min-w-[266px] my-2">
         <!-- Available ships during positioning phase-->
         <div *ngIf="!gamestarted" class="mt-2 ml-2">
           <ul *ngFor="let placedship of this.placedShips; index as i">
@@ -350,8 +350,8 @@
               <span class="bg-black w-2 h-2 rounded-full"></span>
             </div>
             <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'none'" class="border border-black w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
-            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black btn_red w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
-            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black btn_green w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'false'" class="border border-black bg-red-error w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
+            <div *ngIf="cell.value == 0 && !hasplacedallships && !hasconfirmedpositioning && selectedShip != 'none' && myfield[y][x].preview_success == 'true'" class="border border-black bg-success w-full h-full cursor-pointer" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)" (click)="placeShip(x, y, selectedShip.length, selectedShip.orientation)"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && !hasconfirmedpositioning && selectedShip == 'none'" class="border border-black w-full h-full"></div> <!-- If we're still positioning ships -->
             <div *ngIf="cell.value == 0 && hasplacedallships && hasconfirmedpositioning" class="border border-black w-full h-full"></div>
             <div *ngIf="cell.value > 0 && !cell.hit && !hasconfirmedpositioning && selectedShip != 'none'" class="border border-black bg-sepia-lighter w-full h-full cursor-pointer" (click)="removeShip(x, y, cell.value, cell.orientation)" (mouseover)="checkPlaceableOnHover(x, y, selectedShip.length, selectedShip.orientation)" (wheel)="rotateSelectedShip(x, y, selectedShip.length, selectedShip.orientation)"></div>

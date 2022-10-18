@@ -27,6 +27,7 @@ export class ChatComponent implements OnInit {
         this.player2 = message.other_user
         this.chattype = message.chattype
         if(message.chat_type == 'private'){
+          this.chattype = 'private'
           this.getMessages()
         }
         this.chatopened = true

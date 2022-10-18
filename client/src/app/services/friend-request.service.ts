@@ -40,19 +40,21 @@ export class FriendRequestService {
   }
 
   sendFriendRequest(friendrequest: FriendRequest) {
-    this._httpClient.post(this.baseURL+"friendrequest", friendrequest).subscribe()
-
-    this.socket.emit('newfriendrequest', {
-      request_type: 'friendrequest',
-      sender: friendrequest.sender,
-      receiver: friendrequest.receiver
+    this._httpClient.post(this.baseURL+"friendrequest", friendrequest).subscribe((response) => {
+      if(response == 'ok'){
+        this.socket.emit('newfriendrequest', {
+          request_type: 'friendrequest',
+          sender: friendrequest.sender,
+          receiver: friendrequest.receiver
+        })
+        // Telling the client to make the red notification badge appear if the friends menu is not already expanded
+        this.socket.emit('newnotification',
+          {user: friendrequest.receiver,
+           from: friendrequest.sender,
+           notification_type: 'friendrequest'
+          })
+      }
     })
-    // Telling the client to make the red notification badge appear if the friends menu is not already expanded
-    this.socket.emit('newnotification',
-      {user: friendrequest.receiver,
-       from: friendrequest.sender,
-       notification_type: 'friendrequest'
-      })
   }
 
   acceptFriendRequest(accepted_request: FriendRequest){
