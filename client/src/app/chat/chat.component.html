@@ -4,9 +4,9 @@
   </div>
   <ul class="chat_list overflow-y-auto overflow-x-hidden w-[270px] h-[250px]" #scrollMe [scrollTop]="scrollMe.scrollHeight">
     <li *ngFor="let message of this.messages">
-      <a *ngIf="message.text_content != '' " class="font-bold text-xxs">{{ message.from + ':' }}</a>
-      <a class="text-xxs break-words">{{ message.text_content }}</a>
-      <a *ngIf="message.text_content == '' " class="font-bold text-xxs"> ></a>
+      <span *ngIf="message.text_content != '' " class="font-bold text-xxs">{{ message.from + ':' }}</span>
+      <span class="text-xxs break-words">{{ message.text_content }}</span>
+      <span *ngIf="message.text_content == '' " class="font-bold text-xxs"> ></span>
     </li>
   </ul>
   <form class="relative flex items-center mt-2.5">

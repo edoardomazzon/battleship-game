@@ -7,7 +7,7 @@ TODO GABRI:
   6. Creare una UserInfo Component che rende un nome utente cliccabile e che mostri le statistiche dell'utente a comparsa
   
 TODO EDO:
-  1. Spectator Component: nella chat degli spettatori non compare il simboletto per inviare il messaggio
+  1. Spectator Component: sistemare layout o lasciamo così?
   2. Game Component:      il bottone "Leave Match" scompare se la finestra di chrome viene ridimensionata a metà pagina, tipo
                           quando metti un giocatore contro l'altro in split screen scompare proprio il bottone Leave Match, 
                           nel senso che è nascosto da qualche parte.
@@ -16,9 +16,7 @@ TODO EDO:
   4. Game Component:      Mantenere quadrato il campo (se possibile) di gioco anche quando si ridimensiona la pagina
   5. Game Component:      A volte ci sono delle celle nel campo di gioco che se metti male il mouse non sono cliccabili, tipo
                           il centro della cella non è cliccabile e non capisco perché, poi sposti un attimo la freccetta di 
-                          un millimetro e la cella diventa cliccabile.
-  6. Home Component:      riodinare e abbellire le sezioni "ongoing matches" e "recently played"
-  
+                          un millimetro e la cella diventa cliccabile.  
 
 ULTIME FUNZIONALITA' PRINCIPALI:
   - Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa il sito sul cell.

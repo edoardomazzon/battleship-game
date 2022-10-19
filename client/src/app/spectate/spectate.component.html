@@ -1,6 +1,6 @@
 <div class="mt-5 relative">
   <!-- Game container -->
-  <div  class="game md:flex md:gap-x-5"  :[ngClass]="{ 'opacity-30 blur-sm' : turnplayer2}"> <!-- WHILE WE'RE IN GAME -->
+  <div class="game md:flex md:gap-x-5 items-center"  :[ngClass]="{ 'opacity-30 blur-sm' : turnplayer2 || gameended }"> <!-- WHILE WE'RE IN GAME -->
 
       <!-- PLAYER 1 FIELD -->
       <div class="w-[480px] h-[480px] p-3">
@@ -37,16 +37,14 @@
       </div>
 
       <div class="chat-live ml-8">
-        <div class="bg-white h-[480px] w-[300px]">
-          <app-spectatorchat></app-spectatorchat>
-        </div>
+        <app-spectatorchat></app-spectatorchat>
       </div>
   </div>
 </div>
 
 
 <!-- Final Buttons -->
-<div *ngIf="gameended" class="game absolute top-5 left-[37%] p-10 rounded-lg">
+<div *ngIf="gameended" class="game absolute top-1/4 left-1/4 p-10 rounded-lg">
   <p class="text-xl font-bold text-white">{{ winner }} won the game</p>
 </div>
 
