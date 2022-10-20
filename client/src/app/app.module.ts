@@ -21,6 +21,7 @@ import { FriendsComponent } from './friends/friends.component';
 import { SpectateComponent } from './spectate/spectate.component';
 import { SpectatorchatComponent } from './spectatorchat/spectatorchat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { UserinfoComponent } from './userinfo/userinfo.component';
 
 
 const routes: Routes = [
@@ -45,7 +46,8 @@ const routes: Routes = [
     FriendsComponent,
     SpectateComponent,
     SpectatorchatComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    UserinfoComponent
   ],
   imports: [
     BrowserModule,

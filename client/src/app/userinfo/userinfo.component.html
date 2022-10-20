@@ -1,0 +1,11 @@
+<span class="relative cursor-pointer" :[ngClass]="{' text-sepia ': expanded == true}" (mouseover)="expand()" (mouseout)="expand()">{{ this.username }}</span>
+
+<!-- Qui sotto è da metterlo absolute e farlo comparire (Se non è difficile) tipo slide up in cima al nome, non sotto come compare ora.
+     Io ho provato a mettere absolute ma non mi fa comparire niente -->
+<div *ngIf="expanded" class="bg-white text-black p-2 flex flex-col items-center z-10 rounded-lg">
+  <ul>
+    <li class="text-xxs">Accuracy: {{ this.accuracy }}%</li>
+    <li class="text-xxs">Win Rate: {{ this.winrate }}%</li>
+    <li class="text-xxs">Current Winstreak: {{ this.current_winstreak }}</li>
+  </ul>
+</div>

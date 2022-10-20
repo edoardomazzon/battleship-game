@@ -44,6 +44,7 @@ const loginRoute = require('./routes/login');
 const winGameRoute = require('./routes/wingame');
 const loseGameRoute = require('./routes/losegame')
 const registerRoute = require('./routes/register');
+const userInfoRoute = require('./routes/userinfo');
 const myprofileRoute = require('./routes/myprofile');
 const createMatchRoute = require('./routes/creatematch');
 const chatMessageRoute = require('./routes/chatmessage');
@@ -66,6 +67,7 @@ app.use('/login', loginRoute);
 app.use('/wingame', winGameRoute);
 app.use('/losegame', loseGameRoute);
 app.use('/register', registerRoute);
+app.use('/userinfo', userInfoRoute);
 app.use('/myprofile', myprofileRoute);
 app.use('/creatematch', createMatchRoute);
 app.use('/chatmessage', chatMessageRoute);
