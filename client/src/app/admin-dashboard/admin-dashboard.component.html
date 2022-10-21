@@ -24,10 +24,12 @@
           <p class="text-xxs">{{ user.role }}</p>
         </div>
         <div class="ml-10 flex gap-x-5 flex-wrap items-center">
-          <button class="btn btn_red btn_little" (click)="confirmBan(user.username)" [ngClass]="{'pointer-events-none btn_gray': user.isbanned}">Ban</button>
+          <button class="btn btn_red btn_little" (click)="confirmBan(user.username)" [ngClass]="{'pointer-events-none btn_gray': user.isbanned || user.role == 'admin'}">Ban</button>
           <button class="btn btn_green btn_little" (click)="confirmUnban(user.username)" [ngClass]="{'pointer-events-none btn_gray': !user.isbanned}">Unban</button>
+          <button class="btn btn_little" (click)="confirmForcePasswordChange(user.username)">Force password change</button>
           <button class="btn btn_green btn_little" (click)="confirmPromote(user.username)" [ngClass]="{'pointer-events-none btn_gray': user.role == 'admin'}">Promote</button>
           <button class="btn btn_ylw btn_little" (click)="confirmWipe(user.username)">Wipe stats</button>
+
           <button class="btn btn_little" (click)="promptNotificationToUser(user.username)">Notify</button>
         </div>
       </li>

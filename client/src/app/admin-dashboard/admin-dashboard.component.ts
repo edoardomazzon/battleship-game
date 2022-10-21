@@ -238,6 +238,16 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  // Forces the selected user to change its password
+  forcePasswordChange(username: String){
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'forcepasswordchange', username: username}).subscribe()
+  }
+  confirmForcePasswordChange(username: String){
+    if(window.confirm('Are you sure you want to force '+username+' to change password at the next logon?')){
+      this.forcePasswordChange(username)
+    }
+  }
+
   // Activates a popup (or a textbox somewhere in the page) that contains a textbox with the message to be sent to the selected user as a notification
   promptNotificationToUser(username: String){
     // Should make a textbox appear or popup; whatever the administrator types in it, it will be sent to the selected user

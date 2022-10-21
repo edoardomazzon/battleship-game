@@ -63,6 +63,15 @@ router.post("/", async (req, res) => {
         }
     }
 
+    // Forcing a user to change it's password
+    else if(request.request_type == 'forcepasswordchange'){
+        try{
+            User.updateOne({username: request.username}, { needspasswordchange: true }).then()
+        }catch(err){
+            console.log(err)
+        }
+    }
+
     // Inserting notifications for each user
     else if(request.request_type == 'notifyall'){
         try{
