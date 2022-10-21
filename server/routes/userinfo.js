@@ -5,7 +5,7 @@ const User = require('../models/user.js');
 // Called whenever a user takes a shot and gets the shot result back; here the accuracy is updated as well as the total shots count
 // and the hit shots count
 router.post('/', async(req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     const username = req.body.username
     
     try{

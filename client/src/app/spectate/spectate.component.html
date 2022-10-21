@@ -1,47 +1,46 @@
-<div class="mt-5 relative">
+<p class="text-center text-m font-bold">{{ player1 }} <b class="text-red">vs</b> {{ player2 }}</p>
+<div class="mt-2.5 relative">
   <!-- Game container -->
   <div class="game md:flex md:gap-x-5 items-center"  :[ngClass]="{ 'opacity-30 blur-sm' : turnplayer2 || gameended }"> <!-- WHILE WE'RE IN GAME -->
+    <!-- PLAYER 1 FIELD -->
+    <div class="w-[480px] h-[480px] p-3">
+      <p class="text-white mb-4">{{ player1 }}</p>
 
-      <!-- PLAYER 1 FIELD -->
-      <div class="w-[480px] h-[480px] p-3">
-        <p class="text-white mb-4">{{ player1 }}</p>
-
-        <div *ngFor="let row of player1field; index as y" class="grid grid-cols-10 bg-white">
-          <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
-            <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
-            <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full"></div>
-            <div *ngIf="cell == 'water'" class="border border-black w-full h-full flex items-center justify-center">
-              <span class="bg-black w-2 h-2 rounded-full"></span>
-            </div>
-            <div *ngIf="cell == 'hit'" class="border border-black w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
-            <div *ngIf="cell == 'sunk'" class="border border-black w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
+      <div *ngFor="let row of player1field; index as y" class="grid grid-cols-10 bg-white">
+        <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
+          <div *ngIf="cell == 'empty' " class="border border-black w-full h-full"></div>
+          <div *ngIf="cell == 'placed' " class="border border-black bg-sepia-lighter w-full h-full"></div>
+          <div *ngIf="cell == 'water'" class="border border-black w-full h-full flex items-center justify-center">
+            <span class="bg-black w-2 h-2 rounded-full"></span>
           </div>
+          <div *ngIf="cell == 'hit'" class="border border-black w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
+          <div *ngIf="cell == 'sunk'" class="border border-black w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
         </div>
       </div>
+    </div>
 
-      <!-- PLAYER 2 FIELD -->
-      <div class="w-[480px] h-[480px] p-3">
-        <p class="text-white mb-4">{{ player2 }}</p>
+    <!-- PLAYER 2 FIELD -->
+    <div class="w-[480px] h-[480px] p-3">
+      <p class="text-white mb-4">{{ player2 }}</p>
 
-        <div *ngFor="let row of player2field; index as y" class="grid grid-cols-10 bg-white">
-          <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
-            <div *ngIf="cell == 'empty'" class="border border-black w-full h-full"></div>
-            <div *ngIf="cell == 'placed'" class="border border-black bg-sepia-lighter w-full h-full"></div>
-            <div *ngIf="cell == 'water'" class="w-full h-full flex items-center justify-center">
-              <span class="bg-black w-2 h-2 rounded-full"></span>
-            </div>
-            <div *ngIf="cell == 'hit' " class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
-            <div *ngIf="cell == 'sunk' " class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
+      <div *ngFor="let row of player2field; index as y" class="grid grid-cols-10 bg-white">
+        <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
+          <div *ngIf="cell == 'empty'" class="border border-black w-full h-full"></div>
+          <div *ngIf="cell == 'placed'" class="border border-black bg-sepia-lighter w-full h-full"></div>
+          <div *ngIf="cell == 'water'" class="w-full h-full flex items-center justify-center">
+            <span class="bg-black w-2 h-2 rounded-full"></span>
           </div>
+          <div *ngIf="cell == 'hit' " class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-orange-400 after:leading-none"></div>
+          <div *ngIf="cell == 'sunk' " class="w-full h-full after:content-['\d7'] after:text-l after:flex after:items-center after:justify-center after:h-full after:text-success after:leading-none"></div>
         </div>
       </div>
+    </div>
 
-      <div class="chat-live ml-8">
-        <app-spectatorchat></app-spectatorchat>
-      </div>
+    <div class="chat-live ml-8">
+      <app-spectatorchat></app-spectatorchat>
+    </div>
   </div>
 </div>
-
 
 <!-- Final Buttons -->
 <div *ngIf="gameended" class="game absolute top-1/4 left-1/4 p-10 rounded-lg">

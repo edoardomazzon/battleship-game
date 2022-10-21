@@ -28,8 +28,9 @@
           <div class="text-center">
             <h3 class="mb-2.5">Recently played</h3>
             <span *ngIf="recently_played.length <= 0">No games played yet</span>
-            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[150px] overflow-y-auto pr-2.5">
+            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[200px] overflow-y-auto pr-2.5">
               <li *ngFor="let user of recently_played" class="flex items-center justify-between">
+                <!-- se versione click con tendina non absolute items-start al posto di items-center -->
                 <app-userinfo [title]="user"></app-userinfo>
                 <button *ngIf="!current_user.friends_list.includes(user)" title="Send friend request" (click)="sendFriendRequest(user)">
                   <svg class="w-6 h-6 fill-success">
@@ -54,7 +55,7 @@
 
       <div *ngIf="isspectating">
         <app-spectate></app-spectate>
-        <div class="text-center pt-4">
+        <div class="text-center">
           <button class="btn btn_red" (click)="stopSpectating()">Stop spectating</button>
         </div>
       </div>

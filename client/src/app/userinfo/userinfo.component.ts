@@ -34,8 +34,7 @@ export class UserinfoComponent implements OnInit {
     })
   }
 
-  expand(){
+  toggleExpand(){
     this.expanded = !this.expanded
   }
-
 }
