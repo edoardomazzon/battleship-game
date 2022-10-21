@@ -50,7 +50,7 @@ h5 {
     &:hover { @apply bg-transparent border-black; }
   }
   &_txtblk {
-    @apply text-black; 
+    @apply text-black;
     &:hover { @apply text-white; }
   }
 }
@@ -76,7 +76,7 @@ form input {
   }
 }
 ::-webkit-scrollbar-track {
-  @apply bg-white;
+  @apply bg-white rounded-lg;
 }
 ::-webkit-scrollbar-thumb {
   @apply bg-black/50 rounded-lg;

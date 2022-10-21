@@ -1,36 +1,15 @@
-<!-- versione mouseover -->
-<div>
-  <span class="relative cursor-pointer" :[ngClass]="{' text-sepia ': expanded == true}" (mouseover)="toggleExpand()" (mouseout)="toggleExpand()">{{ this.username }}</span>
-  <div *ngIf="expanded" class="absolute bg-white text-black p-2 flex flex-col items-center z-10 rounded-lg">
-    <ul>
-      <li class="text-xxs">Accuracy: {{ this.accuracy }}%</li>
-      <li class="text-xxs">Win Rate: {{ this.winrate }}%</li>
-      <li class="text-xxs">Current Winstreak: {{ this.current_winstreak }}</li>
-    </ul>
-  </div>
-</div>
-
-
 <!-- versione cliccabile -->
-<!-- <div (click)="toggleExpand()" class="cursor-pointer w-fit">
+<div (click)="toggleExpand()" class="cursor-pointer w-fit">
   <span class="hover:text-sepia" :[ngClass]="{' text-sepia': expanded == true}">{{ this.username }}</span>
   <i
     class="relative top-[-5px] content-[''] inline-block w-2 h-2 border-r border-t border-white rotate-[135deg] ml-2 transition duration-300 ease-in-out hover:border-sepia"
     :[ngClass]="{' rotate-[-45deg] top-0 border-sepia': expanded == true}"
   ></i>
-</div> -->
-<!-- <div *ngIf="expanded" class="absolute bg-white text-black p-2 z-10 rounded-lg">
+</div>
+ <div *ngIf="expanded" class="absolute bg-white text-black p-2 z-10 rounded-lg">
   <ul class="flex flex-col items-center">
     <li class="text-xxs">Accuracy: {{ this.accuracy }}%</li>
     <li class="text-xxs">Win Rate: {{ this.winrate }}%</li>
     <li class="text-xxs">Current Winstreak: {{ this.current_winstreak }}</li>
   </ul>
-</div> -->
-<!-- Altra versione -->
-<!-- <div *ngIf="expanded" class="z-10">
-  <ul class="flex items-center flex-wrap gap-x-2">
-    <li class="text-xxs">Acc: {{ this.accuracy }}%</li>
-    <li class="text-xxs">Win Rate: {{ this.winrate }}%</li>
-    <li class="text-xxs">Cur Winstreak: {{ this.current_winstreak }}</li>
-  </ul>
-</div> -->
+</div>

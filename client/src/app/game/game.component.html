@@ -364,7 +364,9 @@
 
       <!-- ENEMYFIELD-->
       <div class="w-[480px] h-[480px] p-3" :[ngClass]="{'opacity-30': !myturn}">
-        <p class="text-white mb-4">{{ enemy}}</p>
+        <div class="text-white mb-4">
+          <app-userinfo [title]="enemy"></app-userinfo>
+        </div>
 
         <div *ngFor="let row of enemyfield; index as i" class="grid grid-cols-10 bg-white">
           <div *ngFor="let cell of row; index as j" class="bg-white w-full h-8 border border-black">
