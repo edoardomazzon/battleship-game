@@ -1,5 +1,4 @@
 TODO GABRI:
-  1. Segnalare con un errore che il login non è andato a buon fine
   2. Solo gli utenti admin possono fare POST su 'admindashboard'
   4. Aggiornare documento su: recently played (route e model), userinfo (component), password change (funzionalità admin)
 
