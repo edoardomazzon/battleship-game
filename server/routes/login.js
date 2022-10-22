@@ -31,35 +31,24 @@ passport.use(
     // Using Passport middleware to manage the authentication and the verification of correct credentials
     new passportHTTP.BasicStrategy(function(username, password, done) {
         User.findOne({ username: username }, (err, user) => {
-            if (err) {
-                return done({
-                    statusCode: 500,
-                    error: true,
-                    errormessage: err
-                });
+            if(!user || err){
+                return done(null, "error")
             }
-            if (!user) {
-                return done({
-                    statusCode: 200,
-                    error: true,
-                    errormessage: "error"
-                });
-            }            
             if (user.validatePassword(password)) {
                 return done(null, user);
             }
-
-            return done({
-                statusCode: 500,
-                error: true,
-                errormessage: "Invalid password"
-            });
+            return done(null, "error")
         });
     })
 );
 
+// Passport's authentication function injects "user" inside the request "rec"
 router.get("/", passport.authenticate("basic", {session: false}), async (req, res) => {
-    // If we reach this point, the user is successfully authenticated and has been injected into req.user
+    // If Passport's authentication function returns an "error", it means the user has given us wrong credentials
+    if(req.user == "error"){
+        return res.json("error")
+    }
+    // If we reach this point, the user is successfully authenticated
     if(req.user.isbanned){
         return res.json('banned')
     }

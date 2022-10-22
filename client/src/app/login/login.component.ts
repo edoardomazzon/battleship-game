@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
       if (authuser == 'error'){
         this.wrongcredentials = true
       }
-      if (authuser == 'banned'){
+      else if (authuser == 'banned'){
         this.wrongcredentials = false
         this.yourebanned = true
       }

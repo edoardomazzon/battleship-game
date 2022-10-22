@@ -29,6 +29,7 @@ export class LoginService {
       tap( (data) => {
         //Otteniamo la response dal server (vedere route login.js in server per capire com'è fatta la response)
         this.response = data;
+
         if(this.response != 'error'){
           if(this.response != 'banned'){
             if(this.response.needspasswordchange != undefined &&
