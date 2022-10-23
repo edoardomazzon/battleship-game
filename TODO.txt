@@ -1,6 +1,5 @@
 TODO GABRI:
-  2. Solo gli utenti admin possono fare POST su 'admindashboard'
-  4. Aggiornare documento su: recently played (route e model), userinfo (component), password change (funzionalità admin)
+  1. Solo gli utenti admin possono fare POST su 'admindashboard'
 
 TODO EDO:
   1. Game Component:      il bottone "Leave Match" scompare se la finestra di chrome viene ridimensionata a metà pagina, tipo
