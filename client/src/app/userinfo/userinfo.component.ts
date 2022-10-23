@@ -13,7 +13,7 @@ export class UserinfoComponent implements OnInit {
   public current_winstreak: Number;
   public accuracy: Number;
 
-  // With these we can pass a parameter named "title" from other HTML components (see home.component.html)
+  // With these we can pass a parameter named "[title]" from other HTML components (see home.component.html or game.component.html)
   @Input()
   title!: string;
 

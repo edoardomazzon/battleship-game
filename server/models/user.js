@@ -84,27 +84,22 @@ const UserSchema = mongoose.Schema({
     }
 })
 
+
 UserSchema.methods.setPassword = function (pwd) {
-    this.salt = crypto.randomBytes(16).toString('hex'); // We use a random 16-bytes hex string for salt
-    // We use the hash function sha512 to hash both the password and salt to
-    // obtain a password digest 
-    // 
-    // From wikipedia: (https://en.wikipedia.org/wiki/HMAC)
-    // In cryptography, an HMAC (sometimes disabbreviated as either keyed-hash message 
-    // authentication code or hash-based message authentication code) is a specific type 
-    // of message authentication code (MAC) involving a cryptographic hash function and 
-    // a secret cryptographic key.
-    //
+    // Generating a 16 Bytes string to enforce the password hash
+    this.salt = crypto.randomBytes(16).toString('hex');
+    // Creating an Hashed Message Authentication Code based on the salt with the SHA256 algorith
     var hmac = crypto.createHmac('sha256', this.salt);
+    // Updating the HMAC with the password
     hmac.update(pwd);
-    this.digest = hmac.digest('hex'); // The final digest depends both by the password and the salt
+    // Updating the user's "digest" field which now contains the salt and the password
+    this.digest = hmac.digest('hex'); 
 };
 
+// To validate the password, we compute the digest with the
+// same HMAC to check if it matches with the digest we stored
+// in the database.
 UserSchema.methods.validatePassword = function (pwd) {
-    // To validate the password, we compute the digest with the
-    // same HMAC to check if it matches with the digest we stored
-    // in the database.
-
     var hmac = crypto.createHmac("sha256", this.salt);
     hmac.update(pwd);
     var digest = hmac.digest('hex');

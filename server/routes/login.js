@@ -28,7 +28,6 @@ var auth = jwt({
 });
 
 passport.use(
-    // Using Passport middleware to manage the authentication and the verification of correct credentials
     new passportHTTP.BasicStrategy(function(username, password, done) {
         User.findOne({ username: username }, (err, user) => {
             if(!user || err){
@@ -44,7 +43,8 @@ passport.use(
 
 // Passport's authentication function injects "user" inside the request "rec"
 router.get("/", passport.authenticate("basic", {session: false}), async (req, res) => {
-    // If Passport's authentication function returns an "error", it means the user has given us wrong credentials
+    // If Passport's authentication function returns an "error", 
+    // it means the user has given us wrong credentials
     if(req.user == "error"){
         return res.json("error")
     }
@@ -59,20 +59,19 @@ router.get("/", passport.authenticate("basic", {session: false}), async (req, re
         })
     }
     else{
-        // We now generate a JWT with the useful user data and return it as response    
+        // Generating a JSONWebToken  
         var tokendata = {
             username: req.user.username,
             role: req.user.role
         };
-        // Here we generate the signed user authorization token
+        // Generate a signed Authentication Token
         var token_signed = jsonwebtoken.sign(
             tokendata,
             process.env.JWT_SECRET, {
                 expiresIn: "5h"
             }
         );
-
-        // Creating a json with user data to save in local storage, but first we have to delete the password, salt and digest fields
+        // Creating a JSON with user data to save in local storage
         const logged_username = jwt_decode(token_signed);
         var logged_user = await User.findOne({username: logged_username.username});
         logged_user.password = undefined;

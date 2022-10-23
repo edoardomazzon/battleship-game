@@ -2,10 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user.js');
 
-// Called whenever a user takes a shot and gets the shot result back; here the accuracy is updated as well as the total shots count
-// and the hit shots count
+// When clicking on a user's username, some basic information about that user are displayed.
+// In particular, this route returns the user's accuracy, winstreak and winrate
 router.post('/', async(req, res) => {
-    // console.log(req.body)
     const username = req.body.username
     
     try{

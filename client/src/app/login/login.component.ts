@@ -27,10 +27,7 @@ export class LoginComponent implements OnInit {
     this.secondpasswordchangefield = ''
     this.warnpasswordmismatch = false
   }
-
-  ngOnInit(){
-  }
-
+  ngOnInit(){}
   loginUser(){
     this._loginService.login(this.authuser).subscribe(authuser =>{
       if (authuser == 'error'){

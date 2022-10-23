@@ -24,12 +24,10 @@ export class LoginService {
           'Content-Type': 'application/x-www-form-urlencoded'
       })
     };
-
-    return this._httpClient.get(this.baseURL, options).pipe(
-      tap( (data) => {
-        //Otteniamo la response dal server (vedere route login.js in server per capire com'è fatta la response)
+    // Receiving a response from the server; such respons can return an "error" string
+    // or the user's info with some optional additional clues such as "banned" or "needspasswordchange"
+    return this._httpClient.get(this.baseURL, options).pipe(tap( (data) => {
         this.response = data;
-
         if(this.response != 'error'){
           if(this.response != 'banned'){
             if(this.response.needspasswordchange != undefined &&
@@ -40,11 +38,9 @@ export class LoginService {
             }
             else{
               localStorage.clear()
-              //Salviamo in localstorage il token
+              // Saving the authentication token and user info in the browser's LocalStoragae
               this.token = this.response.token;
               localStorage.setItem('auth_token', this.token);
-
-              //Salviamo in localstorage l'utente per averne i dati comodamente estraibili in seugito
               this.user = this.response.user;
               localStorage.setItem('current_user', JSON.stringify(this.user));
             }
