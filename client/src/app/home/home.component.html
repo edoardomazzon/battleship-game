@@ -11,7 +11,7 @@
 
         <app-my-profile class="flex justify-center"></app-my-profile>
 
-        <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto border-t border-sepia mt-10 py-10">
+        <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto border-t border-sepia mt-10 pt-10">
           <!-- Ongoing Matches List -->
           <div class="text-center">
             <h4 class="mb-2.5">Ongoing matches</h4>
@@ -28,8 +28,8 @@
           <div class="text-center">
             <h4 class="mb-2.5">Recently played</h4>
             <span *ngIf="recently_played.length <= 0">No games played yet</span>
-            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[200px] overflow-y-auto pr-2.5">
-              <li *ngFor="let user of recently_played" class="flex items-center justify-between">
+            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[150px] overflow-y-auto pr-2.5">
+              <li *ngFor="let user of recently_played" class="flex items-center justify-between relative">
                 <!-- with the "[title]" field below we pass the user's username as an argument to the UserInfo component -->
                 <app-userinfo [title]="user"></app-userinfo><!-- se versione click con tendina non absolute items-start al posto di items-center -->
                 <button *ngIf="!current_user.friends_list.includes(user)" title="Send friend request" (click)="sendFriendRequest(user)">
@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <div class="text-center my-8">
+        <div class="text-center mt-10 mb-4">
           <button *ngIf="!isready" class="text-center btn btn_green" (click)="readyUp()">Ready up</button>
           <button *ngIf="isready"  class="btn btn_red" (click)="cancelMatchMaking()">Cancel Matchmaking</button>
         </div>
