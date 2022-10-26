@@ -28,8 +28,8 @@
           <div class="text-center">
             <h4 class="mb-2.5">Recently played</h4>
             <span *ngIf="recently_played.length <= 0">No games played yet</span>
-            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[150px] overflow-y-auto pr-2.5">
-              <li *ngFor="let user of recently_played" class="flex items-center justify-between relative">
+            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[150px] overflow-y-auto pr-2.5 relative">
+              <li *ngFor="let user of recently_played" class="flex items-center justify-between">
                 <!-- with the "[title]" field below we pass the user's username as an argument to the UserInfo component -->
                 <app-userinfo [title]="user"></app-userinfo><!-- se versione click con tendina non absolute items-start al posto di items-center -->
                 <button *ngIf="!current_user.friends_list.includes(user)" title="Send friend request" (click)="sendFriendRequest(user)">
