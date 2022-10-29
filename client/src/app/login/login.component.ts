@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   public secondpasswordchangefield: string
   public warnpasswordmismatch: Boolean
   public wrongcredentials: Boolean
-  private baseURL = 'http://localhost:3000/login'
+  private baseURL = 'http://192.168.188.23:3000/login'
 
   constructor(private _loginService: LoginService, private _router: Router, private _httpClient: HttpClient) {
     this.yourebanned = false

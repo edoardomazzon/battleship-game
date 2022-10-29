@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "comp": "ng generate component"
+    "comp": "ng generate component",
+    "host": "ng serve --host 192.168.188.23"
   },
   "private": true,
   "dependencies": {

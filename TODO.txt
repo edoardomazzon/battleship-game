@@ -1,3 +1,11 @@
+COME FAR PARTIRE L'APP IN LAN:
+  1. Prendere l'IP del proprio portatile aprendo il cmd e inviando ipconfig
+  2. Sostituirlo a TUTTE le occorrenze di "localhost" nella cartella Client (tipo se nel client abbiamo http://localhost:3000/ diventa
+      nel mio caso http://192.168.188.23:3000/), importante sostituirlo anche nel file app.js del Server dove ci sono le CORS policies 
+      (riga 14)
+  3. Aprire il terminale e fare "cd client" e da lì "npm run host" che ho fatto in modo che faccia "ng serve --host <indirizzo ip>"
+      Questo "--host <indirizzo ip>" è quello che condivide in LAN il client angular
+
 TODO GABRI:
   1. Solo gli utenti admin possono fare POST su 'admindashboard'
 
@@ -9,8 +17,11 @@ TODO EDO:
   3. Game Component:      A volte ci sono delle celle nel campo di gioco che se metti male il mouse non sono cliccabili, tipo
                           il centro della cella non è cliccabile e non capisco perché, poi sposti un attimo la freccetta di 
                           un millimetro e la cella diventa cliccabile. 
+  4. Game Component:      Il fatto che la pagina non sia scrollabile rende ingiocabile il gioco quando sono aperte due pagine una di fianco all'altra
+  5. Game Component:      La chat di gioco è in mezzo al cazzo sopra il campo nemico
 
 ULTIME FUNZIONALITA' PRINCIPALI:
   - Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa il sito sul cell.
    oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)
   - App mobile
+  - SERVER: Riscrivere app.js e tutte le route del server in typescript
