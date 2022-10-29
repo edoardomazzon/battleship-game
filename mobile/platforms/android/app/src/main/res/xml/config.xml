@@ -18,8 +18,9 @@
     <feature name="Notification">
         <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
     </feature>
-    <name>HelloCordova</name>
-    <description>Sample Apache Cordova App</description>
+    <name>Battleship Game</name>
+    <description>A battleship game</description>
+    <icon density="mdpi" height="57" platform="android" src="\platforms\android\app\src\main\res\logo.png" width="57" />
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Cecconello Gabriele, Mazzon Edoardo
     </author>
@@ -27,4 +28,10 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <preference name="loglevel" value="DEBUG" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="BackgroundColor" value="0xff0000ff" />
+    <preference name="HideKeyboardFormAccessoryBar" value="true" />
+    <preference name="Orientation" value="landscape" />
+    <preference name="InAppBrowserStorageEnabled" value="true" />
 </widget>

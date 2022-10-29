@@ -11,7 +11,7 @@ const port = 3000
 const io = require('socket.io')
 const ios = io(server, {
   cors: {
-    origin: "http://localhost:4200",
+    origin: ["http://localhost:8100", "http://localhost:4200"],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With", "cache-control"]
   }

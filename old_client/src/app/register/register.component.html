@@ -1,0 +1,26 @@
+<div>
+  <h1 class="text-center pb-5">Sign up</h1>
+  <div class="container max-w-[768px]">
+    <form class="shadow-2xl container py-6">
+      <div>
+        <label for="email">Email</label>
+        <!-- Qui mettiamo [(ngModel)] per il two-way-binding di angular grazie all'import del modulo FormsModule da @angular/forms -->
+        <input type="text" id="email" [(ngModel)]="newuser.email" name="email"/>
+        <!-- Chiamiamo la registerUser() nella register.component.ts che a sua volta chiamerà la addUser() di register.service.ts -->
+        <p class="text-red-error text-xxs" *ngIf="this.case == 'case0' || this.case == 'case2'"> E-mail address already in use</p>
+      </div>
+      <div class="my-5">
+        <label for="username">Username</label>
+        <input type="text" id="username" [(ngModel)]="newuser.username" name="username"/>
+        <p class="text-red-error text-xxs" *ngIf="this.case == 'case0' || this.case == 'case1'"> Username already in use</p>
+      </div>
+      <div class="mb-5">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="newuser.password" name="password"/>
+      </div>
+
+      <button (click)="registerUser()" class="btn w-full">Conferma</button>
+      <p class="mt-2">Already have an account? Sign in <a href="/login" class="text-sepia font-bold">here</a></p>
+    </form>
+  </div>
+</div>

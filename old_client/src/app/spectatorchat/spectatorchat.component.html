@@ -1,0 +1,21 @@
+<div class="py-5 px-3 relative bg-white text-black rounded-lg">
+  <ul class="chat_list overflow-y-auto overflow-x-hidden w-[270px] h-[250px]" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <li *ngFor=" let message of this.messages">
+      <span *ngIf="message.text_content != '' " class="font-bold text-xxs">{{ message.from + ':' }}</span>
+      <span class="text-xxs break-words">{{ message.text_content }}</span>
+      <span *ngIf="message.text_content == '' " class="font-bold text-xxs"> ></span>
+    </li>
+  </ul>
+  <form class="relative flex items-center mt-2.5">
+    <input class="chat" type="text" id="newmessage" [(ngModel)]="newmessage" name="newmessage"/>
+    <button 
+      class="btn btn_black absolute bottom-[3px] right-1.5 !rounded-full !px-1.5 !py-1.5 flex items-center fill-white stroke-white hover:fill-black hover:stroke-black"
+      (click)="sendMessage()"
+      >
+      <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </form>
+</div>
