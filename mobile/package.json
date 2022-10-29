@@ -14,14 +14,23 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "cordova-android": "^10.1.2",
-    "cordova-plugin-splashscreen": "^6.0.2"
+    "cordova-plugin-device": "^2.1.0",
+    "cordova-plugin-dialogs": "^2.0.2",
+    "cordova-plugin-file": "^7.0.0",
+    "cordova-plugin-media": "^6.1.0",
+    "cordova-plugin-splashscreen": "^6.0.2",
+    "cordova-plugin-vibration": "^3.1.1"
   },
   "cordova": {
     "platforms": [
       "android"
     ],
     "plugins": {
-      "cordova-plugin-splashscreen": {}
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-media": {},
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-vibration": {}
     }
   }
 }
