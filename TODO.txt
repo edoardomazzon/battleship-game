@@ -1,9 +1,12 @@
+Per far partire l'app fare cd .\client_mobile\  e poi npm run build
+In index.js di Mobile, togliere le virgolette interne nello script in <head></head> e nel <base> mettere "./"
+
 COME FAR PARTIRE L'APP IN LAN:
   1. Prendere l'IP del proprio portatile aprendo il cmd e inviando ipconfig
   2. Sostituirlo a TUTTE le occorrenze di "localhost" nella cartella Client (tipo se nel client abbiamo http://localhost:3000/ diventa
       nel mio caso http://192.168.188.23:3000/), importante sostituirlo anche nel file app.js del Server dove ci sono le CORS policies 
       (riga 14)
-  3. Aprire il terminale e fare "cd client" e da lì "npm run host" che ho fatto in modo che faccia "ng serve --host <indirizzo ip>"
+  3. Aprire il terminale e fare "cd .\client_desktop\" e da lì "npm run host" che ho fatto in modo che faccia "ng serve --host <indirizzo ip>"
       Questo "--host <indirizzo ip>" è quello che condivide in LAN il client angular
 
 TODO GABRI:
@@ -25,3 +28,6 @@ ULTIME FUNZIONALITA' PRINCIPALI:
    oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)
   - App mobile
   - SERVER: Riscrivere app.js e tutte le route del server in typescript
+
+
+

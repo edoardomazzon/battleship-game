@@ -1,0 +1,86 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply text-base font-regular;
+}
+h1 {
+  @apply text-xl font-bold;
+}
+h2 {
+  @apply text-l font-bold;
+}
+h3 {
+  @apply text-m font-bold;
+}
+h4 {
+  @apply text-s font-bold;
+}
+h5 {
+  @apply text-xs font-bold;
+}
+.btn {
+  @apply px-4 py-2 text-white rounded-lg border border-solid border-sepia transition duration-500 ease-in-out;
+  &:hover { @apply bg-sepia; }
+  &.noborder { @apply border-none border-0; }
+  &_little {
+    @apply text-xxs px-2.5;
+  }
+  &_alt { @apply bg-white text-sepia; }
+  &_green {
+    @apply bg-success border-sepia/0;
+    &:hover { @apply bg-transparent border-success; }
+  }
+  &_red {
+    @apply bg-red-error border-sepia/0;
+    &:hover { @apply bg-transparent border-red-error; }
+  }
+  &_ylw {
+    @apply bg-yellow-warning border-sepia/0;
+    &:hover { @apply bg-transparent border-yellow-warning; }
+  }
+  &_gray {
+    @apply bg-gray border-sepia/0;
+    &:hover { @apply bg-transparent border-gray; }
+  }
+  &_black {
+    @apply bg-black border-sepia/0;
+    &:hover { @apply bg-transparent border-black; }
+  }
+  &_txtblk {
+    @apply text-black;
+    &:hover { @apply text-white; }
+  }
+}
+form label {
+  @apply block pb-1;
+}
+form input {
+  @apply w-full block relative py-3 px-2 border-2 border-sepia rounded-lg text-black text-base focus:outline-none transition duration-500 ease-in-out;
+  &:focus { box-shadow: 0 0 0 1.5px #B8A88A; }
+  &.chat {
+    @apply py-1.5 border text-xxs;
+  }
+  &.smaller {
+    @apply text-xxs p-2;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+  &:hover {
+    @apply w-3;
+  }
+}
+::-webkit-scrollbar-track {
+  @apply bg-white rounded-lg;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-black/50 rounded-lg;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-black/80 w-3;
+}

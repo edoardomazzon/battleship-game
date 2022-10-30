@@ -20,17 +20,27 @@
     </feature>
     <name>Battleship Game</name>
     <description>A battleship game</description>
+    <base href="./" />
     <icon density="mdpi" height="57" platform="android" src="\platforms\android\app\src\main\res\logo.png" width="57" />
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
-        Cecconello Gabriele, Mazzon Edoardo
-    </author>
+            Cecconello Gabriele, Mazzon Edoardo
+        </author>
     <content src="index.html" />
     <allow-intent href="http://*/*" />
+    <allow-navigation href="http://10.0.2.2/*" />
     <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="itms:*" />
+    <allow-intent href="itms-apps:*" />
+    <access origin="*" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Fullscreen" value="true" />
     <preference name="BackgroundColor" value="0xff0000ff" />
     <preference name="HideKeyboardFormAccessoryBar" value="true" />
+    <preference name="Orientation" value="portrait" />
     <preference name="InAppBrowserStorageEnabled" value="true" />
 </widget>
