@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FriendRequest } from '../models/friend-request';
 import { MatchmakingService } from '../services/matchmaking.service';
 import { FriendRequestService } from '../services/friend-request.service';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 @Component({
   selector: 'app-home',
@@ -18,15 +19,17 @@ export class HomeComponent implements OnInit {
   public recently_played: Array<any>
   public isadmin: Boolean
 
-  constructor(private _matchMakingService: MatchmakingService, private _friendRequestService: FriendRequestService) {
+  constructor(private _matchMakingService: MatchmakingService, private _friendRequestService: FriendRequestService, private _screenOrientation: ScreenOrientation) {
     this.isplaying = false
     this.isspectating = false
     this.isadmin = false
     this.recently_played = new Array()
     this.ongoing_matches = new Array()
+
     }
 
   ngOnInit(): void {
+    this._screenOrientation.lock(this._screenOrientation.ORIENTATIONS.LANDSCAPE);
     this.isready = false
     var matchinfo: any = localStorage.getItem('matchinfo')
     if(matchinfo != null){

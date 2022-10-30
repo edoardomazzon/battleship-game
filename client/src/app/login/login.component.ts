@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserLogin } from '../models/user-login';
 import { LoginService } from '../services/login.service';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   public wrongcredentials: Boolean
   private baseURL = 'http://192.168.188.23:3000/login'
 
-  constructor(private _loginService: LoginService, private _router: Router, private _httpClient: HttpClient) {
+  constructor(private _loginService: LoginService, private _router: Router, private _httpClient: HttpClient, private _screenOrientation: ScreenOrientation) {
     this.yourebanned = false
     this.wrongcredentials = false
     this.changing_password = false
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   }
   ngOnInit(){}
   loginUser(){
+    this._screenOrientation.lock(this._screenOrientation.ORIENTATIONS.LANDSCAPE);
     this._loginService.login(this.authuser).subscribe(authuser =>{
       if (authuser == 'error'){
         this.wrongcredentials = true

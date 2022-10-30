@@ -32,5 +32,9 @@
       "cordova-plugin-dialogs": {},
       "cordova-plugin-vibration": {}
     }
+  },
+  "dependencies": {
+    "@awesome-cordova-plugins/screen-orientation": "^6.1.0",
+    "cordova-plugin-screen-orientation": "^3.0.2"
   }
 }

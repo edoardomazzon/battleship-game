@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FriendRequest } from '../models/friend-request';
 import {io, Socket} from 'socket.io-client';
-import { Observable, raceWith } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

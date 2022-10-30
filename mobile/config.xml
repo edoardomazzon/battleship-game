@@ -2,6 +2,7 @@
 <widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Battleship Game</name>
     <description>A battleship game</description>
+    <base href="./">
     <icon src="\platforms\android\app\src\main\res\logo.png" platform="android" width="57" height="57" density="mdpi" />
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Cecconello Gabriele, Mazzon Edoardo
@@ -13,6 +14,6 @@
     <preference name="Fullscreen" value="true" />
     <preference name="BackgroundColor" value="0xff0000ff"/>
     <preference name="HideKeyboardFormAccessoryBar" value="true"/>
-    <preference name="Orientation" value="landscape" />
+    <!-- <preference name="Orientation" value="landscape" /> -->
     <preference name="InAppBrowserStorageEnabled" value="true"/>
 </widget>
