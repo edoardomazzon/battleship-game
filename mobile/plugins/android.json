@@ -22,6 +22,9 @@
     },
     "cordova-plugin-vibration": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-webintent": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="SplashScreen">
         <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
@@ -18,6 +18,9 @@
     <feature name="Notification">
         <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
     </feature>
+    <feature name="WebIntent">
+        <param name="android-package" value="com.borismus.webintent.WebIntent" />
+    </feature>
     <name>Battleship Game</name>
     <description>A battleship game</description>
     <base href="./" />
@@ -26,16 +29,18 @@
             Cecconello Gabriele, Mazzon Edoardo
         </author>
     <content src="index.html" />
-    <allow-intent href="http://*/*" />
-    <allow-navigation href="http://10.0.2.2/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-    <allow-intent href="itms:*" />
-    <allow-intent href="itms-apps:*" />
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" />
+    </intent-filter>
+    <allow-intent href="*" />
+    <allow-navigation href="*" />
     <access origin="*" />
+    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+        <application android:usesCleartextTraffic="true" />
+    </edit-config>
     <preference name="loglevel" value="DEBUG" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Fullscreen" value="true" />
@@ -43,4 +48,6 @@
     <preference name="HideKeyboardFormAccessoryBar" value="true" />
     <preference name="Orientation" value="portrait" />
     <preference name="InAppBrowserStorageEnabled" value="true" />
+    <preference name="AndroidLaunchMode" value="singleTask" />
+    <preference name="Scheme" value="http" />
 </widget>

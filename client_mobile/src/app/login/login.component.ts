@@ -49,6 +49,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  goToRegister(){
+    this._router.navigateByUrl('/register')
+  }
+
   checkPasswordMismatch(){
     if(this.secondpasswordchangefield != ''){
       this.warnpasswordmismatch = (this.firstpasswordchangefield != this.secondpasswordchangefield)

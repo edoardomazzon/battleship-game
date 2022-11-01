@@ -46,5 +46,13 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-webintent": {
+    "source": {
+      "type": "registry",
+      "id": "github:cordova-misc/cordova-webintent.git"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

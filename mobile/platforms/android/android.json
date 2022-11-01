@@ -31,6 +31,10 @@
             {
               "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"WebIntent\"><param name=\"android-package\" value=\"com.borismus.webintent.WebIntent\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -56,6 +60,31 @@
               "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
               "count": 1
             }
+          ],
+          "/manifest/application": [
+            {
+              "xml": "<receiver android:enabled=\"true\" android:exported=\"true\" android:label=\"@string/app_name\" android:name=\"com.borismus.webintent.WebIntent$ReferralReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "app/src/main/AndroidManifest.xml": {
+        "parents": {
+          "/manifest/application": [
+            {
+              "xml": "<application android:usesCleartextTraffic=\"true\" />",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml",
+              "oldAttrib": {
+                "android:hardwareAccelerated": "true",
+                "android:icon": "@mipmap/ic_launcher",
+                "android:label": "@string/app_name",
+                "android:supportsRtl": "true",
+                "android:usesCleartextTraffic": "true"
+              }
+            }
           ]
         }
       }
@@ -80,6 +109,9 @@
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-webintent": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
@@ -313,6 +345,14 @@
       "merges": [
         "navigator.notification"
       ]
+    },
+    {
+      "id": "cordova-webintent.WebIntent",
+      "file": "plugins/cordova-webintent/www/webintent.js",
+      "pluginId": "cordova-webintent",
+      "clobbers": [
+        "WebIntent"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -321,6 +361,7 @@
     "cordova-plugin-file": "7.0.0",
     "cordova-plugin-media": "6.1.0",
     "cordova-plugin-dialogs": "2.0.2",
-    "cordova-plugin-vibration": "3.1.1"
+    "cordova-plugin-vibration": "3.1.1",
+    "cordova-webintent": "2.0.0"
   }
 }

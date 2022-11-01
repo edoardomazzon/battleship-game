@@ -228,6 +228,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "merges": [
         "navigator.notification"
       ]
+    },
+    {
+      "id": "cordova-webintent.WebIntent",
+      "file": "plugins/cordova-webintent/www/webintent.js",
+      "pluginId": "cordova-webintent",
+      "clobbers": [
+        "WebIntent"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -236,6 +244,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-file": "7.0.0",
     "cordova-plugin-media": "6.1.0",
     "cordova-plugin-dialogs": "2.0.2",
-    "cordova-plugin-vibration": "3.1.1"
+    "cordova-plugin-vibration": "3.1.1",
+    "cordova-webintent": "2.0.0"
   };
 });

@@ -19,6 +19,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  goToLogin(){
+    this._router.navigateByUrl('/login')
+  }
+
   registerUser(): void {
     this._registerService.addUser(this.newuser).subscribe(response =>{
       if (response == 'case0' || response == 'case1' || response == 'case2'){

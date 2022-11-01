@@ -19,7 +19,8 @@
     "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-media": "^6.1.0",
     "cordova-plugin-splashscreen": "^6.0.2",
-    "cordova-plugin-vibration": "^3.1.1"
+    "cordova-plugin-vibration": "^3.1.1",
+    "cordova-webintent": "github:cordova-misc/cordova-webintent"
   },
   "cordova": {
     "platforms": [
@@ -30,7 +31,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-media": {},
       "cordova-plugin-dialogs": {},
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
+      "cordova-webintent": {}
     }
   },
   "dependencies": {
