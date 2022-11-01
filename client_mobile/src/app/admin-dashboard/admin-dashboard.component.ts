@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,15 +6,17 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
-  private baseURL = 'http://10.0.2.2:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
   public users: Array<any>
   public functionalitiessection: Boolean
   public statisticssection: Boolean
   public current_order: string
   public searched_name: string
   public found_users: Array<any>
+  private usertoken: any;
 
   constructor(private _httpClient: HttpClient) {
+    this.usertoken = localStorage.getItem('auth_token')
     this.users = new Array()
     this.statisticssection = false
     this.functionalitiessection = false
@@ -29,10 +31,19 @@ export class AdminDashboardComponent implements OnInit {
 
   /*                                ------------------- ADMIN HOME SECTION ---------------------------                   */
 
+  private create_options() {
+    return {
+        headers: new HttpHeaders({
+            authorization: 'Bearer ' + this.usertoken,
+            'cache-control': 'no-cache',
+            'Content-Type': 'application/json',
+      })
+    };
+  }
 
   // Selects all users from the database and orders them in alphabetical order
   getAllUsers(){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'allusers'}).subscribe((response: any) => {
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'allusers'}, this.create_options()).subscribe((response: any) => {
       this.users = new Array()
       for(let i = 0; i < response.length; i++){
         response[i].games_lost = response[i].games_played - response[i].games_lost
@@ -172,7 +183,7 @@ export class AdminDashboardComponent implements OnInit {
     // If the administrator actually typed something, he's returned a list with the most similar usernames
     if(this.searched_name != ''){
       this.users = new Array()
-      this._httpClient.post(this.baseURL+'searchusers', {searched_name: this.searched_name}).subscribe((response: any) => {
+      this._httpClient.post(this.baseURL+'searchusers', {searched_name: this.searched_name}, this.create_options()).subscribe((response: any) => {
         for(let i = 0; i < response.length; i++){
           response[i].games_lost = response[i].games_played - response[i].games_lost
           response[i].winrate =( response[i].games_won / response[i].games_played) * 100
@@ -190,7 +201,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Bans the selected user
   banUser(username: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'ban', username: username}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'ban', username: username}, this.create_options()).subscribe()
     for(let user of this.users){
       if(user.username == username){
         user.isbanned = true
@@ -205,7 +216,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Unbans the selected user
   unbanUser(username: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'unban', username: username}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'unban', username: username}, this.create_options()).subscribe()
     for(let user of this.users){
       if(user.username == username){
         user.isbanned = false
@@ -220,7 +231,12 @@ export class AdminDashboardComponent implements OnInit {
 
   // Promotes the selected user to administrator
   promoteUser(username: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'promote', username: username}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'promote', username: username}, this.create_options()).subscribe()
+    for(let user of this.users){
+      if(user.username == username){
+        user.role = 'admin'
+      }
+    }
   }
   confirmPromote(username: String){
     if(window.confirm('Are you sure you want to promote '+username+' to moderator?')){
@@ -230,7 +246,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Wipes the selected user's statistics (winstreaks, accuracy, games played, etc.)
   wipeUser(username: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'wipestats', username: username}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'wipestats', username: username}, this.create_options()).subscribe()
   }
   confirmWipe(username: String){
     if(window.confirm('Are you sure you want to wipe '+username+'\'s game statistics?')){
@@ -240,7 +256,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Forces the selected user to change its password
   forcePasswordChange(username: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'forcepasswordchange', username: username}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'forcepasswordchange', username: username}, this.create_options()).subscribe()
   }
   confirmForcePasswordChange(username: String){
     if(window.confirm('Are you sure you want to force '+username+' to change password at the next logon?')){
@@ -259,7 +275,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Sends a custom notification to the selected user
   sendNotificationToUser(username: String, message: String){
-    this._httpClient.post(this.baseURL+'createnotification', {user: username, from: 'moderators', notification_type: 'modmessage', text_content: message, timestamp: new Date()}).subscribe()
+    this._httpClient.post(this.baseURL+'createnotification', {user: username, from: 'moderators', notification_type: 'modmessage', text_content: message, timestamp: new Date()}, this.create_options()).subscribe()
   }
 
   // Activates a popup (or a textbox somewhere in the page) that contains a textbox with the message to be sent to the selected user as a notification
@@ -273,6 +289,6 @@ export class AdminDashboardComponent implements OnInit {
 
   // Sends a custom notification to all the non-administrator users
   sendNotificationToAllUsers(message: String){
-    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'notifyall', message: message, timestamp: new Date()}).subscribe()
+    this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'notifyall', message: message, timestamp: new Date()}, this.create_options()).subscribe()
   }
 }

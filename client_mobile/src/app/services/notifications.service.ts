@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class NotificationsService {
   private socket: Socket;
-  private baseURL = 'http://10.0.2.2:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
 
   constructor() {
     this.socket = io(this.baseURL)

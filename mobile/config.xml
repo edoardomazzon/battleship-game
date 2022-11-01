@@ -20,8 +20,8 @@
         <preference name="AndroidLaunchMode" value="singleTask" /> <!-- Questo evita che vengano aperte più istanze della stessa app nell'emulatore -->
         <preference name="Scheme" value="http" /> <!-- Questo ci ha salvati -->
 
-        <!-- Da capire se servono  intent-filter e platform, secondo me no -->
-        <intent-filter>
+        <!-- Questi sotto in teoria non servono ma metti che vengano fuori casini li lasciamo qua, ci ho messo troppo tempo a trovarli su internet per eliminarli così -->
+        <!-- <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
@@ -31,5 +31,5 @@
             <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
                 <application android:usesCleartextTraffic="true" />
             </edit-config>
-        </platform>
+        </platform> -->
 </widget>

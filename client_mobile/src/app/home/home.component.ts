@@ -9,7 +9,7 @@ import { FriendRequestService } from '../services/friend-request.service';
 })
 
 export class HomeComponent implements OnInit {
-  public baseURL = 'http://10.0.2.2:3000/'
+  public baseURL = 'http://192.168.188.23:3000/'
   public isready = false
   public isplaying: Boolean
   public isspectating: Boolean

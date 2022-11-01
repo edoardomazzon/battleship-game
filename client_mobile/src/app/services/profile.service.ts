@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 export class ProfileService {
 
   private usertoken: any;
-  private baseURL: string = 'http://10.0.2.2:3000/myprofile';
+  private baseURL: string = 'http://192.168.188.23:3000/myprofile';
 
   constructor(private _httpClient: HttpClient) { }
 
@@ -21,20 +21,17 @@ export class ProfileService {
             authorization: 'Bearer ' + this.usertoken,
             'cache-control': 'no-cache',
             'Content-Type': 'application/json',
-    })
-  };
-}
-
-  profile() {
-    //Prendiamo il token in storage e lo mandiamo al server
-    //this.usertoken = localStorage.getItem('auth_token');
-    return this._httpClient.get(this.baseURL/*, this.create_options()*/).subscribe();
+      })
+    };
   }
 
-  getUserInfo(username: String): any{
-    this._httpClient.post(this.baseURL, {username: username}).subscribe((response) => {
+
+  getUserInfo(): any{
+    this.usertoken = localStorage.getItem('auth_token');
+    this._httpClient.get(this.baseURL, this.create_options()).subscribe((response) => {
+      console.log(response)
       localStorage.removeItem('current_user')
       localStorage.setItem('current_user', JSON.stringify(response))
-    })
+    });
   }
 }

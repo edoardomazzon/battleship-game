@@ -9,7 +9,7 @@ import { Observable, raceWith } from 'rxjs';
 })
 
 export class FriendRequestService {
-  private baseURL = 'http://10.0.2.2:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
   private socket: Socket;
 
   constructor(private _httpClient: HttpClient) {

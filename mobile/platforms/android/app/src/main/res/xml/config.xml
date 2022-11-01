@@ -29,18 +29,9 @@
             Cecconello Gabriele, Mazzon Edoardo
         </author>
     <content src="index.html" />
-    <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="http" />
-    </intent-filter>
     <allow-intent href="*" />
     <allow-navigation href="*" />
     <access origin="*" />
-    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-        <application android:usesCleartextTraffic="true" />
-    </edit-config>
     <preference name="loglevel" value="DEBUG" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Fullscreen" value="true" />

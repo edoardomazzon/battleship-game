@@ -27,7 +27,7 @@ export class UserinfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.username = this.title
-    this._httpClient.post("http://10.0.2.2:3000/userinfo", { username: this.username}).subscribe((response: any) => {
+    this._httpClient.post("http://192.168.188.23:3000/userinfo", { username: this.username}).subscribe((response: any) => {
       this.accuracy = response.accuracy
       this.winrate = response.winrate
       this.current_winstreak = response.current_winstreak

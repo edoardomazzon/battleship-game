@@ -7,7 +7,7 @@ import { User } from '../models/user';
 })
 export class RegisterService {
 
-  private baseURL: string = 'http://10.0.2.2:3000/register'
+  private baseURL: string = 'http://192.168.188.23:3000/register'
 
   constructor(private _httpClient: HttpClient) { }
 

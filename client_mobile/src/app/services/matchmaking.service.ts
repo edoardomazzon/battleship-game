@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class MatchmakingService {
   private socket: Socket;
-  private baseURL = 'http://10.0.2.2:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
