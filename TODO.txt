@@ -19,6 +19,9 @@ TODO EDO:
                           un millimetro e la cella diventa cliccabile. 
   4. Game Component:      Il fatto che la pagina non sia scrollabile rende ingiocabile il gioco quando sono aperte due pagine una di fianco all'altra
   5. Game Component:      La chat di gioco è in mezzo al cazzo sopra il campo nemico
+  6. Home Component:      La lista dei recently played se si allunga troppo spinge il bottone "ready up" verso il basso
+  7. Home Component:      La lista dei recently played si allunga se espandiamo le statistiche di uno dei giocatori, forse quel pop-up va messo
+                          a z-10 così compare "in cima" a tutto e non esattamente sotto il nome utente
 
 ULTIME FUNZIONALITA' PRINCIPALI:
   - Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa il sito sul cell.
