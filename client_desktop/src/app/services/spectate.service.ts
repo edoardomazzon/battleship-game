@@ -9,7 +9,7 @@ import { io, Socket } from 'socket.io-client';
 export class SpectateService {
 
   private socket: Socket;
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = 'http://192.168.244.40:3000/'
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)

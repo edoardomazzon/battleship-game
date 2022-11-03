@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FriendRequestService } from '../services/friend-request.service';
 import { FriendRequest } from '../models/friend-request';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChatmessageService } from '../services/chatmessage.service';
 
 @Component({
@@ -17,12 +17,14 @@ export class FriendsComponent implements OnInit {
   public friends: Array<String> = [];
   public friendsSection1: Boolean
   public friendsSection2: Boolean
+  private usertoken: any;
 
   constructor(private _friendRequestService: FriendRequestService,
               private _httpClient: HttpClient,
               private _chatMessageService: ChatmessageService) {
     // If the user is able to reach this route, it means he already logged in, and the loginservice saves his data in localstorage
     // so we can access it
+    this.usertoken = localStorage.getItem('auth_token')
     this.friendsSection1 = false
     this.friendsSection2 = false
     var user = localStorage.getItem('current_user')
@@ -67,9 +69,19 @@ export class FriendsComponent implements OnInit {
     this.openFriendSection2()
   }
 
+  private create_options() {
+    return {
+        headers: new HttpHeaders({
+            authorization: 'Bearer ' + this.usertoken,
+            'cache-control': 'no-cache',
+            'Content-Type': 'application/json',
+      })
+    };
+  }
+  
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
   getUserInfo(){
-    this._httpClient.post("http://192.168.188.23:3000/myprofile", {username: this.current_user.username}).subscribe(user => {
+    this._httpClient.get("http://192.168.244.40:3000/myprofile", this.create_options()).subscribe(user => {
       this.friends = new Array<String>()
       this.blacklisted_users = new Array<String>()
       this.friend_requests_list = new Array<String>()
@@ -99,7 +111,7 @@ export class FriendsComponent implements OnInit {
   searchUsers(searched_name: String) {
     if(searched_name != null && searched_name != '' && searched_name != undefined){
       this.inputname = null // Resetting the text form's content
-      this._httpClient.post('http://192.168.188.23:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
+      this._httpClient.post('http://192.168.244.40:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
           this.foundUsers = response // Getting 5 users with most similar username to the typed one
         })
     }

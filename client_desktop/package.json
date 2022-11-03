@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 192.168.188.23",
+    "start": "ng serve --host 192.168.244.40",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = 'http://192.168.244.40:3000/'
   public users: Array<any>
   public functionalitiessection: Boolean
   public statisticssection: Boolean
