@@ -2,6 +2,7 @@ export class User {
   role!: string;
   email!: string;
   username!: string;
+  password!: string;
   max_winstreak!: number;
   current_winstreak!: number;
   shots_fired!: number;
