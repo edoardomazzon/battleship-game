@@ -22,8 +22,6 @@ export class FriendsComponent implements OnInit {
   constructor(private _friendRequestService: FriendRequestService,
               private _httpClient: HttpClient,
               private _chatMessageService: ChatmessageService) {
-    // If the user is able to reach this route, it means he already logged in, and the loginservice saves his data in localstorage
-    // so we can access it
     this.usertoken = localStorage.getItem('auth_token')
     this.friendsSection1 = false
     this.friendsSection2 = false
@@ -39,7 +37,6 @@ export class FriendsComponent implements OnInit {
     this.getUserInfo()
 
     this._friendRequestService.listenToRequests(this.current_user.username).subscribe((message)=>{
-      //If we reject someone's request or if we receive someone's request, we still have to update the component's friend requests list in both cases.
       if(message.request_type == 'friendrequest'){
         // If we received a friendrequest from a user who's in our blacklist, nothing happenes and this "if" branch is not entered
         if(!this.blacklisted_users.includes(message.sender) && !this.friends.includes(message.sender)){
@@ -78,7 +75,7 @@ export class FriendsComponent implements OnInit {
       })
     };
   }
-  
+
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
   getUserInfo(){
     this._httpClient.get("http://192.168.244.40:3000/myprofile", this.create_options()).subscribe(user => {
