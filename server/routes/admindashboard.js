@@ -10,7 +10,7 @@ var auth = jwt({
     algorithms: ['sha1', 'RS256', 'HS256']
 });
 
-// Activate when a moderator selecets all users, bans or unbans a user, promotes a user, wipes a users's statistics or notifies all users.
+// Activates when a moderator selecets all users, bans or unbans a user, promotes a user, wipes a users's statistics or notifies all users.
 // Based on the request type, one of these functionalities is utilized
 router.post("/", auth, async (req, res) => {
     //Checking wether the user that performs the POST request is authenticated and has an administrator role

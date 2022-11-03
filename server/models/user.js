@@ -10,10 +10,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    password: {
-        type: String,
-        required: false
-    },
     username: {
         type: String,
         required: false
@@ -44,10 +40,6 @@ const UserSchema = mongoose.Schema({
     },
     games_won: {
         type: Number,
-        required: false
-    },
-    pfp: {
-        type: String,
         required: false
     },
     pending_friend_requests: {

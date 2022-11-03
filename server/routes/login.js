@@ -74,7 +74,6 @@ router.get("/", passport.authenticate("basic", {session: false}), async (req, re
         // Creating a JSON with user data to save in local storage
         const logged_username = jwt_decode(token_signed);
         var logged_user = await User.findOne({username: logged_username.username});
-        logged_user.password = undefined;
         logged_user.salt = undefined;
         logged_user.digest = undefined;        
         

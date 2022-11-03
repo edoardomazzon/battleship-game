@@ -16,7 +16,6 @@ router.get('/', auth, function(req, res){
     var username = jwtdecode(authorization_token).username    
     try{
         User.findOne( {username: username}).then((result) => {
-            result.password = undefined
             result.digest = undefined
             result.salt = undefined
             res.json(result)})
