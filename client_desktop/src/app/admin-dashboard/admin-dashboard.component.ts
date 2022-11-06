@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
-  private baseURL = 'http://192.168.244.40:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
   public users: Array<any>
   public functionalitiessection: Boolean
   public statisticssection: Boolean
@@ -47,7 +47,7 @@ export class AdminDashboardComponent implements OnInit {
       this.users = new Array()
       for(let i = 0; i < response.length; i++){
         response[i].games_lost = response[i].games_played - response[i].games_lost
-        response[i].winrate =( response[i].games_won / response[i].games_played) * 100
+        response[i].winrate = Math.floor(( response[i].games_won / response[i].games_played) * 100)
         this.users.push(response[i])
       }
       // Orders users in ascending alphabetical order

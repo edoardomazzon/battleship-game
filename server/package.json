@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified -use 'npm start' to run \" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "populate": "node populatedb.js"
   },
   "author": "",
   "license": "ISC",

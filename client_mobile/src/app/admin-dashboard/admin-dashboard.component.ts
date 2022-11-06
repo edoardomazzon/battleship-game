@@ -47,7 +47,7 @@ export class AdminDashboardComponent implements OnInit {
       this.users = new Array()
       for(let i = 0; i < response.length; i++){
         response[i].games_lost = response[i].games_played - response[i].games_lost
-        response[i].winrate =( response[i].games_won / response[i].games_played) * 100
+        response[i].winrate = Math.floor(( response[i].games_won / response[i].games_played) * 100)
         this.users.push(response[i])
       }
       // Orders users in ascending alphabetical order

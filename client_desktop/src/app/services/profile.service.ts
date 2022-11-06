@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 export class ProfileService {
 
   private usertoken: any;
-  private baseURL: string = 'http://192.168.244.40:3000/myprofile';
+  private baseURL: string = 'http://192.168.188.23:3000/myprofile';
 
   constructor(private _httpClient: HttpClient) { }
 

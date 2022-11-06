@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class GameService {
   private socket: Socket;
-  private baseURL = 'http://192.168.244.40:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
@@ -92,7 +92,7 @@ export class GameService {
   }
 
   winGameDB(current_user: String, enemy: String, timestamp: Date){
-    this._httpClient.post('http://192.168.244.40:3000/wingame/', {
+    this._httpClient.post('http://192.168.188.23:3000/wingame/', {
       username: current_user,
       enemy: enemy,
       timestamp: timestamp

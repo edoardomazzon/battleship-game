@@ -78,7 +78,7 @@ export class FriendsComponent implements OnInit {
 
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
   getUserInfo(){
-    this._httpClient.get("http://192.168.244.40:3000/myprofile", this.create_options()).subscribe(user => {
+    this._httpClient.get("http://192.168.188.23:3000/myprofile", this.create_options()).subscribe(user => {
       this.friends = new Array<String>()
       this.blacklisted_users = new Array<String>()
       this.friend_requests_list = new Array<String>()
@@ -108,7 +108,7 @@ export class FriendsComponent implements OnInit {
   searchUsers(searched_name: String) {
     if(searched_name != null && searched_name != '' && searched_name != undefined){
       this.inputname = null // Resetting the text form's content
-      this._httpClient.post('http://192.168.244.40:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
+      this._httpClient.post('http://192.168.188.23:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
           this.foundUsers = response // Getting 5 users with most similar username to the typed one
         })
     }

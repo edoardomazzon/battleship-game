@@ -8,7 +8,7 @@ import { ChatmessageService } from '../services/chatmessage.service';
   templateUrl: './notifications.component.html'
 })
 export class NotificationsComponent implements OnInit {
-  private baseURL = 'http://192.168.244.40:3000/'
+  private baseURL = 'http://192.168.188.23:3000/'
   private current_user: any
   public notifications: any
 
