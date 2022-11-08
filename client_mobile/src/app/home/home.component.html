@@ -1,6 +1,6 @@
 <div *ngIf=" !isadmin ">
   <!-- Commentare il div sottostante se si vuole avere i campi di prova subito in alto nella home -->
-  <div class="game-container w-50">
+  <div class="game-container">
     <div *ngIf="isplaying">
       <app-game></app-game>
     </div>
@@ -11,7 +11,7 @@
 
         <app-my-profile class="flex justify-center"></app-my-profile>
 
-        <div class="grid grid-cols-2 gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto border-t border-sepia mt-10 pt-10">
+        <div class="grid grid-cols-2 gap-x-2.5 md:gap-x-10 max-w-[480px] lg:max-w-[1024px] mx-auto border-t border-sepia mt-10 pt-10">
           <!-- Ongoing Matches List -->
           <div class="text-center">
             <h4 class="mb-2.5">Ongoing matches</h4>

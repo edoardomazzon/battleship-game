@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { FriendRequest } from '../models/friend-request';
 import {io, Socket} from 'socket.io-client';
 import { Observable, raceWith } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class FriendRequestService {
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = `http://${environment.ip_address}:3000/`
   private socket: Socket;
 
   constructor(private _httpClient: HttpClient) {

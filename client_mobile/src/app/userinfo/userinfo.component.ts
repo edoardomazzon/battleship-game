@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-userinfo',
@@ -27,7 +28,7 @@ export class UserinfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.username = this.title
-    this._httpClient.post("http://192.168.188.23:3000/userinfo", { username: this.username}).subscribe((response: any) => {
+    this._httpClient.post(`http://${environment.ip_address}:3000/userinfo`, { username: this.username}).subscribe((response: any) => {
       this.accuracy = response.accuracy
       this.winrate = response.winrate
       this.current_winstreak = response.current_winstreak

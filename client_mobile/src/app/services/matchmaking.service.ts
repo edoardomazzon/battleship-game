@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {io, Socket} from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MatchmakingService {
   private socket: Socket;
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = `http://${environment.ip_address}:3000`
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)

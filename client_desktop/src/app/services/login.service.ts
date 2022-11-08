@@ -4,13 +4,12 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 import { UserLogin } from '../models/user-login';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-
-  private baseURL: string = 'http://192.168.188.23:3000/login'
   public response: any;
   public token: any;
   public user: any;
@@ -26,7 +25,7 @@ export class LoginService {
     };
     // Receiving a response from the server; such respons can return an "error" string
     // or the user's info with some optional additional clues such as "banned" or "needspasswordchange"
-    return this._httpClient.get(this.baseURL, options).pipe(tap( (data) => {
+    return this._httpClient.get(`http://${environment.ip_address}:3000/login`, options).pipe(tap( (data) => {
         this.response = data;
         if(this.response != 'error'){
           if(this.response != 'banned'){

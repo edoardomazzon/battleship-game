@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserLogin } from '../models/user-login';
 import { LoginService } from '../services/login.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   public secondpasswordchangefield: string
   public warnpasswordmismatch: Boolean
   public wrongcredentials: Boolean
-  private baseURL = 'http://192.168.188.23:3000/login'
+  private baseURL = `http://${environment.ip_address}:3000/login`
 
   constructor(private _loginService: LoginService, private _router: Router, private _httpClient: HttpClient) {
     this.yourebanned = false

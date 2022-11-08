@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = `http://${environment.ip_address}:3000`
   public users: Array<any>
   public functionalitiessection: Boolean
   public statisticssection: Boolean

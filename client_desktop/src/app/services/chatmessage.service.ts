@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ChatMessage } from '../models/chatmessage';
 import { HttpClient } from '@angular/common/http';
 import {io, Socket} from 'socket.io-client';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -10,8 +11,7 @@ import {io, Socket} from 'socket.io-client';
 })
 
 export class ChatmessageService {
-
-  public baseURL = 'http://192.168.188.23:3000/'
+  public baseURL = `http://${environment.ip_address}:3000/`
   public socket: Socket
   private current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
 

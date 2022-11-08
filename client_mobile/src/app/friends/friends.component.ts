@@ -3,6 +3,7 @@ import { FriendRequestService } from '../services/friend-request.service';
 import { FriendRequest } from '../models/friend-request';
 import { HttpClient } from '@angular/common/http';
 import { ChatmessageService } from '../services/chatmessage.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-friends',
@@ -69,7 +70,7 @@ export class FriendsComponent implements OnInit {
 
   //Function used to update the browser's localstorage and this component's fields with updated user info from db
   getUserInfo(){
-    this._httpClient.post("http://192.168.188.23:3000/myprofile", {username: this.current_user.username}).subscribe(user => {
+    this._httpClient.post(`http://${environment.ip_address}:3000/myprofile`, {username: this.current_user.username}).subscribe(user => {
       this.friends = new Array<String>()
       this.blacklisted_users = new Array<String>()
       this.friend_requests_list = new Array<String>()
@@ -99,7 +100,7 @@ export class FriendsComponent implements OnInit {
   searchUsers(searched_name: String) {
     if(searched_name != null && searched_name != '' && searched_name != undefined){
       this.inputname = null // Resetting the text form's content
-      this._httpClient.post('http://192.168.188.23:3000/searchusers', {searched_name: searched_name}).subscribe((response: any) => {
+      this._httpClient.post(`http://${environment.ip_address}:3000/searchusers`, {searched_name: searched_name}).subscribe((response: any) => {
           this.foundUsers = response // Getting 5 users with most similar username to the typed one
         })
     }

@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NotificationsService } from '../services/notifications.service';
 import { ChatmessageService } from '../services/chatmessage.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html'
 })
 export class NotificationsComponent implements OnInit {
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = `http://${environment.ip_address}:3000`
   private current_user: any
   public notifications: any
 

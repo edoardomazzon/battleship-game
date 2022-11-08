@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import {io, Socket} from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsService {
   private socket: Socket;
-  private baseURL = 'http://192.168.188.23:3000/'
 
   constructor() {
-    this.socket = io(this.baseURL)
+    this.socket = io(`http://${environment.ip_address}:3000`)
   }
 
   // Whatever the notification is, we forward it to the Notification or Header Component

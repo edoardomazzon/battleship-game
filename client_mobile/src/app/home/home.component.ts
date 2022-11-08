@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FriendRequest } from '../models/friend-request';
 import { MatchmakingService } from '../services/matchmaking.service';
 import { FriendRequestService } from '../services/friend-request.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ import { FriendRequestService } from '../services/friend-request.service';
 })
 
 export class HomeComponent implements OnInit {
-  public baseURL = 'http://192.168.188.23:3000/'
+  public baseURL = `http://${environment.ip_address}:3000`
   public isready = false
   public isplaying: Boolean
   public isspectating: Boolean

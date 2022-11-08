@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {io, Socket} from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   private socket: Socket;
-  private baseURL = 'http://192.168.188.23:3000/'
+  private baseURL = `http://${environment.ip_address}:3000/`
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
@@ -92,7 +93,7 @@ export class GameService {
   }
 
   winGameDB(current_user: String, enemy: String, timestamp: Date){
-    this._httpClient.post('http://192.168.188.23:3000/wingame/', {
+    this._httpClient.post(`http://${environment.ip_address}:3000/wingame/`, {
       username: current_user,
       enemy: enemy,
       timestamp: timestamp
