@@ -1,7 +1,7 @@
-<h1 class="text-center mb-5 break-words md:break-normal">Administrator panel</h1>
-<div class="flex flex-col items-center gap-8">
+<h1 class="text-center break-words md:break-normal">Administrator panel</h1>
+<div class="flex flex-col items-center gap-8 mt-10 md:mt-5 px-5 md:px-10">
   <!-- Administrator Home Page, where he can chose to enter the functionalities or statistics section -->
-  <div *ngIf="!statisticssection && !functionalitiessection" class="flex items-center gap-10">
+  <div *ngIf="!statisticssection && !functionalitiessection" class="flex flex-col md:flex-row items-center gap-10">
     <button class="btn btn_ylw" (click)="openFunctionalitiesSection()">Manage Users</button>
     <button class="btn" (click)="openStatisticsSection()">User Statistics</button>
   </div>
@@ -18,12 +18,12 @@
       </form>
     </div>
     <ul class="max-h-[250px] overflow-y-auto">
-      <li *ngFor="let user of users" class="flex flex-wrap justify-between items-center mb-6">
+      <li *ngFor="let user of users" class="flex flex-col gap-y-2.5 md:flex-row md:flex-wrap md:justify-between md:items-center mb-6">
         <div>
           <p class="text-xs">{{ user.username }}</p>
           <p class="text-xxs">{{ user.role }}</p>
         </div>
-        <div class="ml-10 flex gap-x-5 flex-wrap items-center">
+        <div class="md:ml-10 flex gap-y-2.5 gap-x-5 flex-wrap items-center">
           <button class="btn btn_red btn_little" (click)="confirmBan(user.username)" [ngClass]="{'pointer-events-none btn_gray': user.isbanned || user.role == 'admin'}">Ban</button>
           <button class="btn btn_green btn_little" (click)="confirmUnban(user.username)" [ngClass]="{'pointer-events-none btn_gray': !user.isbanned}">Unban</button>
           <button class="btn btn_little" (click)="confirmForcePasswordChange(user.username)">Force password change</button>
@@ -34,61 +34,56 @@
         </div>
       </li>
     </ul>
-    <button class="btn block mx-auto mt-2.5" (click)="promptNotificationToAllUsers()">Notify all</button>
+    <button class="btn block mx-auto mt-8 md:mt-2.5" (click)="promptNotificationToAllUsers()">Notify all</button>
   </div>
 
   <!-- Statistics Section (order by games played, games won, winrate, games lost, accuracy, winstreak) -->
-  <div *ngIf="statisticssection">
-    <table class="mt-2 mb-10">
+  <div *ngIf="statisticssection" class="px-5 max-h-[275px] overflow-auto">
+    <table>
       <thead>
         <tr>
           <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
-              <p>Username</p>
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
+              <p>User</p>
               <svg class="cursor-pointer" (click)="orderByAlpha(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
               </svg>
             </div>
           </th>
           <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
-              <p>Email</p>
-            </div>
-          </th>
-          <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
               <p>Win Rate</p>
               <svg class="cursor-pointer" (click)="orderByWinrate(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
               </svg>
             </div>
           </th>
-          <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
+          <!-- <th>
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
               <p>Games Won</p>
               <svg class="cursor-pointer" (click)="orderByGameswon(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
               </svg>
             </div>
-          </th>
-          <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
+          </th> -->
+          <!-- <th>
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
               <p>Games Lost</p>
               <svg class="cursor-pointer" (click)="orderByGameslost(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
               </svg>
             </div>
-          </th>
+          </th> -->
           <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
-              <p>Games Played</p>
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
+              <p>Games</p>
               <svg class="cursor-pointer" (click)="orderByGamesplayed(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
               </svg>
             </div>
           </th>
           <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
               <p>Accuracy</p>
               <svg class="cursor-pointer" (click)="orderByAccuracy(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
@@ -96,7 +91,7 @@
             </div>
           </th>
           <th>
-            <div class="bg-sepia py-2 flex justify-between items-center whitespace-nowrap">
+            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
               <p>Longest Winstreak</p>
               <svg class="cursor-pointer" (click)="orderByLongestStreak(current_order)" width="24" height="24" style="fill:#fff">
                 <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
@@ -105,22 +100,23 @@
           </th>
         </tr>
       </thead>
-      <tbody class="pt-2">
+      <tbody class="pt-2 border-l border-b border-r border-white">
         <!-- Showing all users except administrators -->
-        <tr *ngFor="let user of users" class="text-center">
-          <td *ngIf="user.role != 'admin'">{{user.username}}</td>
-          <td *ngIf="user.role != 'admin'">{{user.email}}</td>
-          <td *ngIf="user.role != 'admin'">{{user.winrate}}%</td>
-          <td *ngIf="user.role != 'admin'">{{user.games_won}}</td>
-          <td *ngIf="user.role != 'admin'">{{user.games_lost}}</td>
-          <td *ngIf="user.role != 'admin'">{{user.games_played}}</td>
-          <td *ngIf="user.role != 'admin'">{{user.accuracy}}%</td>
-          <td *ngIf="user.role != 'admin'">{{user.max_winstreak}}</td>
+        <tr *ngFor="let user of users" class="text-center border-b border-white">
+          <td *ngIf="user.role != 'admin'" class="flex flex-col border-r border-white"><span>{{user.username}}</span><span>({{user.email}})</span></td>
+          <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.winrate ? user.winrate : 0}}%</td>
+          <!-- <td *ngIf="user.role != 'admin'">{{user.games_won}}</td> -->
+          <!-- <td *ngIf="user.role != 'admin'">{{user.games_lost}}</td> -->
+          <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.games_played}} ({{user.games_won}} - {{user.games_lost ? user.games_lost : 0}})</td>
+          <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.accuracy}}%</td>
+          <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.max_winstreak}}</td>
         </tr>
       </tbody>
     </table>
-    <button class="btn btn_green block mx-auto" (click)="getAllUsers()">Refresh</button>
   </div>
+
+  <button *ngIf="statisticssection" class="btn btn_green block mx-auto mt-7" (click)="getAllUsers()">Refresh</button>
+
 
 
   <!-- Back to admin home button -->

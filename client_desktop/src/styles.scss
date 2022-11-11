@@ -7,16 +7,16 @@ html {
   @apply text-base font-regular;
 }
 h1 {
-  @apply text-xl font-bold;
+  @apply text-l md:text-xl font-bold;
 }
 h2 {
-  @apply text-l font-bold;
+  @apply text-m md:text-l font-bold;
 }
 h3 {
-  @apply text-m font-bold;
+  @apply text-s md:text-m font-bold;
 }
 h4 {
-  @apply text-s font-bold;
+  @apply text-xs md:text-s font-bold;
 }
 h5 {
   @apply text-xs font-bold;
