@@ -1,16 +1,16 @@
+"use strict";
+exports.__esModule = true;
 require('dotenv/config');
-const mongoose = require('mongoose')
-const User = require('./models/user.js');
-const Notification = require('./models/notification.js')
-const Match = require('./models/match.js')
-const ChatMessage = require('./models/chatmessage.js')
-
-mongoose.connect(
-  process.env.DB_CONNECTION, () => console.log('\x1b[36m%s\x1b[0m', "Connected to Mongoose Database. \nDeleting all documents"), (err) => {
-     if(err){ console.log(err) } 
-  }
-);
-
+var mongoose = require('mongoose');
+var User = require('./models/user.js');
+var Notifications = require('./models/notification.js');
+var Match = require('./models/match.js');
+var ChatMessage = require('./models/chatmessage.js');
+mongoose.connect(process.env.DB_CONNECTION, function () { return console.log('\x1b[36m%s\x1b[0m', "Connected to Mongoose Database. \nDeleting all documents"); }, function (err) {
+    if (err) {
+        console.log(err);
+    }
+});
 // Creating new data
 var user1 = new User({
     username: "Gabriele",
@@ -29,7 +29,7 @@ var user1 = new User({
     recently_played: [],
     isbanned: false,
     needspasswordchange: false
-})
+});
 var user2 = new User({
     username: "Edoardo",
     email: "870606@stud.unive.it",
@@ -47,7 +47,7 @@ var user2 = new User({
     recently_played: [],
     isbanned: false,
     needspasswordchange: false
-})
+});
 var user3 = new User({
     username: "Filippo",
     email: "flippo.bergamasco@unive.it",
@@ -65,39 +65,44 @@ var user3 = new User({
     recently_played: [],
     isbanned: false,
     needspasswordchange: false
-})
+});
 var admin = new User({
     username: "Administrator",
     email: "administrator@battleshipgame.com",
     role: "admin",
     needspasswordchange: false
-})
-
+});
 // Setting passwords
-user1.setPassword("pass")
-user2.setPassword("pass")
-user3.setPassword("pass")
-admin.setPassword("admin")
-
+user1.setPassword("pass");
+user2.setPassword("pass");
+user3.setPassword("pass");
+admin.setPassword("admin");
 // Deleting every document and inserting the above users
-try{
-    User.deleteMany({}).then(() => {
-        console.log("   Deleted all users")
-        Notification.deleteMany({}).then(() => {
-            console.log("   Deleted all notifications")
-            Match.deleteMany({}).then(() => {
-                console.log("   Deleted all matches")
-                ChatMessage.deleteMany({}).then(() => {
-                    console.log("   Deleted all chat messages")                    
-                    user1.save().then(() => {
-                        user2.save().then(() => {
-                            user3.save().then(() => {
-                                admin.save().then(() => {
-                                    console.log("Inserted new data.")
-                                    console.log('\x1b[33m%s\x1b[0m', "Run \"npm start\" to start the Node.js server.")
-                                    mongoose.disconnect()
-    })})})})})})})})
-}catch(err){
-    console.log(err)
+try {
+    User.deleteMany({}).then(function () {
+        console.log("   Deleted all users");
+        Notifications.deleteMany({}).then(function () {
+            console.log("   Deleted all notifications");
+            Match.deleteMany({}).then(function () {
+                console.log("   Deleted all matches");
+                ChatMessage.deleteMany({}).then(function () {
+                    console.log("   Deleted all chat messages");
+                    user1.save().then(function () {
+                        user2.save().then(function () {
+                            user3.save().then(function () {
+                                admin.save().then(function () {
+                                    console.log("Inserted new data.");
+                                    console.log('\x1b[33m%s\x1b[0m', "Run \"npm start\" to start the Node.js server.");
+                                    mongoose.disconnect();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 }
-return;
+catch (err) {
+    console.log(err);
+}

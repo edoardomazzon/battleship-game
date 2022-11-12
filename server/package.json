@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified -use 'npm start' to run \" && exit 1",
+    "compile": "tsc populatedb.ts app.ts \"./models/user.ts\" \"./models/match.ts\" \"./models/chatmessage.ts\" \"./models/notification.ts\"",
     "start": "node app.js",
     "populate": "node populatedb.js"
   },
