@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class GameService {
   private socket: Socket;
-  private baseURL = `http://${environment.ip_address}:3000/`
+  private baseURL = "http://"+ environment.ip_address +":3000/"
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)
@@ -93,7 +93,7 @@ export class GameService {
   }
 
   winGameDB(current_user: String, enemy: String, timestamp: Date){
-    this._httpClient.post(`http://${environment.ip_address}:3000/wingame/`, {
+    this._httpClient.post("http://" + environment.ip_address + ":3000/wingame/", {
       username: current_user,
       enemy: enemy,
       timestamp: timestamp

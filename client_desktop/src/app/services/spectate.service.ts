@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
@@ -10,8 +9,8 @@ import { environment } from '../../environments/environment';
 export class SpectateService {
   private socket: Socket;
 
-  constructor(private _httpClient: HttpClient) {
-    this.socket = io(`http://${environment.ip_address}:3000/`)
+  constructor() {
+    this.socket = io("http://"+ environment.ip_address +":3000/")
   }
 
   spectate(player1: String, player2: String){

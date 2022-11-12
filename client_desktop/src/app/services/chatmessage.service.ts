@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 })
 
 export class ChatmessageService {
-  public baseURL = `http://${environment.ip_address}:3000/`
+  public baseURL = "http://"+ environment.ip_address +":3000/"
   public socket: Socket
   private current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
 

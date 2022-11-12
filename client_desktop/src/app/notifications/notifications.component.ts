@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   templateUrl: './notifications.component.html'
 })
 export class NotificationsComponent implements OnInit {
-  private baseURL = `http://${environment.ip_address}:3000/`
+  private baseURL = "http://"+ environment.ip_address +":3000/"
   private current_user: any
   public notifications: any
 

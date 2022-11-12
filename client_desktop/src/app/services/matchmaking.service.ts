@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class MatchmakingService {
   private socket: Socket;
-  private baseURL = `http://${environment.ip_address}:3000/`
+  private baseURL = "http://"+ environment.ip_address +":3000/"
 
   constructor(private _httpClient: HttpClient) {
     this.socket = io(this.baseURL)

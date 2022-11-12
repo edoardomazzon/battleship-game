@@ -10,7 +10,7 @@ export class NotificationsService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io(`http://${environment.ip_address}:3000`)
+    this.socket = io("http://"+ environment.ip_address +":3000")
   }
 
   // Whatever the notification is, we forward it to the Notification or Header Component

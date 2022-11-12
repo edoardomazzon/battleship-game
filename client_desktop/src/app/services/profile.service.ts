@@ -22,7 +22,7 @@ export class ProfileService {
 
   getUserInfo(): any{
     this.usertoken = localStorage.getItem('auth_token');
-    this._httpClient.get(`http://${environment.ip_address}:3000/myprofile`, this.create_options()).subscribe((response) => {
+    this._httpClient.get("http://" + environment.ip_address + ":3000/myprofile", this.create_options()).subscribe((response) => {
       console.log(response)
       localStorage.removeItem('current_user')
       localStorage.setItem('current_user', JSON.stringify(response))

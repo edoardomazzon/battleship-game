@@ -10,7 +10,7 @@ export class SpectatorchatService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io(`http://${environment.ip_address}:3000/`)
+    this.socket = io("http://"+ environment.ip_address +":3000/")
   }
 
   receiveMessages(player1: String, player2: String){

@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
-  private baseURL = `http://${environment.ip_address}:3000/`
+  private baseURL = "http://"+ environment.ip_address +":3000/"
   public users: Array<any>
   public functionalitiessection: Boolean
   public statisticssection: Boolean

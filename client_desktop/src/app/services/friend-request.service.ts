@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 })
 
 export class FriendRequestService {
-  private baseURL = `http://${environment.ip_address}:3000/`
+  private baseURL = "http://"+ environment.ip_address +":3000/"
   private socket: Socket;
 
   constructor(private _httpClient: HttpClient) {
