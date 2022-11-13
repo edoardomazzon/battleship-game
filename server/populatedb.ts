@@ -1,19 +1,24 @@
 export {};
-require('dotenv/config');
-const mongoose = require('mongoose')
-const User = require('./models/user.js');
-const Notifications = require('./models/notification.js')
-const Match = require('./models/match.js')
-const ChatMessage = require('./models/chatmessage.js')
 
-mongoose.connect(
-  process.env.DB_CONNECTION, () => console.log('\x1b[36m%s\x1b[0m', "Connected to Mongoose Database. \nDeleting all documents"), (err) => {
-     if(err){ console.log(err) } 
-  }
-);
+import mongoose from 'mongoose';
+import User from './models/user.js';
+import Notifications from './models/notification.js';
+import Match from './models/match.js';
+import ChatMessage from './models/chatmessage.js';
+import 'dotenv/config'
+
+
+const dbstring = process.env.DB_CONNECTION
+if(dbstring != undefined){
+    mongoose.connect(dbstring, (err) => {
+        if(err){ console.log(err) } 
+     }
+   );
+}
+
 
 // Creating new data
-var user1 = new User({
+var user1: any = new User({
     username: "Gabriele",
     email: "870751@stud.unive.it",
     role: "regular",
@@ -31,7 +36,7 @@ var user1 = new User({
     isbanned: false,
     needspasswordchange: false
 })
-var user2 = new User({
+var user2: any = new User({
     username: "Edoardo",
     email: "870606@stud.unive.it",
     role: "regular",
@@ -49,7 +54,7 @@ var user2 = new User({
     isbanned: false,
     needspasswordchange: false
 })
-var user3 = new User({
+var user3: any = new User({
     username: "Filippo",
     email: "flippo.bergamasco@unive.it",
     role: "regular",
@@ -67,7 +72,7 @@ var user3 = new User({
     isbanned: false,
     needspasswordchange: false
 })
-var admin = new User({
+var admin: any = new User({
     username: "Administrator",
     email: "administrator@battleshipgame.com",
     role: "admin",

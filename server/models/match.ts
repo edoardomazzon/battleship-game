@@ -22,7 +22,7 @@ function getSchema() {
     return MatchSchema; 
 }
 
-var matchModel;
+var matchModel: any;
 
 function getModel() {
     if (!matchModel) {
@@ -31,14 +31,14 @@ function getModel() {
     return matchModel;
 }
 
-function newMatch(data) {
+function newMatch(data: any) {
     var _matchmodel = getModel();
     var match = new _matchmodel(data);
     match.timestamp = new Date()
     return match;
 }
 
-module.exports = model('Match', MatchSchema);
+export default model('Match', MatchSchema);
 module.exports.getSchema = getSchema;
 module.exports.getModel = getModel;
 module.exports.newMatch = newMatch;

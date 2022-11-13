@@ -24,6 +24,7 @@ export class AdminDashboardComponent implements OnInit {
     this.current_order = 'asc'
     this.searched_name = ''
     this.found_users = new Array()
+    this.getAllUsers()
   }
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class AdminDashboardComponent implements OnInit {
     this._httpClient.post(this.baseURL+'admindashboard', {request_type: 'allusers'}, this.create_options()).subscribe((response: any) => {
       this.users = new Array()
       for(let i = 0; i < response.length; i++){
-        response[i].games_lost = response[i].games_played - response[i].games_lost
+        response[i].games_lost = response[i].games_played - response[i].games_won
         response[i].winrate = Math.floor(( response[i].games_won / response[i].games_played) * 100)
         this.users.push(response[i])
       }

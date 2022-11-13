@@ -77,7 +77,7 @@ const UserSchema = new Schema({
 })
 
 
-UserSchema.methods.setPassword = function (pwd) {
+UserSchema.methods.setPassword = function (pwd: any) {
     // Generating a 16 Bytes string to enforce the password hash
     this.salt = randomBytes(16).toString('hex');
     // Creating an Hashed Message Authentication Code based on the salt with the SHA256 algorith
@@ -91,7 +91,7 @@ UserSchema.methods.setPassword = function (pwd) {
 // To validate the password, we compute the digest with the
 // same HMAC to check if it matches with the digest we stored
 // in the database.
-UserSchema.methods.validatePassword = function (pwd) {
+UserSchema.methods.validatePassword = function (pwd: any) {
     var hmac = createHmac("sha256", this.salt);
     hmac.update(pwd);
     var digest = hmac.digest('hex');
@@ -101,7 +101,7 @@ UserSchema.methods.validatePassword = function (pwd) {
 function getSchema() { return UserSchema; }
 module.exports.getSchema = getSchema;
 // Mongoose Model
-var userModel; // This is not exposed outside the model
+var userModel: any; // This is not exposed outside the model
 function getModel() {
     if (!userModel) {
         userModel = model('User', getSchema());
@@ -109,13 +109,13 @@ function getModel() {
     return userModel;
 }
 
-function newUser(data) {
+function newUser(data: any) {
     var _usermodel = getModel();
     var user = new _usermodel(data);
     return user;
 }
 
 
-module.exports = model('User', UserSchema);
+export default model('User', UserSchema);
 module.exports.getModel = getModel;
 module.exports.newUser = newUser;

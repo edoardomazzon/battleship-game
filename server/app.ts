@@ -1,15 +1,15 @@
 export {};
-require('dotenv/config');
-const http = require('http');
-const express = require('express')
+import 'dotenv/config'
+import {createServer} from 'http';
+import express = require("express");
 const app = express()
-const server = http.createServer(app)
+const server = createServer(app)
 const port = 3000
 
 
 // Setting the Socket.io instance to listen on the localhost server and enabling CORS policies for it
-const io = require('socket.io')
-const ios = io(server, {
+import {Server} from 'socket.io';
+const ios = new Server(server, {
   cors: {
     origin: "*", // ["http://192.168.1.44:4200", "http://10.0.2.16:4200", "http://192.168.1.44:8100"]
     methods: ["GET", "POST"],
@@ -26,43 +26,44 @@ app.all('/*', (req, res, next) => {
 })
 
 // Everytime the server receives a request from the client, the request gets parsed
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+import {json} from 'body-parser';
+app.use(json());
 
 // Connecting the database to MongoDB Atlas service through the connection string stored in .env
-const mongoose = require('mongoose')
-mongoose.connect(
-  process.env.DB_CONNECTION, () => console.log("Connected to Atlas Database"), (err) => {
-     if(err){ console.log(err) } 
-  }
-);
+import mongoose from 'mongoose';
+const dbstring = process.env.DB_CONNECTION
+if(dbstring != undefined){
+  mongoose.connect(dbstring, (err) => {
+       if(err){ console.log(err) } 
+    }
+  );
+}
+
 
 
 // Declaring and importing all existing routes
-const indexRoute = require('./routes/index');
-const loginRoute = require('./routes/login');
-const winGameRoute = require('./routes/wingame');
-const loseGameRoute = require('./routes/losegame')
-const registerRoute = require('./routes/register');
-const userInfoRoute = require('./routes/userinfo');
-const myprofileRoute = require('./routes/myprofile');
-const createMatchRoute = require('./routes/creatematch');
-const chatMessageRoute = require('./routes/chatmessage');
-const searchUsersRoute = require('./routes/searchusers');
-const unblockUserRoute = require('./routes/unblockuser');
-const removeFriendRoute = require('./routes/removefriend');
-const friendRequestRoute = require('./routes/friendrequest');
-const blacklistUserRoute = require('./routes/blacklistuser');
-const updateAccuracyRoute = require('./routes/updateaccuracy');
-const adminDashboardRoute = require('./routes/admindashboard')
-const createNotificationRoute = require('./routes/createnotification');
-const deleteNotificationRoute = require('./routes/deletenotification');
-const acceptFriendRequestRoute = require('./routes/acceptfriendrequest');
-const rejectFriendRequestRoute = require('./routes/rejectfriendrequest');
-const retrieveNotificationsRoute = require('./routes/retrievenotifications');
+import loginRoute from './routes/login';
+import winGameRoute from './routes/wingame';
+import loseGameRoute from './routes/losegame';
+import registerRoute from './routes/register';
+import userInfoRoute from './routes/userinfo';
+import myprofileRoute from './routes/myprofile';
+import createMatchRoute from './routes/creatematch';
+import chatMessageRoute from './routes/chatmessage';
+import searchUsersRoute from './routes/searchusers';
+import unblockUserRoute from './routes/unblockuser';
+import removeFriendRoute from './routes/removefriend';
+import friendRequestRoute from './routes/friendrequest';
+import blacklistUserRoute from './routes/blacklistuser';
+import updateAccuracyRoute from './routes/updateaccuracy';
+import adminDashboardRoute from './routes/admindashboard';
+import createNotificationRoute from './routes/createnotification';
+import deleteNotificationRoute from './routes/deletenotification';
+import acceptFriendRequestRoute from './routes/acceptfriendrequest';
+import rejectFriendRequestRoute from './routes/rejectfriendrequest';
+import retrieveNotificationsRoute from './routes/retrievenotifications';
 
 // Telling the app which route (declared above) to use in correspondance to a given localhost URL path
-app.use('/', indexRoute);
 app.use('/login', loginRoute);
 app.use('/wingame', winGameRoute);
 app.use('/losegame', loseGameRoute);
@@ -281,11 +282,13 @@ ios.on('connection', (socket) => {
             delete_index = j
           }
         }
-        delete(confirmedpositonings[delete_index])
-        for(let j = delete_index; j < confirmedpositonings.length-1; j++){
-          confirmedpositonings[j] = confirmedpositonings[j+1]
-        }
-        confirmedpositonings.length = confirmedpositonings.length - 1
+        if(delete_index){
+          delete(confirmedpositonings[delete_index])
+          for(let j = delete_index; j < confirmedpositonings.length-1; j++){
+            confirmedpositonings[j] = confirmedpositonings[j+1]
+          }
+          confirmedpositonings.length = confirmedpositonings.length - 1
+        }        
       }
     }
     // If the enemy still hasn't confirmed his positioning, the current user will be added to the confirmedpositionings list

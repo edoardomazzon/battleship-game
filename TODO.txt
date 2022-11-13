@@ -9,8 +9,7 @@ COME FAR PARTIRE L'APP IN LAN:
 TODO GABRI:
   1. Aggiornare capitolo sulle route e l'autenticazione per myprofile e administrator
   2. Aggiornare il model di USer nel documento (non c'è più pfp e password in chiaro)
-  3. Trasformare in TS app.js e populatedb.js
-  4. Trasformare in TS le route
+  3. Aggiornare documento con parti in typescript e funzionalità di ordinamento utente statistiche admin
 
 TODO EDO:
   1. Game Component:      il bottone "Leave Match" scompare se la finestra di chrome viene ridimensionata a metà pagina, tipo

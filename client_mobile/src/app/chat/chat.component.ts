@@ -51,7 +51,7 @@ export class ChatComponent implements OnInit {
   // Sends a message once the user hits "enter" or clicks on the "send" button
   public sendMessage(){
     if(this.newmessage != ''){
-      this._chatmessageservice.sendMessage(this.chattype, {from: this.player1, to: this.player2, text_content: this.newmessage})
+      this._chatmessageservice.sendMessage(this.chattype, {from: this.player1, to: this.player2, text_content: this.newmessage, timestamp: new Date()})
       this.messages.push({from: this.player1, to: this.player2, text_content: this.newmessage})
 
       // The other user has 1.5 seconds to us that he's read the message, otherwise we send a notification to him.

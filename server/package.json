@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified -use 'npm start' to run \" && exit 1",
-    "compile": "tsc populatedb.ts app.ts \"./models/user.ts\" \"./models/match.ts\" \"./models/chatmessage.ts\" \"./models/notification.ts\"",
+    "compile": "tsc populatedb.ts app.ts \"./models/user.ts\" \"./models/match.ts\" \"./models/chatmessage.ts\" \"./models/notification.ts\" \"./routes/userinfo.ts\" \"./routes/wingame.ts\" \"./routes/losegame.ts\" \"./routes/login.ts\" \"./routes/blacklistuser.ts\" \"./routes/chatmessage.ts\"  \"./routes/createnotification.ts\" \"./routes/deletenotification.ts\" \"./routes/myprofile.ts\" \"./routes/unblockuser.ts\" \"./routes/searchusers.ts\" \"./routes/retrievenotifications.ts\" \"./routes/rejectfriendrequest.ts\" \"./routes/acceptfriendrequest.ts\" \"./routes/updateaccuracy.ts\" \"./routes/friendrequest.ts\" \"./routes/admindashboard.ts\"",
     "start": "node app.js",
     "populate": "node populatedb.js"
   },
@@ -27,5 +27,9 @@
   },
   "volta": {
     "node": "16.18.0"
+  },
+  "devDependencies": {
+    "@types/passport": "^1.0.11",
+    "@types/passport-http": "^0.3.9"
   }
 }

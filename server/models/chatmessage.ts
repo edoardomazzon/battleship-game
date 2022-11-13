@@ -23,7 +23,7 @@ function getSchema() {
     return ChatMessageSchema; 
 }
 
-var chatmessageModel;
+var chatmessageModel: any;
 
 function getModel() {
     if (!chatmessageModel) {
@@ -32,14 +32,14 @@ function getModel() {
     return chatmessageModel;
 }
 
-function newChatMessage(data) {
+function newChatMessage(data: any) {
     var _chatmessagemodel = getModel();
     var chatmessage = new _chatmessagemodel(data);
     chatmessage.timestamp = new Date()
     return chatmessage;
 }
 
-module.exports = model('ChatMessage', ChatMessageSchema);
+export default model('ChatMessage', ChatMessageSchema);
 module.exports.getSchema = getSchema;
 module.exports.getModel = getModel;
 module.exports.newChatMessage = newChatMessage;

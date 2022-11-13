@@ -22,7 +22,7 @@ function getSchema() {
     return NotificationSchema; 
 }
 
-var notificationModel;
+var notificationModel: any;
 
 function getModel() {
     if (!notificationModel) {
@@ -31,14 +31,14 @@ function getModel() {
     return notificationModel;
 }
 
-function newNotification(data) {
+function newNotification(data: any) {
     var _notificationModel = getModel();
     var notification = new _notificationModel(data);
     notification.timestamp = new Date()
     return notification;
 }
 
-module.exports = model('Notification', NotificationSchema);
+export default model('Notification', NotificationSchema);
 module.exports.getSchema = getSchema;
 module.exports.getModel = getModel;
 module.exports.newNotification = newNotification;
