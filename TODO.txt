@@ -16,22 +16,11 @@ TODO EDO:
                           quando metti un giocatore contro l'altro in split screen scompare proprio il bottone Leave Match, 
                           nel senso che è nascosto da qualche parte.
   2. Game Component:      Mantenere quadrato il campo (se possibile) di gioco anche quando si ridimensiona la pagina
-  3. Game Component:      A volte ci sono delle celle nel campo di gioco che se metti male il mouse non sono cliccabili, tipo
-                          il centro della cella non è cliccabile e non capisco perché, poi sposti un attimo la freccetta di 
-                          un millimetro e la cella diventa cliccabile. (solo desktop)
-  4. Game Component:      Il fatto che la pagina non sia scrollabile rende ingiocabile il gioco quando sono aperte due pagine una di fianco all'altra
-  5. Game Component:      La chat di gioco è in mezzo al cazzo sopra il campo nemico 
-  6. Home Component:      La lista dei recently played se si allunga troppo spinge il bottone "ready up" verso il basso
-  7. Home Component:      La lista dei recently played si allunga se espandiamo le statistiche di uno dei giocatori, forse quel pop-up va messo
+  3. Game Component:      La chat di gioco è in mezzo al cazzo sopra il campo nemico 
+  4. Home Component:      La lista dei recently played se si allunga troppo spinge il bottone "ready up" verso il basso
+  5. Home Component:      La lista dei recently played si allunga se espandiamo le statistiche di uno dei giocatori, forse quel pop-up va messo
                           a z-10 così compare "in cima" a tutto e non esattamente sotto il nome utente
-  8. All:                 Ottimizzare la variabile globale togliendo in ogni componente il baseUrl e mettendo al suo posto direttamente global.ip_address
-  9. Client mobile:       Per completezza sarebbe da togliere tutta la parte desktop (sia vari if che stile ecc.) dalla parte client_mobile
-  10. Tablet:             Vedere design
-
-ULTIME FUNZIONALITA' PRINCIPALI:
-  - Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa il sito sul cell.
-    oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)
-  - SERVER: Riscrivere app.js e tutte le route del server in typescript
-
-
-
+  6. Client mobile:       Per completezza sarebbe da togliere tutta la parte desktop (sia vari if che stile ecc.) dalla parte client_mobile
+  7. Tablet:             Vedere design
+  8. Mobile:             Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa il sito sul cell.
+                          oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)
