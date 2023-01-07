@@ -1,13 +1,4 @@
 TODO EDO:
-  1. Game Component:      il bottone "Leave Match" scompare se la finestra di chrome viene ridimensionata a metà pagina, tipo
-                          quando metti un giocatore contro l'altro in split screen scompare proprio il bottone Leave Match, 
-                          nel senso che è nascosto da qualche parte.
-  2. Game Component:      Mantenere quadrato il campo (se possibile) di gioco anche quando si ridimensiona la pagina
-  3. Game Component:      La chat di gioco è in mezzo al cazzo sopra il campo nemico 
-  4. Home Component:      La lista dei recently played se si allunga troppo spinge il bottone "ready up" verso il basso
-  5. Home Component:      La lista dei recently played si allunga se espandiamo le statistiche di uno dei giocatori, forse quel pop-up va messo
-                          a z-10 così compare "in cima" a tutto e non esattamente sotto il nome utente
-  6. Client mobile:       Per completezza sarebbe da togliere tutta la parte desktop (sia vari if che stile ecc.) dalla parte client_mobile
-  7. Tablet:             Vedere design
-  8. Mobile:             Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa il sito sul cell.
-                          oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)
+  1. Tablet: Vedere design
+  2. Mobile: Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa 
+    il sito sul cell. oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)

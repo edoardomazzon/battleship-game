@@ -6,7 +6,8 @@ import { ChatmessageService } from '../services/chatmessage.service';
   templateUrl: './chat.component.html'
 })
 export class ChatComponent implements OnInit {
-  public chatopened: Boolean
+  public chatopened: Boolean;
+  public chatcollapse: Boolean;
   private player1: any;
   private player2: any;
   public messages: any = [];
@@ -16,6 +17,7 @@ export class ChatComponent implements OnInit {
 
   constructor(private _chatmessageservice: ChatmessageService) {
     this.chatopened = false
+    this.chatcollapse = false
     this.chattype = 'match' // Can be 'match' or 'private'
   }
 
@@ -65,7 +67,11 @@ export class ChatComponent implements OnInit {
     this.newmessage = ''
   }
 
+  public openChat(){
+    this.chatcollapse = false
+  }
+
   public closeChat(){
-    this.chatopened = false
+    this.chatcollapse = true
   }
 }

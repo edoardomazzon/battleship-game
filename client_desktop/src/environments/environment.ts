@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ip_address: '192.168.188.23' // change with your IP address here
+  ip_address: '192.168.1.58' // change with your IP address here
 };
 
 /*
