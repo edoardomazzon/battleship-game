@@ -1,4 +1,7 @@
-# HOW TO RUN
+# Battleship game
+A full-stack web application, comprising a REST-style API backend and a SPA Angular frontend to let the users play the game of “Battleship”.
+
+## HOW TO RUN
 
 ### FIRST STEP, STARTING SERVER
 1. First of all, open new terminal and navigate to server folder with `cd .\server\`
