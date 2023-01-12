@@ -1,4 +1,5 @@
-TODO EDO:
-  1. Tablet: Vedere design
-  2. Mobile: Rivedere tutto stile mobile (da capire se fare quando iniziamo l'app ma comunque andrà fatto anche da webapp se uno usa 
-    il sito sul cell. oppure potremmo fare che da mobile mostriamo pannello con scritto tipo scarica app)
+da vedere insieme:
+- My profile component -> si può eliminare?
+- finire di vedere design mobile e tablet per spettatori game e chat
+- userinfo component -> si può eliminare?
+- HomeComponent -> lista recently_played da sistemare, come?

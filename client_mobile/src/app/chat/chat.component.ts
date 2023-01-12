@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit {
 
   constructor(private _chatmessageservice: ChatmessageService) {
     this.chatopened = false
-    this.chatcollapse = false
+    this.chatcollapse = true
     this.chattype = 'match' // Can be 'match' or 'private'
   }
 

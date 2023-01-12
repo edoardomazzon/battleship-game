@@ -45,7 +45,7 @@
       <ul *ngIf="this.foundUsers.length > 0" class="my-5">
         <p class="text-center font-bold mb-3">USERS FOUND</p>
         <li *ngFor="let user of this.foundUsers">
-          <div *ngIf="!this.friends.includes(user.username)" class="flex items-center justify-center gap-x-4">
+          <div *ngIf="!this.friends.includes(user.username)" class="flex flex-col md:flex-row items-center justify-center gap-x-4">
             <span>{{ user.username }} </span>
             <div>
               <button title="Send friend request" (click)="newFriendRequest(user.username)">

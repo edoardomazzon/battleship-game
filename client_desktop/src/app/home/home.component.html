@@ -16,7 +16,7 @@
           <div class="text-center">
             <h4 class="mb-2.5">Ongoing matches</h4>
             <span *ngIf="ongoing_matches.length <= 0">No ongoing matches yet</span>
-            <ul  class="flex flex-col gap-y-1 mx-auto max-w-[380px] max-h-[175px] overflow-y-auto pr-2.5">
+            <ul  class="flex flex-col gap-y-1 mx-auto md:max-w-[380px] md:max-h-[175px] overflow-y-auto pr-2.5">
               <li *ngFor="let match of ongoing_matches" class="flex items-center justify-between">
                 <span>{{ match.player1 }} <b>vs</b> {{ match.player2 }}</span>
                 <button class="btn btn_red" (click)="startSpectating(match.player1, match.player2)">Spectate</button>
@@ -28,7 +28,7 @@
           <div class="text-center">
             <h4 class="mb-2.5">Recently played</h4>
             <span *ngIf="recently_played.length <= 0">No games played yet</span>
-            <ul class="flex flex-col gap-y-1 mx-auto max-w-[250px] max-h-[175px] overflow-y-auto pr-2.5 relative">
+            <ul class="flex flex-col gap-y-1 mx-auto md:max-w-[250px] md:max-h-[175px] overflow-y-auto pr-2.5 relative">
               <li *ngFor="let user of recently_played" class="flex items-center justify-between">
                 <!-- with the "[title]" field below we pass the user's username as an argument to the UserInfo component -->
                 <app-userinfo [title]="user"></app-userinfo><!-- se versione click con tendina non absolute items-start al posto di items-center -->

@@ -3,7 +3,10 @@
   <p class="mb-1 font-bold uppercase">Notifications</p>
   <ul *ngIf="notifications.length > 0">
     <li *ngFor="let notification of notifications" class="py-2 border-b border-sepia last:border-0">
-      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'matchinvite'" class="flex items-center flex-col md:flex-row justify-between gap-x-3">
+      <div
+        *ngIf="notification != undefined && notification != null && notification.notification_type == 'matchinvite'"
+        class="flex items-center flex-row justify-between gap-x-3 text-xxs md:text-xs"
+      >
         <strong>{{ notification.from }}</strong> invited you to a game
         
         <div class="buttons flex items-center gap-x-2">
@@ -18,10 +21,16 @@
           </div>
         </div>
       </div>
-      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'friendnotavailable'" class="text-red-error text-xs">
+      <div
+        *ngIf="notification != undefined && notification != null && notification.notification_type == 'friendnotavailable'"
+        class="text-red-error text-xs"
+      >
         {{ notification.from }} is no longer available
       </div>
-      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'newmessage'" class="flex items-center flex-col md:flex-row justify-between gap-x-3">
+      <div
+        *ngIf="notification != undefined && notification != null && notification.notification_type == 'newmessage'"
+        class="flex items-center flex-row justify-between gap-x-3 text-xxs md:text-xs"
+      >
         Unread messages from <strong>{{ notification.from }}</strong>
         <button class="btn !py-1 !px-2 btn_green fill-white hover:fill-black" (click)="openChat(notification.from); markNotificationAsRead(notification)">
           <svg class="w-4 h-4" viewBox="0 0 24 24">
@@ -30,7 +39,10 @@
           </svg>
         </button>
       </div>
-      <div *ngIf="notification != undefined && notification != null && notification.notification_type == 'modmessage'" class="flex items-center flex-col md:flex-row justify-between gap-x-3">
+      <div
+        *ngIf="notification != undefined && notification != null && notification.notification_type == 'modmessage'"
+        class="flex items-center flex-row justify-between gap-x-3 text-xxs md:text-xs"
+      >
         <p><strong>Mod: </strong><span class="text-xxs text-yellow-warning">{{notification.text_content}}</span></p>
         <button class="btn btn_green" (click)="markNotificationAsRead(notification)">Ok</button>
       </div>
