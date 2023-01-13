@@ -3,3 +3,5 @@ da vedere insieme:
 - finire di vedere design mobile e tablet per spettatori game e chat
 - userinfo component -> si può eliminare?
 - HomeComponent -> lista recently_played da sistemare, come?
+- mettere tutti i commenti in inglese
+- unificare client_mobile e client_desktop? facendo sul client_desktop la build con script custom? 
