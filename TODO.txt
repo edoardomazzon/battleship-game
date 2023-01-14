@@ -7,3 +7,4 @@ EDO:
 
 GABRI:
 - parla di tailwind nel progetto
+- sistema parte in cui parli di startare mobile perché edo ha sistemato l'href "./"
