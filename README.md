@@ -10,9 +10,8 @@ A full-stack web application, comprising a REST-style API backend and a SPA Angu
 4. Finally, run the script that keep the server listening typing `npm run start`
 
 ### HOW TO START APP IN LAN:
-1. In the `client_desktop` folder edit `package.json` on the "start" script and `src/environment/environment.ts` the IP_ADDRESS variable with your IP address (to see what is open the terminal and type `ipconfig`).
-2. Now open new terminal and type `cd .\client_desktop\` , then type `npm start` that run the custom script we have created (`ng serve --host <ip_address>`).
-The `--host <ip_address>` is the script that share with in LAN the client Angular and that's the code we have just wrote.
+1.  In the `client_desktop` folder edit `package.json` on the "start" script by pasting your own IP address; the same goes for `src/environment/environment.ts` with the IP_ADDRESS variable (to obtain your IP address, open a new terminal session and run the `ipconfig` command).
+2. Now open a new terminal and type `cd .\client_desktop\` , then type `npm start` which runs the custom script we have created on the specified IP address.
 
 ### HOW TO START APP MOBILE:
 1. If you changed anything in the client_desktop folder, repeat the changes on `client_mobile` too.
