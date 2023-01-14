@@ -182,6 +182,11 @@ export class GameComponent implements OnInit {
     this.selectedShip = 'none'
   }
 
+  rotateSelectedShipMobile(){
+    if(this.selectedShip.orientation == 'h'){ this.selectedShip.orientation = 'v'}
+    else if(this.selectedShip.orientation == 'v'){ this.selectedShip.orientation = 'h'}
+  }
+
   // Rotates the selected ship from horizontal to vertical and vice versa (WHILE PLACING: doesn't work on already placed ships)
   rotateSelectedShip(x: any, y: any, length: any, orientation: String){
     if(this.selectedShip.orientation == 'h'){ this.selectedShip.orientation = 'v'}

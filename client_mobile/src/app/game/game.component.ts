@@ -183,11 +183,9 @@ export class GameComponent implements OnInit {
   }
 
   // Rotates the selected ship from horizontal to vertical and vice versa (WHILE PLACING: doesn't work on already placed ships)
-  rotateSelectedShip(x: any, y: any, length: any, orientation: String){
+  rotateSelectedShip(){
     if(this.selectedShip.orientation == 'h'){ this.selectedShip.orientation = 'v'}
     else if(this.selectedShip.orientation == 'v'){ this.selectedShip.orientation = 'h'}
-    this.checkPlaceableOnHover(x, y, length, this.selectedShip.orientation)
-    //this.previewShip(x, y, length, this.selectedShip.orientation, (this.isPlaceable(x, y, length, (this.selectedShip.orientatoin)).toString()))
   }
 
   // When a user selects the ship he wants to place and then hovers on a cell of his field, this gets updated accordingly with green or red cells

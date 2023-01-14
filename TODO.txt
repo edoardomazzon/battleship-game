@@ -1,7 +1,10 @@
 da vedere insieme:
-- My profile component -> si può eliminare?
 - finire di vedere design mobile e tablet per spettatori game e chat
-- userinfo component -> si può eliminare?
-- HomeComponent -> lista recently_played da sistemare, come?
 - mettere tutti i commenti in inglese
-- unificare client_mobile e client_desktop? facendo sul client_desktop la build con script custom? 
+
+EDO:
+- tasti refresh e back nell'admin mobile da mettere in cima alla lista
+- leave match da ipad da sistemarae posizione
+
+GABRI:
+- parla di tailwind nel progetto

@@ -158,7 +158,7 @@ setInterval(() => {
 }, 10000)
 
 // Setting up ship positioning confirmation
-var confirmedpositonings = new Array()
+var confirmedpositionings = new Array()
 
 
 //Setting up Socket.io server side (ios stands for IO Server)
@@ -259,41 +259,44 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('matchended'+matchinfo.player1+matchinfo.player2, matchinfo)
   })
 
+  
+
   // When a user confirms its ship positioning
   socket.on('confirmshippositioning', (positioning) => {
+    console.log(confirmedpositionings)
     var isalreadyin = false
-    for(let i = 0; i < confirmedpositonings.length; i++){
+    for(let i = 0; i < confirmedpositionings.length; i++){
       // If the enemy already told the server that he confirms his ship placement, an object like {current_user: ..., enemy: ...}
       // is already going to be present in the confirmedpositionings list; if this is the case, it means that both the enemy and
       // the current_user are ready to start the game using their chosen positioning.
-      if(confirmedpositonings[i].current_user == positioning.enemy){
+      if(confirmedpositionings[i].current_user == positioning.enemy){
         isalreadyin = true
         positioning.message_type = 'enemyconfirmed'
         // Choosing randomly which user goes first
         var firstturn = Math.floor(Math.random() * 2);
-        if(firstturn == 0){ positioning.firstturn = confirmedpositonings[i].current_user}
-        else{ positioning.firstturn = confirmedpositonings[i].enemy}
-        socket.broadcast.emit('yourenemyconfirmed'+confirmedpositonings[i].current_user, positioning)
-        socket.emit('yourenemyconfirmed'+confirmedpositonings[i].enemy, positioning)
+        if(firstturn == 0){ positioning.firstturn = confirmedpositionings[i].current_user}
+        else{ positioning.firstturn = confirmedpositionings[i].enemy}
+        socket.broadcast.emit('yourenemyconfirmed'+confirmedpositionings[i].current_user, positioning)
+        socket.emit('yourenemyconfirmed'+confirmedpositionings[i].enemy, positioning)
   
         var delete_index
-        for(let j = 0; j < confirmedpositonings.length; j++){
-          if(confirmedpositonings[j].current_user == positioning.enemy){
+        for(let j = 0; j < confirmedpositionings.length; j++){
+          if(confirmedpositionings[j].current_user == positioning.enemy){
             delete_index = j
           }
         }
         if(delete_index){
-          delete(confirmedpositonings[delete_index])
-          for(let j = delete_index; j < confirmedpositonings.length-1; j++){
-            confirmedpositonings[j] = confirmedpositonings[j+1]
+          delete(confirmedpositionings[delete_index])
+          for(let j = delete_index; j < confirmedpositionings.length-1; j++){
+            confirmedpositionings[j] = confirmedpositionings[j+1]
           }
-          confirmedpositonings.length = confirmedpositonings.length - 1
+          confirmedpositionings.length = confirmedpositionings.length - 1
         }        
       }
     }
     // If the enemy still hasn't confirmed his positioning, the current user will be added to the confirmedpositionings list
     if(!isalreadyin){
-      confirmedpositonings.push(positioning)
+      confirmedpositionings.push(positioning)
     }
   })
 
