@@ -15,8 +15,8 @@ A full-stack web application, comprising a REST-style API backend and a SPA Angu
 The `--host <ip_address>` is the script that share with in LAN the client Angular and that's the code we have just wrote.
 
 ### HOW TO START APP MOBILE:
-1. If you changed anything in the client_desktop, report them too on `client_mobile`.
-2. In the `client_mobile` folder edit `package.json` on script start and `src/environment/environment.ts` the IP_ADDRESS variable with your IP address (to see what is open the terminal and type `ipconfig`).
-3. Open new terminal and type `cd .\client_mobile\` then `npm run build`.
-4. Now, in the `mobile` folder we have all the files ready to run the mobile application. So, open new terminal or use the same and navigate to mobile folder (`cd..` if you are in the previous directory and, in every case, `cd .\mobile\`). 
-5. Last step, type `cordova android` which will start the emulator automatically.
+1. If you changed anything in the client_desktop folder, repeat the changes on `client_mobile` too.
+2. In the `client_mobile` folder edit `package.json` on the "start" script by pasting your own IP address; the same goes for `src/environment/environment.ts` with the IP_ADDRESS variable (to obtain your IP address, open a new terminal session and run the `ipconfig` command).
+3. Open a new terminal session and type `cd .\client_mobile\` then `npm run build`.
+4. Now, in the `mobile` folder we have all the files ready to run the mobile application. Navigate to the "mobile" folder (`cd..` if you are in the previous directory and, in every case, `cd .\mobile\`). 
+5. Last step, type `cordova run android` which will start the emulator automatically.
