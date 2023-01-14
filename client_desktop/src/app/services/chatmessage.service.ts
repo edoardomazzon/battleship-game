@@ -47,7 +47,6 @@ export class ChatmessageService {
   }
 
   getMessagesFromDb(player1: String, player2: String): ChatMessage[]{
-    //Riutilizziamo il model di angular "ChatMessage" perché ha i campi from e to che dobbiamno inviare al db incapsulati in un unico oggetto
     var from_to = new ChatMessage()
     from_to.from = player1
     from_to.to = player2
@@ -56,9 +55,9 @@ export class ChatmessageService {
     var json = JSON.parse(JSON.stringify(from_to))
 
     this._httpClient.put(this.baseURL+'chatmessage', json).subscribe((response) => {
-      var returned_list = JSON.parse(JSON.stringify((response))) //La repsonse ha l'array (già invertito dal lato server) degli ultimi 10 messaggi
+      var returned_list = JSON.parse(JSON.stringify((response))) // THe response contains the already inverted array with the last 10 messages
       for(let i = 0; i < returned_list.length; i++){
-        messages_list.push(returned_list[i])//Riempiamo la message list che ritorniamo a chat component
+        messages_list.push(returned_list[i])
       }
     })
     return messages_list

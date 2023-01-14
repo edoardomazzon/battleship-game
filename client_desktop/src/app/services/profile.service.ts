@@ -8,8 +8,7 @@ export class ProfileService {
   private usertoken: any;
 
   constructor(private _httpClient: HttpClient) { }
-  //Modifichiamo il campo "authorization" dell'header così che contenga il token firmato
-  //con utente e password da passare al server che poi lo decifrerà.
+  // Here we edit the header's "authorization" field so that it contains the signed token with username and password
   private create_options() {
     return {
       headers: new HttpHeaders({

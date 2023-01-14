@@ -1,6 +1,5 @@
 da vedere insieme:
 - finire di vedere design mobile e tablet per spettatori game e chat
-- mettere tutti i commenti in inglese
 
 EDO:
 - tasti refresh e back nell'admin mobile da mettere in cima alla lista

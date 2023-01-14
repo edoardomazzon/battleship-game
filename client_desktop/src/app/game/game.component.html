@@ -371,8 +371,7 @@
 
       <div *ngFor="let row of enemyfield; index as i" class="grid grid-cols-10 bg-white">
         <div *ngFor="let cell of row; index as j" class="bg-white w-full h-8 border border-black">
-          <!-- <div *ngIf="cell.value != 0 && !cell.hit" class="bg-white w-full h-full"></div>
-          <div *ngIf="cell.value != 0 && cell.hit" class="border border-error text-error w-full h-full">X</div> -->
+
           <div *ngIf="cell == '?' && myturn == true" class="w-full h-full">
             <button (click)="fire(i, j)" class="w-full h-full"></button>
           </div>
@@ -775,8 +774,7 @@
 
       <div *ngFor="let row of enemyfield; index as i" class="grid grid-cols-10 bg-white">
         <div *ngFor="let cell of row; index as j" class="bg-white w-full h-8 border border-black">
-          <!-- <div *ngIf="cell.value != 0 && !cell.hit" class="bg-white w-full h-full"></div>
-          <div *ngIf="cell.value != 0 && cell.hit" class="border border-error text-error w-full h-full">X</div> -->
+
           <div *ngIf="cell == '?' && myturn == true" class="w-full h-full">
             <button (click)="fire(i, j)" class="w-full h-full"></button>
           </div>

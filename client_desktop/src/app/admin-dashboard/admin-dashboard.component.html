@@ -59,22 +59,7 @@
               </svg>
             </div>
           </th>
-          <!-- <th>
-            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
-              <p>Games Won</p>
-              <svg class="cursor-pointer" (click)="orderByGameswon(current_order)" width="24" height="24" style="fill:#fff">
-                <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
-              </svg>
-            </div>
-          </th> -->
-          <!-- <th>
-            <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
-              <p>Games Lost</p>
-              <svg class="cursor-pointer" (click)="orderByGameslost(current_order)" width="24" height="24" style="fill:#fff">
-                <path d="M7 11h10v2H7zM4 7h16v2H4zm6 8h4v2h-4z"></path>
-              </svg>
-            </div>
-          </th> -->
+
           <th>
             <div class="bg-sepia p-2 flex justify-between items-center whitespace-nowrap">
               <p>Games</p>
@@ -106,8 +91,6 @@
         <tr *ngFor="let user of users" class="text-center border-b border-white">
           <td *ngIf="user.role != 'admin'" class="flex flex-col border-r border-white"><span>{{user.username}}</span><span>({{user.email}})</span></td>
           <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.winrate ? user.winrate : 0}}%</td>
-          <!-- <td *ngIf="user.role != 'admin'">{{user.games_won}}</td> -->
-          <!-- <td *ngIf="user.role != 'admin'">{{user.games_lost}}</td> -->
           <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.games_played}} ({{user.games_won}} - {{user.games_lost ? user.games_lost : 0}})</td>
           <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.accuracy}}%</td>
           <td *ngIf="user.role != 'admin'" class="border-r border-white">{{user.max_winstreak}}</td>

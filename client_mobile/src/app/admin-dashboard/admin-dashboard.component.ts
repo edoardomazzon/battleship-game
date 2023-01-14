@@ -35,9 +35,9 @@ export class AdminDashboardComponent implements OnInit {
   private create_options() {
     return {
         headers: new HttpHeaders({
-            authorization: 'Bearer ' + this.usertoken,
-            'cache-control': 'no-cache',
-            'Content-Type': 'application/json',
+          authorization: 'Bearer ' + this.usertoken,
+          'cache-control': 'no-cache',
+          'Content-Type': 'application/json',
       })
     };
   }
@@ -107,32 +107,6 @@ export class AdminDashboardComponent implements OnInit {
       this.current_order = 'asc'
     }
   }
-
-  // Orders users by amount of games won (ascending or descending depending on the paramenter)
-  // orderByGameswon(mode: string){
-  //   this.orderByAlpha('asc') // This doesn't affect the 'asc' or 'desc' order of the function, since it's already been passed as a parameter
-  //   if(mode == 'asc'){
-  //     this.users.sort((a, b) => (a.games_won > b.games_won) ? 1 : -1 )
-  //     this.current_order = 'desc'
-  //   }
-  //   else if(mode == 'desc'){
-  //     this.users.sort((a, b) => (a.games_won < b.games_won) ? 1 : -1 )
-  //     this.current_order = 'asc'
-  //   }
-  // }
-
-  // Orders users by amount of games lost (ascending or descending depending on the paramenter)
-  // orderByGameslost(mode: string){
-  //   this.orderByAlpha('asc') // This doesn't affect the 'asc' or 'desc' order of the function, since it's already been passed as a parameter
-  //   if(mode == 'asc'){
-  //     this.users.sort((a, b) => (a.games_lost > b.games_lost) ? 1 : -1 )
-  //     this.current_order = 'desc'
-  //   }
-  //   else if(mode == 'desc'){
-  //     this.users.sort((a, b) => (a.games_lost < b.games_lost) ? 1 : -1 )
-  //     this.current_order = 'asc'
-  //   }
-  // }
 
   // Orders users by amount of games played (ascending or descending depending on the paramenter)
   orderByGamesplayed(mode: string){

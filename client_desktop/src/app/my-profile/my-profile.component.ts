@@ -19,7 +19,6 @@ export class MyProfileComponent implements OnInit {
     var u = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     if(u != null){
       //With this function we query the db for the current user's data and save it in the browser's localstorage
-      // this._profileService.getUserInfo(u.username)
       this._profileService.getUserInfo()
     }
     u = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))

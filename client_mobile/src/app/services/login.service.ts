@@ -1,4 +1,3 @@
-//Funziona come register.services.ts quindi vedere i commenti per quello
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';

@@ -125,7 +125,4 @@ export class NotificationsComponent implements OnInit {
   orderLastFirst(){
     this.notifications.sort((a: any, b: any) => (a.timestamp.getTime() > b.timestamp.getTime()) ? 1 : -1 )
   }
-
-
-
 }

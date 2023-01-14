@@ -185,7 +185,7 @@ ios.on('connection', (socket) => {
     socket.broadcast.emit('friendrequest'+friendrequest.receiver, friendrequest)
   })
 
-  // Acceèting a friend request and notify the accepted user to update its client's "friend_list" by adding the accepter
+  // Accepting a friend request and notify the accepted user to update its client's "friend_list" by adding the accepter
   socket.on('newacceptedrequest', (newacceptedrequest) => {    
     var message = {
       request_type: "yougotaccepted",

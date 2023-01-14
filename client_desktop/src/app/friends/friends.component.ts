@@ -142,9 +142,7 @@ export class FriendsComponent implements OnInit {
 
   // The reject receiver is the one who recieves the positive response to his request (that is to say the one who sent the request in the first place)
   acceptFriendRequest(acceptance_receiver: String) {
-    this.rejectFriendRequest(acceptance_receiver)//È controintuitivo ma questa funzione in verità non fa altro che togliere
-    // l'accettato dalla pending list dell'accettante, così ci risparmiamo molta più logica front end dopo. In questo modo
-    // togliamo subito l'utente accettato dalle pending list dell'accettante, così dovremo preoccuparci solo di aggiornare la friends list dei due
+    this.rejectFriendRequest(acceptance_receiver) // This function call is counterintuitive but what it actually does is just removing the accepted user from the accepter's pending requests list.
 
     var accepted_request = new FriendRequest();
     accepted_request.receiver = acceptance_receiver
