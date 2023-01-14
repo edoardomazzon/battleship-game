@@ -54,9 +54,9 @@ module.exports = {
           DEFAULT: '#f6f6f6'
         }
       },
-      // height: {
-      //   screen: 'calc(var(--vh, 1vh) * 100)'
-      // },
+      boxShadow: {
+        'chat': '0px 0px 10px 0px rgb(0, 0, 0)'
+      },
       zIndex: {
         'null': -1
       }

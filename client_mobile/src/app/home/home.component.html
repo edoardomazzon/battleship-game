@@ -15,8 +15,8 @@
           <div class="text-center">
             <h4 class="mb-2.5">Ongoing matches</h4>
             <span *ngIf="ongoing_matches.length <= 0">No ongoing matches yet</span>
-            <ul  class="flex flex-col gap-y-1 mx-auto md:max-w-[380px] md:max-h-[150px] overflow-y-auto pr-2.5">
-              <li *ngFor="let match of ongoing_matches" class="flex items-center justify-between">
+            <ul class="flex flex-col gap-y-2.5 lg:gap-y-1 mx-auto md:max-w-[380px] md:max-h-[150px] overflow-y-auto pr-2.5">
+              <li *ngFor="let match of ongoing_matches" class="flex flex-col md:flex-row items-center justify-between">
                 <span>{{ match.player1 }} <b>vs</b> {{ match.player2 }}</span>
                 <button class="btn btn_red" (click)="startSpectating(match.player1, match.player2)">Spectate</button>
               </li>
@@ -54,7 +54,7 @@
 
       <div *ngIf="isspectating">
         <app-spectate></app-spectate>
-        <div class="text-center">
+        <div class="text-center mt-16 md:mt-32 lg:mt-0">
           <button class="btn btn_red" (click)="stopSpectating()">Stop spectating</button>
         </div>
       </div>

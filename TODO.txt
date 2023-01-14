@@ -1,10 +1,3 @@
-da vedere insieme:
-- finire di vedere design mobile e tablet per spettatori game e chat
-
-EDO:
-- tasti refresh e back nell'admin mobile da mettere in cima alla lista
-- leave match da ipad da sistemarae posizione
-
 GABRI:
 - parla di tailwind nel progetto
 - sistema parte in cui parli di startare mobile perché edo ha sistemato l'href "./"

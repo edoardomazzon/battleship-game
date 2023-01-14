@@ -2,7 +2,7 @@
   <!-- Game container -->
 
   <!-- Mobile version -->
-  <div class="game flex flex-col gap-x-5 h-[100vh] md:h-[80vh]" :[ngClass]="{ 'opacity-30 blur-sm' : youwon || youlost}"> <!-- WHILE WE'RE IN GAME -->
+  <div class="game flex flex-col gap-x-5 h-[100vh]" :[ngClass]="{ 'opacity-30 blur-sm' : youwon || youlost}"> <!-- WHILE WE'RE IN GAME -->
     <!-- Our ships in positioning phase (or both our and enemy's ships during game phase)-->
     <div class="w-full h-full mb-2 flex mt-4 ml-2" :[ngClass]="{'justify-between md:justify-around md:gap-x-[50%]': gamestarted}">
       <!-- Available ships during positioning phase-->
@@ -345,7 +345,7 @@
     <!-- MYFIELD-->
     <div
       class="w-full h-full md:w-[480px] md:h-[480px] p-3 transition duration-500 ease-in-out"
-      :[ngClass]="{'-translate-y-[60%] scale-50 md:-translate-y-[40%] md:translate-x-[35%] md:scale-75': gamestarted}"
+      :[ngClass]="{'-translate-y-[60%] scale-50 md:-translate-y-[40%] md:translate-x-[32.5%] md:scale-75': gamestarted}"
     >
       <div class="flex items-center justify-between mb-4">
         <p class="text-white">You</p>
@@ -357,7 +357,7 @@
       </div>
 
       <div *ngFor="let row of myfield; index as y" class="grid grid-cols-10 bg-white">
-        <div *ngFor="let cell of row; index as x" class="bg-white w-ful h-8">
+        <div *ngFor="let cell of row; index as x" class="bg-white w-full h-8">
           <div *ngIf="cell.value == -1" class="border border-black w-full h-full flex items-center justify-center">
             <span class="bg-black w-2 h-2 rounded-full"></span>
           </div>

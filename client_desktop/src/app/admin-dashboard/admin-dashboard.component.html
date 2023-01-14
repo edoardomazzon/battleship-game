@@ -17,7 +17,7 @@
         <button (click)="searchUsers()" class="h-0"></button>
       </form>
     </div>
-    <ul class="lg:max-h-[250px] lg:overflow-y-auto">
+    <ul class="max-h-[250px] overflow-y-auto">
       <li *ngFor="let user of users" class="flex flex-col gap-y-2.5 md:flex-row md:flex-wrap md:justify-between md:items-center mb-6">
         <div>
           <p class="text-xs">{{ user.username }}</p>
@@ -38,9 +38,8 @@
   </div>
 
   <!-- Statistics Section (order by games played, games won, winrate, games lost, accuracy, winstreak) -->
-  <!-- Desktop version -->
-  <div *ngIf="statisticssection" class="px-5 max-h-[275px] overflow-auto hidden lg:block">
-    <table>
+  <div *ngIf="statisticssection" class="px-5 max-h-[380px] md:max-h-[740px] lg:max-h-[300px] overflow-auto">
+    <table class="hidden lg:block">
       <thead>
         <tr>
           <th>
@@ -97,11 +96,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
-
-  <!-- Mobile version -->
-  <div *ngIf="statisticssection" class="px-5 lg:hidden">
-    <div *ngFor="let user of users">
+    <div *ngFor="let user of users" class="lg:hidden">
       <div *ngIf="user.role != 'admin'" class="single_user border-b border-white mb-10 text-center md:grid md:grid-cols-3">
         <div class="flex flex-col gap-y-2 mb-5">
           <span class="text-base">Username</span>
@@ -131,12 +126,11 @@
     </div>
   </div>
 
-  <button *ngIf="statisticssection" class="btn btn_green block mx-auto lg:mt-7" (click)="getAllUsers()">Refresh</button>
-
-  <!-- Back to admin home button -->
-  <div *ngIf="functionalitiessection || statisticssection">
-    <button class="btn btn_gray font-bold" (click)="backToAdminHome()">
-      Back
-    </button>
+  <div class="flex flex-col items-center gap-2">
+    <button *ngIf="statisticssection" class="btn btn_green block mx-auto lg:mt-7" (click)="getAllUsers()">Refresh</button>
+    <!-- Back to admin home button -->
+    <div *ngIf="functionalitiessection || statisticssection">
+      <button class="btn btn_gray font-bold" (click)="backToAdminHome()">Back</button>
+    </div>
   </div>
 </div>

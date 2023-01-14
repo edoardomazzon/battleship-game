@@ -6,6 +6,8 @@ import { SpectatorchatService } from '../services/spectatorchat.service';
   templateUrl: './spectatorchat.component.html',
 })
 export class SpectatorchatComponent implements OnInit {
+  public chatopened: Boolean;
+  public chatcollapse: Boolean;
   public messages: Array<any> = new Array()
   public newmessage: String
   public player1: String
@@ -13,6 +15,8 @@ export class SpectatorchatComponent implements OnInit {
   public current_user: String
 
   constructor(private _spectatorchatService: SpectatorchatService) {
+    this.chatopened = true
+    this.chatcollapse = true
     var current_user = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('current_user'))))
     var spectateinfo = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('spectateinfo'))))
     this.player1 = spectateinfo.player1
@@ -49,5 +53,10 @@ export class SpectatorchatComponent implements OnInit {
     }
     this.newmessage = ''
   }
-
+  public openChat(){
+    this.chatcollapse = false
+  }
+  public closeChat(){
+    this.chatcollapse = true
+  }
 }

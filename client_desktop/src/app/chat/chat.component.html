@@ -1,4 +1,4 @@
-<div *ngIf="this.chatopened == true" class="py-5 px-3 absolute bg-white text-black rounded-lg bottom-5 md:bottom-9 right-4" :[ngClass]="{'!py-3 !rounded-full' : this.chatcollapse}" >
+<div *ngIf="this.chatopened == true" class="py-5 px-3 absolute bg-white text-black rounded-lg bottom-5 md:bottom-9 right-4 shadow-chat" :[ngClass]="{'!py-3 !rounded-full' : this.chatcollapse}" >
   <div *ngIf="this.chatcollapse == true" (click)="openChat()" class="cursor-pointer">
     <svg fill="#222222" height="40" width="40" viewBox="-6 -6 72.00 72.00" xml:space="preserve" stroke="#222222" stroke-width="0.0006000000000000001" transform="matrix(-1, 0, 0, 1, 0, 0)rotate(0)">
       <path d="M26,9.586C11.664,9.586,0,20.09,0,33c0,4.499,1.418,8.856,4.106,12.627c-0.51,5.578-1.86,9.712-3.813,11.666 c-0.304,0.304-0.38,0.768-0.188,1.153C0.276,58.789,0.625,59,1,59c0.046,0,0.093-0.003,0.14-0.01 c0.349-0.049,8.432-1.213,14.317-4.585c3.33,1.333,6.874,2.009,10.544,2.009c14.336,0,26-10.503,26-23.414S40.337,9.586,26,9.586z"></path>
