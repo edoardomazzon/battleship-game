@@ -13,7 +13,7 @@ export class IsNotAuthenticatedService implements CanActivate {
 
   canActivate(): boolean {
     if (this._auth.isAuthenticated()) {
-      this._router.navigateByUrl('/myprofile')
+      this._router.navigateByUrl('/')
       return false;
     }
     return true;
